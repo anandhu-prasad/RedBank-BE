@@ -1,10 +1,10 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.model.InventoryBb;
-import com.javainuse.model.InventoryHos;
-import com.javainuse.repositories.InventoryBbRepository;
-import com.javainuse.repositories.InventoryHosRepository;
+import com.javainuse.models.InventoryBb;
+import com.javainuse.models.InventoryHos;
+import com.javainuse.repositories.InventoryBbRepo;
+import com.javainuse.repositories.InventoryHosRepo;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +19,10 @@ import java.util.List;
 public class InventoryController {
 
     @Autowired
-    InventoryBbRepository inventoryBbRepository;
+    InventoryBbRepo inventoryBbRepo;
 
     @Autowired
-    InventoryHosRepository inventoryHosRepository;
+    InventoryHosRepo inventoryHosRepo;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -31,12 +31,12 @@ public class InventoryController {
 
     @GetMapping("/recievehosinventoryall")
     public List<InventoryHos> extractHosInventoryAll(){
-        return inventoryHosRepository.findAll();
+        return inventoryHosRepo.findAll();
     }
 
     @GetMapping("/recievebbinventoryall")
     public List<InventoryBb> extractBbInventoryAll(){
-        return inventoryBbRepository.findAll();
+        return inventoryBbRepo.findAll();
     }
 
 
@@ -45,7 +45,7 @@ public class InventoryController {
 
     //? TO GET THE INVENTORY DATA OF CURRENT USER / HOSPITAL
     //! TESTED
-    @GetMapping("/recieveinventory")
+    @GetMapping("/receieveinventory")
     public ResponseEntity<List<?>> extractInventory(@RequestHeader ("Authorization") String userToken){
         try{
             //! HARDCODED DATA HERE, NEED TO BE EXTRACTED FROM THE TOKEN ITSELF.
@@ -59,10 +59,10 @@ public class InventoryController {
                 HttpHeaders responseHeaders = new HttpHeaders();
                 responseHeaders.set("success", "true");
                 if(userType == 3){
-                    return ResponseEntity.ok().headers(responseHeaders).body(inventoryBbRepository.findByUserId(userId));
+                    return ResponseEntity.ok().headers(responseHeaders).body(inventoryBbRepo.findByUserId(userId));
                 }
                 else{
-                    return ResponseEntity.ok().headers(responseHeaders).body(inventoryHosRepository.findByUserId(userId));
+                    return ResponseEntity.ok().headers(responseHeaders).body(inventoryHosRepo.findByUserId(userId));
                 }
             }
             else{
@@ -97,10 +97,10 @@ public class InventoryController {
                 List <InventoryHos> response = new ArrayList<>();
 
                 for (InventoryHos inventoryHos : inventoryHosList) {
-                    InventoryHos match = inventoryHosRepository.findByUserIdAndComponent(userId, inventoryHos.getComponent());
+                    InventoryHos match = inventoryHosRepo.findByUserIdAndComponent(userId, inventoryHos.getComponent());
                     //TODO SET EVERY BLOOD GROUP UNITS AND STUFF HERE.
                     match = inventoryHos;
-                    inventoryHosRepository.save(match);
+                    inventoryHosRepo.save(match);
                     response.add(match);
                 }
 
@@ -135,7 +135,7 @@ public class InventoryController {
 
             for (InventoryBb inventoryBb : inventoryBbList) {
                 //TODO SET EVERY BLOOD GROUP UNITS AND STUFF HERE.
-                inventoryBbRepository.save(inventoryBb);
+                inventoryBbRepo.save(inventoryBb);
                 response.add(inventoryBb);
             }
 

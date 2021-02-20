@@ -8,8 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.model.*;
+import com.javainuse.models.*;
 import com.javainuse.repositories.*;
+import com.javainuse.requests.ProfileBbDTO;
+import com.javainuse.requests.ProfileHosDTO;
+import com.javainuse.requests.ProfileIndDTO;
 import com.javainuse.responses.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,22 +29,22 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Autowired
-	private ProfileIndRepository profileIndRepository;
+	private ProfileIndRepo profileIndRepo;
 
 	@Autowired
-	private ProfileHosRepository profileHosRepository;
+	private ProfileHosRepo profileHosRepo;
 
 	@Autowired
-	private ProfileBbRepository profileBbRepository;
+	private ProfileBbRepo profileBbRepo;
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
 	@Autowired
-	private InventoryHosRepository inventoryHosRepository;
+	private InventoryHosRepo inventoryHosRepo;
 
 	@Autowired
-	private InventoryBbRepository inventoryBbRepository;
+	private InventoryBbRepo inventoryBbRepo;
 
 //	@Autowired
 //	private UserDao userDao;
@@ -56,11 +59,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 
-		ProfileInd profileInd = profileIndRepository.findByEmail(username);
+		ProfileInd profileInd = profileIndRepo.findByEmail(username);
 
-		ProfileHos profileHos = profileHosRepository.findByEmail(username);
+		ProfileHos profileHos = profileHosRepo.findByEmail(username);
 
-		ProfileBb profileBb = profileBbRepository.findByEmail(username);
+		ProfileBb profileBb = profileBbRepo.findByEmail(username);
 
 
 		if (profileInd == null && profileHos == null && profileBb == null ) {
@@ -88,9 +91,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
 		//TODO TO BE CHANGED TO USER SPECIFIC ENTITIES.
-		ProfileInd profileInd = profileIndRepository.findByEmail(user.getEmail());
-		ProfileHos profileHos = profileHosRepository.findByEmail(user.getEmail());
-		ProfileBb profileBb = profileBbRepository.findByEmail(user.getEmail());
+		ProfileInd profileInd = profileIndRepo.findByEmail(user.getEmail());
+		ProfileHos profileHos = profileHosRepo.findByEmail(user.getEmail());
+		ProfileBb profileBb = profileBbRepo.findByEmail(user.getEmail());
 
 		if(profileInd != null || profileHos != null || profileBb != null){
 
@@ -105,7 +108,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 			System.out.println("DOB: " + dob);
 
 			ProfileInd newIndUser = new ProfileInd(user.getName(), user.getBloodGroup(), user.getEmail(), dob, user.getPhone(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), new Timestamp(System.currentTimeMillis()), bcryptEncoder.encode(user.getPassword()));
-        	ProfileInd newProfileInd = profileIndRepository.save(newIndUser);
+        	ProfileInd newProfileInd = profileIndRepo.save(newIndUser);
 
 			//? GENERATE TOKEN HERE
 
@@ -129,9 +132,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
 		//TODO TO BE CHANGED TO USER SPECIFIC ENTITIES.
-		ProfileInd profileInd = profileIndRepository.findByEmail(user.getEmail());
-		ProfileHos profileHos = profileHosRepository.findByEmail(user.getEmail());
-		ProfileBb profileBb = profileBbRepository.findByEmail(user.getEmail());
+		ProfileInd profileInd = profileIndRepo.findByEmail(user.getEmail());
+		ProfileHos profileHos = profileHosRepo.findByEmail(user.getEmail());
+		ProfileBb profileBb = profileBbRepo.findByEmail(user.getEmail());
 
 		if(profileInd != null || profileHos != null || profileBb != null){
 
@@ -163,7 +166,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 				newHosUser.setPhone5(user.getPhone().get(4));
 			}
 
-			ProfileHos newProfileHos = profileHosRepository.save(newHosUser);
+			ProfileHos newProfileHos = profileHosRepo.save(newHosUser);
 
 			//? GENERATE TOKEN HERE
 
@@ -172,7 +175,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 			//? INITIALIZE THE INVENTORY.
 
 			for (String component : components) {
-				inventoryHosRepository.save(new InventoryHos(newProfileHos.getUserId(), component));
+				inventoryHosRepo.save(new InventoryHos(newProfileHos.getUserId(), component));
 			}
 
 			//? SETTING THE HEADERS AND RESPONSE BODY.
@@ -193,9 +196,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
 		//TODO TO BE CHANGED TO USER SPECIFIC ENTITIES.
-		ProfileInd profileInd = profileIndRepository.findByEmail(user.getEmail());
-		ProfileHos profileHos = profileHosRepository.findByEmail(user.getEmail());
-		ProfileBb profileBb = profileBbRepository.findByEmail(user.getEmail());
+		ProfileInd profileInd = profileIndRepo.findByEmail(user.getEmail());
+		ProfileHos profileHos = profileHosRepo.findByEmail(user.getEmail());
+		ProfileBb profileBb = profileBbRepo.findByEmail(user.getEmail());
 
 		if(profileInd != null || profileHos != null || profileBb != null){
 
@@ -227,7 +230,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 				newBbUser.setPhone5(user.getPhone().get(4));
 			}
 
-			ProfileBb newProfileBb = profileBbRepository.save(newBbUser);
+			ProfileBb newProfileBb = profileBbRepo.save(newBbUser);
 
 			//? GENERATE TOKEN HERE
 
@@ -235,7 +238,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			//? INITIALIZE THE INVENTORY.
 			for (String component : components) {
-				inventoryBbRepository.save(new InventoryBb(newProfileBb.getUserId(), component));
+				inventoryBbRepo.save(new InventoryBb(newProfileBb.getUserId(), component));
 			}
 
 			//? SETTING THE HEADERS AND RESPONSE BODY.

@@ -12,15 +12,12 @@ public class InviteDonationResponseBody {
     private String recipientEmail;
     private int recipientContact;
     private String address;
-    private String district;
-    private String state;
-    private int pincode;
 
     public InviteDonationResponseBody() {
         super();
     }
 
-    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address, String district, String state, int pincode) {
+    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address) {
         this.inviteTimestamp = inviteTimestamp;
         this.donationId = donationId;
         this.status = status;
@@ -29,9 +26,6 @@ public class InviteDonationResponseBody {
         this.recipientEmail = recipientEmail;
         this.recipientContact = recipientContact;
         this.address = address;
-        this.district = district;
-        this.state = state;
-        this.pincode = pincode;
     }
 
     public Timestamp getInviteTimestamp() {
@@ -102,29 +96,6 @@ public class InviteDonationResponseBody {
         this.address = address;
     }
 
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public int getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(int pincode) {
-        this.pincode = pincode;
-    }
 
     @Override
     public String toString() {
@@ -138,9 +109,6 @@ public class InviteDonationResponseBody {
                 ", recipientEmail='" + recipientEmail + '\'' +
                 ", recipientContact=" + recipientContact +
                 ", address='" + address + '\'' +
-                ", district='" + district + '\'' +
-                ", state='" + state + '\'' +
-                ", pincode=" + pincode +
                 '}';
     }
 }

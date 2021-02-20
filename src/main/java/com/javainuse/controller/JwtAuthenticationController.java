@@ -1,10 +1,13 @@
 package com.javainuse.controller;
 
-import com.javainuse.model.*;
-import com.javainuse.repositories.ProfileBbRepository;
-import com.javainuse.repositories.ProfileHosRepository;
-import com.javainuse.repositories.ProfileIndRepository;
+import com.javainuse.models.*;
+import com.javainuse.repositories.ProfileBbRepo;
+import com.javainuse.repositories.ProfileHosRepo;
+import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.requests.JwtRequest;
+import com.javainuse.requests.ProfileBbDTO;
+import com.javainuse.requests.ProfileHosDTO;
+import com.javainuse.requests.ProfileIndDTO;
 import com.javainuse.responses.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -34,13 +37,13 @@ public class JwtAuthenticationController {
 	private JwtUserDetailsService userDetailsService;
 
 	@Autowired
-	private ProfileIndRepository profileIndRepository;
+	private ProfileIndRepo profileIndRepo;
 
 	@Autowired
-	private ProfileHosRepository profileHosRepository;
+	private ProfileHosRepo profileHosRepo;
 
 	@Autowired
-	private ProfileBbRepository profileBbRepository;
+	private ProfileBbRepo profileBbRepo;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,11 +76,11 @@ public class JwtAuthenticationController {
 		//////////////////////////////////////////////////ROOKIE CODE, TO BE TAKEN CARE OF////////////////////////////////////////////////////////////////////////
 
 
-		ProfileInd profileInd = profileIndRepository.findByEmail(authenticationRequest.getEmail());
+		ProfileInd profileInd = profileIndRepo.findByEmail(authenticationRequest.getEmail());
 
-		ProfileHos profileHos = profileHosRepository.findByEmail(authenticationRequest.getEmail());
+		ProfileHos profileHos = profileHosRepo.findByEmail(authenticationRequest.getEmail());
 
-		ProfileBb profileBb = profileBbRepository.findByEmail(authenticationRequest.getEmail());
+		ProfileBb profileBb = profileBbRepo.findByEmail(authenticationRequest.getEmail());
 
 
 		HttpHeaders responseHeaders = new HttpHeaders();

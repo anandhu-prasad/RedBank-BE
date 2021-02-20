@@ -12,18 +12,15 @@ public class InviteDriveResponseBody {
     private String recipientEmail;
     private int recipientContact;
     private String address;
-    private String district;
-    private String state;
-    private int pincode;
     private Timestamp startTimestamp;
     private Timestamp endTimestamp;
-
+    private String message;
 
     public InviteDriveResponseBody() {
         super();
     }
 
-    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address, String district, String state, int pincode, Timestamp startTimestamp, Timestamp endTimestamp) {
+    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address, Timestamp startTimestamp, Timestamp endTimestamp, String message) {
         this.inviteTimestamp = inviteTimestamp;
         this.driveId = driveId;
         this.status = status;
@@ -32,11 +29,9 @@ public class InviteDriveResponseBody {
         this.recipientEmail = recipientEmail;
         this.recipientContact = recipientContact;
         this.address = address;
-        this.district = district;
-        this.state = state;
-        this.pincode = pincode;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
+        this.message = message;
     }
 
     public Timestamp getInviteTimestamp() {
@@ -107,30 +102,6 @@ public class InviteDriveResponseBody {
         this.address = address;
     }
 
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public int getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(int pincode) {
-        this.pincode = pincode;
-    }
-
     public Timestamp getStartTimestamp() {
         return startTimestamp;
     }
@@ -147,6 +118,14 @@ public class InviteDriveResponseBody {
         this.endTimestamp = endTimestamp;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return "InviteDriveResponseBody{" +
@@ -159,11 +138,9 @@ public class InviteDriveResponseBody {
                 ", recipientEmail='" + recipientEmail + '\'' +
                 ", recipientContact=" + recipientContact +
                 ", address='" + address + '\'' +
-                ", district='" + district + '\'' +
-                ", state='" + state + '\'' +
-                ", pincode=" + pincode +
                 ", startTimestamp=" + startTimestamp +
                 ", endTimestamp=" + endTimestamp +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.model.*;
+import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.requests.InviteRequestBody;
 import com.javainuse.responses.InviteDonationResponseBody;
@@ -22,30 +22,30 @@ import java.util.List;
 public class InviteController {
 
     @Autowired
-    DonationInvitedDonorsRepository donationInvitedDonorsRepository;
+    DonationInvitedDonorsRepo donationInvitedDonorsRepo;
 
     @Autowired
-    DriveInvitedDonorsRepository driveInvitedDonorsRepository;
+    DriveInvitedDonorsRepo driveInvitedDonorsRepo;
 
     @Autowired
-    ProfileIndRepository profileIndRepository;
-
-    @Autowired
-
-    ProfileHosRepository profileHosRepository;
+    ProfileIndRepo profileIndRepo;
 
     @Autowired
 
-    ProfileBbRepository profileBbRepository;
+    ProfileHosRepo profileHosRepo;
 
     @Autowired
-    NotificationRepository notificationRepository;
+
+    ProfileBbRepo profileBbRepo;
 
     @Autowired
-    DrivesRepository drivesRepository;
+    NotificationRepo notificationRepo;
 
     @Autowired
-    DonationRequestRepository donationRequestRepository;
+    DrivesRepo drivesRepo;
+
+    @Autowired
+    DonationRequestRepo donationRequestRepo;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -62,44 +62,49 @@ public class InviteController {
             Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
             String userId = claims.get("userId").toString();
 
+            System.out.println("1");
 
             List <Object> responseList = new ArrayList<>();
             Timestamp currTime = new Timestamp(System.currentTimeMillis());
 
             //? GETTING THE LIST OF DONATION REQUESTS FROM drive_invited_donors TABLE.
 
-            List <DonationInvitedDonors> donationInvitedDonors = donationInvitedDonorsRepository.findByUserId(userId);
+            List <DonationInvitedDonors> donationInvitedDonors = donationInvitedDonorsRepo.findByUserId(userId);
 
-            List <DriveInvitedDonors> driveInvitedDonors = driveInvitedDonorsRepository.findByUserId(userId);
+            List <DriveInvitedDonors> driveInvitedDonors = driveInvitedDonorsRepo.findByUserId(userId);
 
             for (DonationInvitedDonors donationInvitedDonor : donationInvitedDonors) {
                 //! HERE, I NEED TO ADD THE NEW DATA SORTED ON THE BASIS OF CREATION DATE OF THE INVITE
 
+                System.out.println("2");
+
                 String donationId = donationInvitedDonor.getDonationId();
-                DonationRequest donationRequest = donationRequestRepository.findByDonationId(donationId);
+                DonationRequest donationRequest = donationRequestRepo.findByDonationId(donationId);
 
-                String recipientName;
-                String recipientType;
-                String recipientEmail;
-                int recipientContact;
+                if(donationRequest.getStatus()){
 
-                if(donationRequest.getUserId().substring(0,3) == "HOS"){
-                    recipientType = "Hospital";
-                    ProfileHos profileHos = profileHosRepository.findByUserId(donationRequest.getUserId());
-                    recipientName = profileHos.getName();
-                    recipientEmail = profileHos.getEmail();
-                    recipientContact = profileHos.getPhone1();
-                }
-                else{
-                    recipientType = "Blood Bank";
-                    ProfileBb profileBb = profileBbRepository.findByUserId(donationRequest.getUserId());
-                    recipientName = profileBb.getName();
-                    recipientEmail = profileBb.getEmail();
-                    recipientContact = profileBb.getPhone1();
-                }
+                    String recipientName;
+                    String recipientType;
+                    String recipientEmail;
+                    int recipientContact;
 
-                if(donationRequest.isStatus()){
-                    InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress(), donationRequest.getDistrict(), donationRequest.getState(), donationRequest.getPincode());
+                    if(donationRequest.getUserId().substring(0, 3).equals("HOS")){
+                        recipientType = "Hospital";
+                        ProfileHos profileHos = profileHosRepo.findByUserId(donationRequest.getUserId());
+                        recipientName = profileHos.getName();
+                        recipientEmail = profileHos.getEmail();
+                        recipientContact = profileHos.getPhone1();
+                    }
+                    else{
+                        recipientType = "Blood Bank";
+                        ProfileBb profileBb = profileBbRepo.findByUserId(donationRequest.getUserId());
+                        recipientName = profileBb.getName();
+                        recipientEmail = profileBb.getEmail();
+                        recipientContact = profileBb.getPhone1();
+                    }
+
+
+                    InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress());
                     responseList.add(inviteDonationResponseBody);
 
                 }
@@ -109,34 +114,43 @@ public class InviteController {
             for (DriveInvitedDonors driveInvitedDonor : driveInvitedDonors) {
                 //! HERE, I NEED TO ADD THE NEW DATA SORTED ON THE BASIS OF CREATION DATE OF THE INVITE
 
+                System.out.println("3");
+
                 String driveId = driveInvitedDonor.getDriveId();
-                Drives drive = drivesRepository.findByDriveId(driveId);
+                Drives drive = drivesRepo.findByDriveId(driveId);
 
-                String recipientName;
-                String recipientType;
-                String recipientEmail;
-                int recipientContact;
+                if(drive.getStatus()){
 
-                if(drive.getUserId().substring(0,3) == "HOS"){
-                    recipientType = "Hospital";
-                    ProfileHos profileHos = profileHosRepository.findByUserId(drive.getUserId());
-                    recipientName = profileHos.getName();
-                    recipientEmail = profileHos.getEmail();
-                    recipientContact = profileHos.getPhone1();
-                }
-                else{
-                    recipientType = "Blood Bank";
-                    ProfileBb profileBb = profileBbRepository.findByUserId(drive.getUserId());
-                    recipientName = profileBb.getName();
-                    recipientEmail = profileBb.getEmail();
-                    recipientContact = profileBb.getPhone1();
-                }
+                    String recipientName;
+                    String recipientType;
+                    String recipientEmail;
+                    int recipientContact;
+
+                    if(drive.getUserId().substring(0, 3).equals("HOS")){
+                        recipientType = "Hospital";
+                        ProfileHos profileHos = profileHosRepo.findByUserId(drive.getUserId());
+                        recipientName = profileHos.getName();
+                        recipientEmail = profileHos.getEmail();
+                        recipientContact = profileHos.getPhone1();
+                    }
+                    else{
+                        recipientType = "Blood Bank";
+                        ProfileBb profileBb = profileBbRepo.findByUserId(drive.getUserId());
+                        recipientName = profileBb.getName();
+                        recipientEmail = profileBb.getEmail();
+                        recipientContact = profileBb.getPhone1();
+                    }
+                System.out.print(drive.getStartTimestamp());
+                System.out.println(currTime);
 
 
-                if(drive.isStatus() && drive.getStart_timestamp().compareTo(currTime) > 0){
-                    //TODO CHECK FOR TEST OUTPUT.
+//                 && new Timestamp().compareTo(currTime) > 0
+                //TODO CONDITION BASED ON DATE.
 
-                    InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress(), drive.getDistrict(), drive.getState(), drive.getPincode(), drive.getStart_timestamp(), drive.getEnd_timestamp());
+
+                    System.out.println("6");
+
+                    InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress() + ", " + drive.getDistrict() + ", " +drive.getState() + "(" +drive.getPincode()+ ")" , drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage());
                     responseList.add(inviteDriveResponseBody);
                 }
             }
@@ -175,48 +189,48 @@ public class InviteController {
             if(inviteRequestBody.getEventType().equals("drive")){
                 //? MAKE A NEW ID OBJECT
 
-                DriveInvitedDonors driveInvitedDonors = driveInvitedDonorsRepository.findByDriveIdAndUserId(inviteRequestBody.getEventId(), userId);
+                DriveInvitedDonors driveInvitedDonors = driveInvitedDonorsRepo.findByDriveIdAndUserId(inviteRequestBody.getEventId(), userId);
 
                 driveInvitedDonors.setAcceptance(inviteRequestBody.getAcceptance());
                 driveInvitedDonors.setResponseTimeStamp(new Timestamp(System.currentTimeMillis()));
                 driveInvitedDonors.setRejection_message(inviteRequestBody.getRejectionMessage());
 
-                driveInvitedDonorsRepository.save(driveInvitedDonors);
+                driveInvitedDonorsRepo.save(driveInvitedDonors);
 
                 //? ALSO, TO SET THE NOTIFICATION, WE HAVE,
 
                 //?1.  GET THE NAME OF THE DONOR BY FIRST FINDING THE DONATION REQUEST/ DRIVE ROW IN THE TABLE, GET THE ORGANIZER'S USER ID,
                 //? THEN SET A NOTIFICATION FOR THAT ID.
                 if(inviteRequestBody.getAcceptance() == 1){
-                String organizerId = drivesRepository.findByDriveId(inviteRequestBody.getEventId()).getUserId();
+                String organizerId = drivesRepo.findByDriveId(inviteRequestBody.getEventId()).getUserId();
 
-                String donorName = profileIndRepository.findByUserId(userId).getName();
+                String donorName = profileIndRepo.findByUserId(userId).getName();
 
                 Notification notification = new Notification(organizerId, "New donor!", donorName + " has accepted your drive invite.", new Timestamp(System.currentTimeMillis()));
-                notificationRepository.save(notification);}
+                notificationRepo.save(notification);}
 
             }
             else{
 
-                DonationInvitedDonors donationInvitedDonors = donationInvitedDonorsRepository.findByDonationIdAndUserId(inviteRequestBody.getEventId(), userId);
+                DonationInvitedDonors donationInvitedDonors = donationInvitedDonorsRepo.findByDonationIdAndUserId(inviteRequestBody.getEventId(), userId);
 
                 donationInvitedDonors.setAcceptance(inviteRequestBody.getAcceptance());
                 donationInvitedDonors.setResponseTimeStamp(new Timestamp(System.currentTimeMillis()));
                 donationInvitedDonors.setRejection_message(inviteRequestBody.getRejectionMessage());
 
-                donationInvitedDonorsRepository.save(donationInvitedDonors);
+                donationInvitedDonorsRepo.save(donationInvitedDonors);
 
                 //? ALSO, TO SET THE NOTIFICATION, WE HAVE,
 
                 //?1.  GET THE NAME OF THE DONOR BY FIRST FINDING THE DONATION REQUEST/ DRIVE ROW IN THE TABLE, GET THE ORGANIZER'S USER ID,
                 //? THEN SET A NOTIFICATION FOR THAT ID.
                 if(inviteRequestBody.getAcceptance() == 1){
-                String organizerId = donationRequestRepository.findByDonationId(inviteRequestBody.getEventId()).getUserId();
+                String organizerId = donationRequestRepo.findByDonationId(inviteRequestBody.getEventId()).getUserId();
 
-                String donorName = profileIndRepository.findByUserId(userId).getName();
+                String donorName = profileIndRepo.findByUserId(userId).getName();
 
                 Notification notification = new Notification(organizerId, "New donor!", donorName + " has accepted your donation request.", new Timestamp(System.currentTimeMillis()));
-                notificationRepository.save(notification);}
+                notificationRepo.save(notification);}
 
             }
 

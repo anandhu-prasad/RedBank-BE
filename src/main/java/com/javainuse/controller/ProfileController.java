@@ -1,12 +1,12 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.model.ProfileBb;
-import com.javainuse.model.ProfileHos;
-import com.javainuse.model.ProfileInd;
-import com.javainuse.repositories.ProfileBbRepository;
-import com.javainuse.repositories.ProfileHosRepository;
-import com.javainuse.repositories.ProfileIndRepository;
+import com.javainuse.models.ProfileBb;
+import com.javainuse.models.ProfileHos;
+import com.javainuse.models.ProfileInd;
+import com.javainuse.repositories.ProfileBbRepo;
+import com.javainuse.repositories.ProfileHosRepo;
+import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.requests.DonorStatusRequestBody;
 import com.javainuse.requests.ProfileBB_HosData;
 import com.javainuse.requests.ProfileIndData;
@@ -17,20 +17,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
-    ProfileIndRepository profileIndRepository;
+    ProfileIndRepo profileIndRepo;
 
     @Autowired
-    ProfileHosRepository profileHosRepository;
+    ProfileHosRepo profileHosRepo;
 
     @Autowired
-    ProfileBbRepository profileBbRepository;
+    ProfileBbRepo profileBbRepo;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -47,9 +45,9 @@ public class ProfileController {
             String userId = claims.get("userId").toString();
             int userType = Integer.parseInt(claims.get("userType").toString());
 
-            ProfileInd profileInd = profileIndRepository.findByUserId(userId);
+            ProfileInd profileInd = profileIndRepo.findByUserId(userId);
             profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
-            profileIndRepository.save(profileInd);
+            profileIndRepo.save(profileInd);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
             System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
@@ -74,7 +72,7 @@ public class ProfileController {
             String userId = claims.get("userId").toString();
 //            int userType = Integer.parseInt(claims.get("userType").toString());
 
-            ProfileInd match = profileIndRepository.findByUserId(userId);
+            ProfileInd match = profileIndRepo.findByUserId(userId);
 
             //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
             match.setAddress(profile.getAddress());
@@ -84,7 +82,7 @@ public class ProfileController {
             match.setPhone(profile.getPhone());
             match.setBloodGroup(profile.getBloodGroup());
 
-            profileIndRepository.save(match);
+            profileIndRepo.save(match);
 
             //! SEND THE NEWLY UPDATED PROFILE DETAILS AS RESPONSE BODY IF REQUIRED.
 
@@ -110,7 +108,7 @@ public class ProfileController {
             String userId = claims.get("userId").toString();
 //            int userType = Integer.parseInt(claims.get("userType").toString());
 
-            ProfileHos match = profileHosRepository.findByUserId(userId);
+            ProfileHos match = profileHosRepo.findByUserId(userId);
 
             //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
             match.setAddress(profile.getAddress());
@@ -137,7 +135,7 @@ public class ProfileController {
 
             //TODO ADD ALL THE GETTERS AND SETTERS IF THIS DOESN'T WORK.
 
-            profileHosRepository.save(match);
+            profileHosRepo.save(match);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
@@ -160,7 +158,7 @@ public class ProfileController {
             String userId = claims.get("userId").toString();
 //          int userType = Integer.parseInt(claims.get("userType").toString());
 
-            ProfileBb match = profileBbRepository.findByUserId(userId);
+            ProfileBb match = profileBbRepo.findByUserId(userId);
 
             //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
             match.setAddress(profile.getAddress());
@@ -185,7 +183,7 @@ public class ProfileController {
             }
 
 
-            profileBbRepository.save(match);
+            profileBbRepo.save(match);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
@@ -205,29 +203,29 @@ public class ProfileController {
 //
 //    @PostMapping("/addnewprofileind")
 //    public ProfileInd addNewProfileInd(@RequestBody ProfileInd profile){
-//        return profileIndRepository.save(profile);
+//        return profileIndRepo.save(profile);
 //    }
 //
 //    @PostMapping("/addnewprofilehos")
 //    public ProfileHos addNewProfileHos(@RequestBody ProfileHos profile){
-//        return profileHosRepository.save(profile);
+//        return profileHosRepo.save(profile);
 //    }
 //
 //    @PostMapping("/addnewprofilebb")
 //    public ProfileBb addNewProfileBb(@RequestBody ProfileBb profile){
-//        return profileBbRepository.save(profile);
+//        return profileBbRepo.save(profile);
 //    }
 //
 //    @GetMapping("/recieveprofile")
 //    public List<ProfileInd> extractProfileDetails(){
 //        System.out.println("getting profile data now!");
-//        return profileIndRepository.findAll();
+//        return profileIndRepo.findAll();
 //    }
 //
 //    //!HARDCODED HERE, SET TO ACTUAL
 //    @GetMapping("/userprofile")
 //    public ProfileInd extractProfile(){
-//        return profileIndRepository.findByUserId("IND1234");
+//        return profileIndRepo.findByUserId("IND1234");
 //    }
 
     //?//////////////////////////////////////////////////////////////////////////////////////////////////////////

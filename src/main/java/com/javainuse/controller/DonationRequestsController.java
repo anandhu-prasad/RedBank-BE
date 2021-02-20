@@ -1,8 +1,8 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.model.DonationRequest;
-import com.javainuse.repositories.DonationRequestRepository;
+import com.javainuse.models.DonationRequest;
+import com.javainuse.repositories.DonationRequestRepo;
 import com.javainuse.requests.ExpireRequestBody;
 import com.javainuse.responses.SuccessResponseBody;
 import io.jsonwebtoken.Claims;
@@ -18,7 +18,7 @@ import java.util.List;
 public class DonationRequestsController {
 
     @Autowired
-    DonationRequestRepository donationRequestRepository;
+    DonationRequestRepo donationRequestRepo;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -30,10 +30,10 @@ public class DonationRequestsController {
 
         //! TESTED
         try{
-            DonationRequest donationRequest = donationRequestRepository.findByDonationId(expireRequestBody.getDonationId());
+            DonationRequest donationRequest = donationRequestRepo.findByDonationId(expireRequestBody.getDonationId());
             donationRequest.setStatus(false);
 
-            donationRequestRepository.save(donationRequest);
+            donationRequestRepo.save(donationRequest);
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
@@ -59,7 +59,7 @@ public class DonationRequestsController {
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(donationRequestRepository.findByUserId(userId));
+            return ResponseEntity.ok().headers(responseHeaders).body(donationRequestRepo.findByUserId(userId));
         }
         catch (Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -77,7 +77,7 @@ public class DonationRequestsController {
 //    public ResponseEntity<DonationRequest> addNewRequest(@RequestBody DonationRequest donationRequest){
 //        HttpHeaders responseHeaders = new HttpHeaders();
 //        responseHeaders.set("success", "true");
-//        return ResponseEntity.ok().headers(responseHeaders).body(donationRequestRepository.save(donationRequest));
+//        return ResponseEntity.ok().headers(responseHeaders).body(donationRequestRepo.save(donationRequest));
 //    }
 //
 //

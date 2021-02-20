@@ -14,7 +14,15 @@ public class HelloWorldController {
 	JwtTokenUtil jwtTokenUtil;
 
 	@RequestMapping({ "/hello" })
-	public String firstPage() {
+//1. do this
+	public String firstPage(@RequestHeader ("Authorization") String userToken) {
+
+
+		Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+		String userIdFromToken = claims.get("userId").toString();
+		Integer userTypeFromToken = Integer.parseInt(claims.get("userType").toString());
+
+		System.out.println(userIdFromToken);
 
 		return "Hello World";
 	}
