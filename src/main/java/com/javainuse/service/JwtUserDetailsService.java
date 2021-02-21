@@ -107,7 +107,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 			Date dob = new SimpleDateFormat("yyyy/MM/dd").parse(user.getDob());
 			System.out.println("DOB: " + dob);
 
-			ProfileInd newIndUser = new ProfileInd(user.getName(), user.getBloodGroup(), user.getEmail(), dob, user.getPhone(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), new Timestamp(System.currentTimeMillis()), bcryptEncoder.encode(user.getPassword()));
+			ProfileInd newIndUser = new ProfileInd(user.getName(), user.getBloodGroup(), user.getEmail(), dob, user.getPhone(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), new Timestamp(System.currentTimeMillis()),
+					bcryptEncoder.encode(user.getPassword()));
         	ProfileInd newProfileInd = profileIndRepo.save(newIndUser);
 
 			//? GENERATE TOKEN HERE
