@@ -55,7 +55,7 @@ public class InviteController {
     //? BUT IN CASE OF DRIVES, WE HAVE MORE FIELDS, WE MIGHT HAVE TO SEND EMPTY DATA THERE, AND CONDITIONALLY RENDER IT AT FRONT END.
 
     @GetMapping("/fetchinvites")
-    public ResponseEntity<List<Object>> fetchInvites(@RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<List<?>> fetchInvites(@RequestHeader ("Authorization") String userToken){
 
         try{
             //! HARDCODED DATA, USER ID TO BE EXTRACTED FROM THE TOKEN - DONE.
@@ -77,6 +77,8 @@ public class InviteController {
                 //! HERE, I NEED TO ADD THE NEW DATA SORTED ON THE BASIS OF CREATION DATE OF THE INVITE
 
                 System.out.println("2");
+
+                if (donationInvitedDonor.getAcceptance() == 2) {
 
                 String donationId = donationInvitedDonor.getDonationId();
                 DonationRequest donationRequest = donationRequestRepo.findByDonationId(donationId);
@@ -107,7 +109,7 @@ public class InviteController {
                     InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress());
                     responseList.add(inviteDonationResponseBody);
 
-                }
+                }}
             }
 
 
@@ -116,6 +118,7 @@ public class InviteController {
 
                 System.out.println("3");
 
+                if (driveInvitedDonor.getAcceptance() == 2) {
                 String driveId = driveInvitedDonor.getDriveId();
                 Drives drive = drivesRepo.findByDriveId(driveId);
 
@@ -150,21 +153,23 @@ public class InviteController {
 
                     System.out.println("6");
 
-                    InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress() + ", " + drive.getDistrict() + ", " +drive.getState() + "(" +drive.getPincode()+ ")" , drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage());
+                    InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress(), drive.getDistrict(), drive.getState(), drive.getPincode(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage());
                     responseList.add(inviteDriveResponseBody);
                 }
+            }
             }
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
-
+            System.out.println("Okayy");
+            System.out.println(responseList);
             return ResponseEntity.ok().headers(responseHeaders).body(responseList);
         }
 
         catch(Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("error", "Something went wrong, please try again later.");
-            return ResponseEntity.notFound().headers(responseHeaders).build();
+            return ResponseEntity.badRequest().headers(responseHeaders).build();
 
         }
 
