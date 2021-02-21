@@ -10,7 +10,7 @@ public class InviteDriveResponseBody {
     private String recipientName;
     private String recipientType;
     private String recipientEmail;
-    private int recipientContact;
+    private String recipientContact;
     private String address;
     private Timestamp startTimestamp;
     private Timestamp endTimestamp;
@@ -20,7 +20,7 @@ public class InviteDriveResponseBody {
         super();
     }
 
-    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address, Timestamp startTimestamp, Timestamp endTimestamp, String message) {
+    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address, Timestamp startTimestamp, Timestamp endTimestamp, String message) {
         this.inviteTimestamp = inviteTimestamp;
         this.driveId = driveId;
         this.status = status;
@@ -86,11 +86,11 @@ public class InviteDriveResponseBody {
         this.recipientEmail = recipientEmail;
     }
 
-    public int getRecipientContact() {
+    public String getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(int recipientContact) {
+    public void setRecipientContact(String recipientContact) {
         this.recipientContact = recipientContact;
     }
 

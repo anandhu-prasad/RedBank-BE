@@ -10,14 +10,14 @@ public class InviteDonationResponseBody {
     private String recipientName;
     private String recipientType;
     private String recipientEmail;
-    private int recipientContact;
+    private String recipientContact;
     private String address;
 
     public InviteDonationResponseBody() {
         super();
     }
 
-    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, int recipientContact, String address) {
+    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address) {
         this.inviteTimestamp = inviteTimestamp;
         this.donationId = donationId;
         this.status = status;
@@ -80,11 +80,11 @@ public class InviteDonationResponseBody {
         this.recipientEmail = recipientEmail;
     }
 
-    public int getRecipientContact() {
+    public String getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(int recipientContact) {
+    public void setRecipientContact(String recipientContact) {
         this.recipientContact = recipientContact;
     }
 

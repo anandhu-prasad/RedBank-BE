@@ -86,7 +86,7 @@ public class InviteController {
                     String recipientName;
                     String recipientType;
                     String recipientEmail;
-                    int recipientContact;
+                    String recipientContact;
 
                     if(donationRequest.getUserId().substring(0, 3).equals("HOS")){
                         recipientType = "Hospital";
@@ -124,7 +124,7 @@ public class InviteController {
                     String recipientName;
                     String recipientType;
                     String recipientEmail;
-                    int recipientContact;
+                    String recipientContact;
 
                     if(drive.getUserId().substring(0, 3).equals("HOS")){
                         recipientType = "Hospital";

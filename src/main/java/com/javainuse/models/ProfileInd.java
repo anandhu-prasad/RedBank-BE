@@ -28,11 +28,11 @@ public class ProfileInd {
     private String bloodGroup;
     private String email;
     private Date dob;
-    private int phone;
+    private String phone;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private Timestamp registration_date;
     private Timestamp last_donation_date;
     @Column(name="donor_status", columnDefinition = "int default 0")
@@ -44,7 +44,7 @@ public class ProfileInd {
         super();
     }
 
-    public ProfileInd(String name, String bloodGroup, String email, Date dob, int phone, String address, String state, String district, int pincode, Timestamp registration_date, String password) {
+    public ProfileInd(String name, String bloodGroup, String email, Date dob, String phone, String address, String state, String district, String pincode, Timestamp registration_date, String password) {
         this.name = name;
         this.bloodGroup = bloodGroup;
         this.email = email;
@@ -147,11 +147,11 @@ public class ProfileInd {
         this.donorStatus = donorStatus;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 
@@ -163,11 +163,11 @@ public class ProfileInd {
         this.password = password;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 

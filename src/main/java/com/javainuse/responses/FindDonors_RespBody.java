@@ -6,9 +6,9 @@ public class FindDonors_RespBody {
     private String address;
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
 
-    public FindDonors_RespBody(String userId, String name, String address, String state, String district, Integer pincode) {
+    public FindDonors_RespBody(String userId, String name, String address, String state, String district, String pincode) {
         this.userId = userId;
         this.name = name;
         this.address = address;
@@ -60,11 +60,11 @@ public class FindDonors_RespBody {
         this.district = district;
     }
 
-    public Integer getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(Integer pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

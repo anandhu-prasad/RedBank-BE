@@ -29,7 +29,7 @@ public class Drives {
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private String message;
 
     @Column(name = "request_time")
@@ -72,7 +72,7 @@ public class Drives {
         super();
     }
 
-    public Drives(String userId, String address, String state, String district, int pincode, String message, Timestamp requestTime, Timestamp startTimestamp, Timestamp endTimestamp, Boolean bPos, Boolean bNeg, Boolean aPos, Boolean aNeg, Boolean oPos, Boolean oNeg, Boolean abPos, Boolean abNeg) {
+    public Drives(String userId, String address, String state, String district, String pincode, String message, Timestamp requestTime, Timestamp startTimestamp, Timestamp endTimestamp, Boolean bPos, Boolean bNeg, Boolean aPos, Boolean aNeg, Boolean oPos, Boolean oNeg, Boolean abPos, Boolean abNeg) {
         this.userId = userId;
         this.address = address;
         this.state = state;
@@ -133,11 +133,11 @@ public class Drives {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

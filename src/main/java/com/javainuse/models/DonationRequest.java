@@ -33,13 +33,13 @@ public class DonationRequest {
     private String address;
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
 
     @Column(name="blood_group")
     private String bloodGroup;
     private Boolean status;
 
-    public DonationRequest(String userId, Timestamp requestTime, String address, String state, String district, Integer pincode, String bloodGroup, Boolean status) {
+    public DonationRequest(String userId, Timestamp requestTime, String address, String state, String district, String pincode, String bloodGroup, Boolean status) {
         this.userId = userId;
         this.requestTime = requestTime;
         this.address = address;
@@ -102,11 +102,11 @@ public class DonationRequest {
         this.district = district;
     }
 
-    public Integer getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(Integer pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

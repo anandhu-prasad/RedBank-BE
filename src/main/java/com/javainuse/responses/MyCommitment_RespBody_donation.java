@@ -8,13 +8,13 @@ public class MyCommitment_RespBody_donation {
     private String commitmentType;
     private String recipientType;
     private String recipientId;
-    private Integer recipientContact;
+    private String recipientContact;
     private String recipientAddress;
     private Boolean status;    // commitment status -> Completed/incomplete
 
 
 
-    public MyCommitment_RespBody_donation(Timestamp commitment_timeStamp, String commitmentType, String recipientType, String recipientId, Integer recipientContact, String recipientAddress, Boolean status) {
+    public MyCommitment_RespBody_donation(Timestamp commitment_timeStamp, String commitmentType, String recipientType, String recipientId, String recipientContact, String recipientAddress, Boolean status) {
         this.commitment_timeStamp = commitment_timeStamp;
         this.commitmentType = commitmentType;
         this.recipientType = recipientType;
@@ -60,11 +60,11 @@ public class MyCommitment_RespBody_donation {
         this.recipientId = recipientId;
     }
 
-    public Integer getRecipientContact() {
+    public String getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(Integer recipientContact) {
+    public void setRecipientContact(String recipientContact) {
         this.recipientContact = recipientContact;
     }
 

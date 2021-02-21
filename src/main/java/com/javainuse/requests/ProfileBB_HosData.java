@@ -8,11 +8,11 @@ public class ProfileBB_HosData {
 
     private String email;
     private String license_number;
-    private List<Integer> phone;
+    private List<String> phone;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private Timestamp registration_date;
     private Timestamp last_donation_date;
 
@@ -20,7 +20,7 @@ public class ProfileBB_HosData {
         super();
     }
 
-    public ProfileBB_HosData(String email, String license_number, List<Integer> phone, String address, String state, String district, int pincode, Timestamp registration_date, Timestamp last_donation_date) {
+    public ProfileBB_HosData(String email, String license_number, List<String> phone, String address, String state, String district, String pincode, Timestamp registration_date, Timestamp last_donation_date) {
         this.email = email;
         this.license_number = license_number;
         this.phone = phone;
@@ -48,11 +48,11 @@ public class ProfileBB_HosData {
         this.license_number = license_number;
     }
 
-    public List<Integer> getPhone() {
+    public List<String> getPhone() {
         return phone;
     }
 
-    public void setPhone(List<Integer> phone) {
+    public void setPhone(List<String> phone) {
         this.phone = phone;
     }
 
@@ -80,11 +80,11 @@ public class ProfileBB_HosData {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

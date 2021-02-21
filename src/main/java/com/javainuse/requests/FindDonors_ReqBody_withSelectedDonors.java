@@ -8,11 +8,11 @@ public class FindDonors_ReqBody_withSelectedDonors {
     private String address;
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
     private String bloodGroup;
     private List<String> idList;
 
-    public FindDonors_ReqBody_withSelectedDonors(String address, String state, String district, Integer pincode, String bloodGroup, List<String> idList) {
+    public FindDonors_ReqBody_withSelectedDonors(String address, String state, String district, String pincode, String bloodGroup, List<String> idList) {
         this.address = address;
         this.state = state;
         this.district = district;
@@ -57,11 +57,11 @@ public class FindDonors_ReqBody_withSelectedDonors {
         this.district = district;
     }
 
-    public Integer getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(Integer pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

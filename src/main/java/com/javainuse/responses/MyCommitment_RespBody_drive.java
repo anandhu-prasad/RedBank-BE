@@ -7,14 +7,14 @@ public class MyCommitment_RespBody_drive {
     private String commitmentType;
     private String recipientType;
     private String recipientId;
-    private Integer recipientContact;
+    private String recipientContact;
     private String recipientAddress;
     private Boolean status;    // commitment status -> Completed/incomplete
     private Timestamp startTimeStamp;
     private Timestamp endTimeStamp;
 
 
-    public MyCommitment_RespBody_drive(Timestamp dateTime, String commitmentType, String recipientType, String recipientId, Integer recipientContact, String recipientAddress, Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp) {
+    public MyCommitment_RespBody_drive(Timestamp dateTime, String commitmentType, String recipientType, String recipientId, String recipientContact, String recipientAddress, Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp) {
         this.dateTime = dateTime;
         this.commitmentType = commitmentType;
         this.recipientType = recipientType;
@@ -62,11 +62,11 @@ public class MyCommitment_RespBody_drive {
         this.recipientId = recipientId;
     }
 
-    public Integer getRecipientContact() {
+    public String getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(Integer recipientContact) {
+    public void setRecipientContact(String recipientContact) {
         this.recipientContact = recipientContact;
     }
 

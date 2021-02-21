@@ -10,16 +10,16 @@ public class ProfileIndData {
     private String bloodGroup;
     private String email;
     private Date dob;
-    private int phone;
+    private String phone;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private Timestamp registration_date;
     private Timestamp last_donation_date;
 
-    public ProfileIndData(String bloodGroup, String email, Date dob, int phone,
-                          String address, String state, String district, int pincode,
+    public ProfileIndData(String bloodGroup, String email, Date dob, String phone,
+                          String address, String state, String district, String pincode,
                           Timestamp registration_date, Timestamp last_donation_date) {
         this.bloodGroup = bloodGroup;
         this.email = email;
@@ -62,11 +62,11 @@ public class ProfileIndData {
         this.dob = dob;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -94,11 +94,11 @@ public class ProfileIndData {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

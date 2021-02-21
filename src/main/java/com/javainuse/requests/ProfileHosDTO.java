@@ -8,19 +8,19 @@ public class ProfileHosDTO {
 
     private String name;
     private String email;
-    private List<Integer> phone;
+    private List<String> phone;
     private String licenseNumber;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private String password;
 
     public ProfileHosDTO() {
         super();
     }
 
-    public ProfileHosDTO(String name, String email, List<Integer> phone, String licenseNumber, String address, String state, String district, int pincode, String password) {
+    public ProfileHosDTO(String name, String email, List<String> phone, String licenseNumber, String address, String state, String district, String pincode, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -48,11 +48,11 @@ public class ProfileHosDTO {
         this.email = email;
     }
 
-    public List<Integer> getPhone() {
+    public List<String> getPhone() {
         return phone;
     }
 
-    public void setPhone(List<Integer> phone) {
+    public void setPhone(List<String> phone) {
         this.phone = phone;
     }
 
@@ -88,11 +88,11 @@ public class ProfileHosDTO {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

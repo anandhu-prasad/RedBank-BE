@@ -23,15 +23,15 @@ public class ProfileBb {
 
     private String email;
     private String license_number;
-    private int phone1;
-    private int phone2;
-    private int phone3;
-    private int phone4;
-    private int phone5;
+    private String phone1;
+    private String phone2;
+    private String phone3;
+    private String phone4;
+    private String phone5;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private String password;
     private Timestamp registration_date;
 
@@ -40,7 +40,7 @@ public class ProfileBb {
         super();
     }
 
-    public ProfileBb(String name, String email, String license_number, String address, String state, String district, int pincode, String password, Timestamp registration_date) {
+    public ProfileBb(String name, String email, String license_number, String address, String state, String district, String pincode, String password, Timestamp registration_date) {
         this.name = name;
         this.email = email;
         this.license_number = license_number;
@@ -84,43 +84,43 @@ public class ProfileBb {
         this.license_number = license_number;
     }
 
-    public int getPhone1() {
+    public String getPhone1() {
         return phone1;
     }
 
-    public void setPhone1(int phone1) {
+    public void setPhone1(String phone1) {
         this.phone1 = phone1;
     }
 
-    public int getPhone2() {
+    public String getPhone2() {
         return phone2;
     }
 
-    public void setPhone2(int phone2) {
+    public void setPhone2(String phone2) {
         this.phone2 = phone2;
     }
 
-    public int getPhone3() {
+    public String getPhone3() {
         return phone3;
     }
 
-    public void setPhone3(int phone3) {
+    public void setPhone3(String phone3) {
         this.phone3 = phone3;
     }
 
-    public int getPhone4() {
+    public String getPhone4() {
         return phone4;
     }
 
-    public void setPhone4(int phone4) {
+    public void setPhone4(String phone4) {
         this.phone4 = phone4;
     }
 
-    public int getPhone5() {
+    public String getPhone5() {
         return phone5;
     }
 
-    public void setPhone5(int phone5) {
+    public void setPhone5(String phone5) {
         this.phone5 = phone5;
     }
 
@@ -148,11 +148,11 @@ public class ProfileBb {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

@@ -6,13 +6,13 @@ public class FindDonors_ReqBody {
     private String address;
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
     private String bloodGroup;
 
     public FindDonors_ReqBody(){
         super();
     }
-    public FindDonors_ReqBody(String address, String state, String district, Integer pincode, String bloodGroup) {
+    public FindDonors_ReqBody(String address, String state, String district, String pincode, String bloodGroup) {
         this.address = address;
         this.state = state;
         this.district = district;
@@ -45,11 +45,11 @@ public class FindDonors_ReqBody {
         this.district = district;
     }
 
-    public Integer getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(Integer pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

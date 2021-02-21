@@ -12,5 +12,5 @@ import lombok.Setter;
 public class UpcomingDrives_ReqBody {
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
 }

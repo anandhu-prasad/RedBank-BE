@@ -48,17 +48,18 @@ public class JwtAuthenticationController {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/registerind", method = RequestMethod.POST)
-	public ResponseEntity<AuthResponse> saveUserInd(@RequestBody ProfileIndDTO user) throws Exception {
+	public ResponseEntity<?> saveUserInd(@RequestBody ProfileIndDTO user) throws Exception {
+		System.out.println(user);
 		return userDetailsService.saveInd(user);
 	}
 
 	@RequestMapping(value = "/registerhos", method = RequestMethod.POST)
-	public ResponseEntity<AuthResponse> saveUserHos(@RequestBody ProfileHosDTO user) throws Exception {
+	public ResponseEntity<?> saveUserHos(@RequestBody ProfileHosDTO user) throws Exception {
 		return userDetailsService.saveHos(user);
 	}
 
 	@RequestMapping(value = "/registerbb", method = RequestMethod.POST)
-	public ResponseEntity<AuthResponse> saveUserBb(@RequestBody ProfileBbDTO user) throws Exception {
+	public ResponseEntity<?> saveUserBb(@RequestBody ProfileBbDTO user) throws Exception {
 		return userDetailsService.saveBb(user);
 	}
 
@@ -94,7 +95,7 @@ public class JwtAuthenticationController {
 			final String token = jwtTokenUtil.generateUserToken(profileHos.getUserId(), profileHos.getEmail(), 2);
 			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileHos.getUserId(), 2));
 		}
-		else{
+		else {
 			final String token = jwtTokenUtil.generateUserToken(profileBb.getUserId(), profileBb.getEmail(), 3);
 			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileBb.getUserId(), 3));
 		}

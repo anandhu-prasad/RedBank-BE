@@ -14,6 +14,7 @@ import com.javainuse.requests.ProfileBbDTO;
 import com.javainuse.requests.ProfileHosDTO;
 import com.javainuse.requests.ProfileIndDTO;
 import com.javainuse.responses.AuthResponse;
+import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +86,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	}
 	
-	public ResponseEntity<AuthResponse> saveInd(ProfileIndDTO user) throws Exception{
+	public ResponseEntity<?> saveInd(ProfileIndDTO user) throws Exception{
 
 		//? CHECK IF THE NEWLY REGISTERED USER IS USING A PREVIOUSLY REGISTERED PHONE(S) OR EMAIL.
 
@@ -99,12 +100,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("error", "Email is already taken");
-			return ResponseEntity.notFound().headers(responseHeaders).build();
+			return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(false));
 
 		}
 
 		else{
-			Date dob = new SimpleDateFormat("yyyy/MM/dd").parse(user.getDob());
+			Date dob = new SimpleDateFormat("dd/MM/yy").parse(user.getDob());
 			System.out.println("DOB: " + dob);
 
 			ProfileInd newIndUser = new ProfileInd(user.getName(), user.getBloodGroup(), user.getEmail(), dob, user.getPhone(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), new Timestamp(System.currentTimeMillis()), bcryptEncoder.encode(user.getPassword()));
@@ -126,7 +127,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
 
-	public ResponseEntity<AuthResponse> saveHos(ProfileHosDTO user) throws Exception{
+	public ResponseEntity<?> saveHos(ProfileHosDTO user) throws Exception{
 
 		//? CHECK IF THE NEWLY REGISTERED USER IS USING A PREVIOUSLY REGISTERED PHONE(S) OR EMAIL.
 
@@ -140,10 +141,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("error", "Email is already taken");
-			return ResponseEntity.notFound().headers(responseHeaders).build();
+			return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(false));
 
 		}
-
 		else{
 
 			ProfileHos newHosUser = new ProfileHos(user.getName(), user.getEmail(), user.getLicenseNumber(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), bcryptEncoder.encode(user.getPassword()), new Timestamp(System.currentTimeMillis()));
@@ -190,7 +190,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 
 
-	public ResponseEntity<AuthResponse> saveBb(ProfileBbDTO user) throws Exception{
+	public ResponseEntity<?> saveBb(ProfileBbDTO user) throws Exception{
 
 		//? CHECK IF THE NEWLY REGISTERED USER IS USING A PREVIOUSLY REGISTERED PHONE(S) OR EMAIL.
 
@@ -204,7 +204,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("error", "Email is already taken");
-			return ResponseEntity.notFound().headers(responseHeaders).build();
+			return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(false));
 
 		}
 

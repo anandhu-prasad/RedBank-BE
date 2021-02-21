@@ -3,20 +3,20 @@ package com.javainuse.requests;
 public class ProfileIndDTO {
     private String name;
     private String email;
-    private int phone;
+    private String phone;
     private String dob;
     private String bloodGroup;
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private String password;
 
     public ProfileIndDTO() {
         super();
     }
 
-    public ProfileIndDTO(String name, String email, int phone, String dob, String bloodGroup, String address, String state, String district, int pincode, String password) {
+    public ProfileIndDTO(String name, String email, String phone, String dob, String bloodGroup, String address, String state, String district, String pincode, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -45,11 +45,11 @@ public class ProfileIndDTO {
         this.email = email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -93,11 +93,11 @@ public class ProfileIndDTO {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 

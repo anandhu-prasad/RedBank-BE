@@ -14,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public class UpcomingDrives_RespBody {
     private String name;
-    private Integer contact;
+    private String contact;
     private Timestamp startTimestamp;
     private Timestamp endTimestamp;
     private String address;
     private String state;
     private String district;
-    private Integer pincode;
+    private String pincode;
     private List<String> bloodGroups;
 }

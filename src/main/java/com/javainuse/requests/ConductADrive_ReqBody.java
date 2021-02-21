@@ -12,14 +12,14 @@ public class ConductADrive_ReqBody {
     private String address;
     private String state;
     private String district;
-    private int pincode;
+    private String pincode;
     private String message;
 
 
     public ConductADrive_ReqBody(){
         super();
     }
-    public ConductADrive_ReqBody(Timestamp startTimeStamp, Timestamp endTimeStamp, List<String> bloodGroups, String address, String state, String district, int pincode, String message) {
+    public ConductADrive_ReqBody(Timestamp startTimeStamp, Timestamp endTimeStamp, List<String> bloodGroups, String address, String state, String district, String pincode, String message) {
 
         this.startTimeStamp = startTimeStamp;
         this.endTimeStamp = endTimeStamp;
@@ -81,11 +81,11 @@ public class ConductADrive_ReqBody {
         this.district = district;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 
