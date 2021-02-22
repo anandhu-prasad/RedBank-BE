@@ -97,12 +97,19 @@ public class InviteController {
                         recipientEmail = profileHos.getEmail();
                         recipientContact = profileHos.getPhone1();
                     }
-                    else{
+                    else if(donationRequest.getUserId().substring(0, 3).equals("BOB")){
                         recipientType = "Blood Bank";
                         ProfileBb profileBb = profileBbRepo.findByUserId(donationRequest.getUserId());
                         recipientName = profileBb.getName();
                         recipientEmail = profileBb.getEmail();
                         recipientContact = profileBb.getPhone1();
+                    }
+                    else{
+                        recipientType = "Individual";
+                        ProfileInd profileInd = profileIndRepo.findByUserId(donationRequest.getUserId());
+                        recipientName = profileInd.getName();
+                        recipientEmail = profileInd.getEmail();
+                        recipientContact = profileInd.getPhone();
                     }
 
 
