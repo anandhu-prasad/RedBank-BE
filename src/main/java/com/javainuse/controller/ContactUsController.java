@@ -20,7 +20,7 @@ public class ContactUsController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/addMessage")
+    @PostMapping("/addmessage")
     public ResponseEntity<SuccessResponseBody> addMessage(@RequestBody ContactUs_ReqBody message,
             @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));

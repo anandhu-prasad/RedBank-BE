@@ -42,27 +42,33 @@ public class ProfileController {
 
 
     @GetMapping("/fetchuserprofile")
-    public Object getProfileDetails(@RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<?> getProfileDetails(@RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
 
         if(userType == 1){
             ProfileInd obj = profileIndRepo.findByUserId(userId);
             ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus());
-            return  obj1;
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+
         }
         else if(userType == 3){
             ProfileBb obj = profileBbRepo.findByUserId(userId);
             ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
-            return  obj1;
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+
         }else{
             ProfileHos obj = profileHosRepo.findByUserId(userId);
             ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
-            return  obj1;
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
         }
+
+
+
     }
 
     @GetMapping("/fetchuserdata")

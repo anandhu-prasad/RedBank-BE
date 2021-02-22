@@ -32,7 +32,7 @@ public class ProfileBB_HosData {
         this.last_donation_date = last_donation_date;
     }
 
-    public ProfileBB_HosData(String email, String license_number, int phone1, int phone2, int phone3, int phone4, int phone5, String address, String state, String district, int pincode, Timestamp registration_date) {
+    public ProfileBB_HosData(String email, String license_number, String phone1, String phone2, String phone3, String phone4, String phone5, String address, String state, String district, String pincode, Timestamp registration_date) {
     }
 
     public String getEmail() {
