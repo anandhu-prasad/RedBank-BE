@@ -7,10 +7,13 @@ import com.javainuse.models.ProfileInd;
 import com.javainuse.repositories.ProfileBbRepo;
 import com.javainuse.repositories.ProfileHosRepo;
 import com.javainuse.repositories.ProfileIndRepo;
-import com.javainuse.requests.DonorStatusRequestBody;
-import com.javainuse.requests.ProfileBB_HosData;
-import com.javainuse.requests.ProfileIndData;
+import com.javainuse.requests.*;
+import com.javainuse.responses.ProfileIndividualData;
+import com.javainuse.responses.ProfileDataBb_Hos;
+import com.javainuse.responses.ProfileDataInd;
 import com.javainuse.responses.SuccessResponseBody;
+import com.javainuse.service.ChangePasswordDAO;
+import com.javainuse.service.Verify_ChangePasswordDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +36,91 @@ public class ProfileController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+
+    @Autowired
+    Verify_ChangePasswordDAO verifyChangePasswordDAO;
+
+
+    @GetMapping("/fetchuserprofile")
+    public Object getProfileDetails(@RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+
+
+        if(userType == 1){
+            ProfileInd obj = profileIndRepo.findByUserId(userId);
+            ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus());
+            return  obj1;
+        }
+        else if(userType == 3){
+            ProfileBb obj = profileBbRepo.findByUserId(userId);
+            ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            return  obj1;
+        }else{
+            ProfileHos obj = profileHosRepo.findByUserId(userId);
+            ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            return  obj1;
+        }
+    }
+
+    @GetMapping("/fetchuserdata")
+    public Object getProfileDataDetails(@RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+
+
+        if(userType == 1){
+            ProfileInd obj = profileIndRepo.findByUserId(userId);
+            ProfileIndividualData obj1 = new ProfileIndividualData(obj.getBloodGroup(), obj.getEmail(), obj.getDob(), obj.getPhone(), obj.getAddress(), obj.getState(), obj.getDistrict(),obj.getPincode(),obj.getRegistration_date(),obj.getLast_donation_date());
+            return  obj1;
+        }
+        else if(userType == 3){
+            ProfileBb obj = profileBbRepo.findByUserId(userId);
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(), obj.getLicense_number(), obj.getPhone1(),obj.getPhone2(), obj.getPhone3(),obj.getPhone4(),obj.getPhone5(),obj.getAddress(),obj.getState(),obj.getDistrict(),obj.getPincode(),obj.getRegistration_date());
+            return  obj1;
+        }else{
+            ProfileHos obj = profileHosRepo.findByUserId(userId);
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(),obj.getLicense_number(),obj.getPhone1(),
+                    obj.getPhone2(),obj.getPhone3(),obj.getPhone4(),obj.getPhone5(), obj.getAddress(),obj.getState(),
+                    obj.getDistrict(), obj.getPincode(),obj.getRegistration_date());
+            return  obj1;
+        }
+    }
+
+//    Password
+    @PostMapping("/verifycurrentPassword")
+    public ResponseEntity<SuccessResponseBody> verifyPass(@RequestHeader ("Authorization") String userToken ,@RequestBody CurrentPassword currentPassword ) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        if(userType == 1){
+            return verifyChangePasswordDAO.verifyIndPassword(currentPassword.getCurrentPassword(), userId);
+        }else if(userType == 3){
+            return verifyChangePasswordDAO.verifyBbPassword(currentPassword.getCurrentPassword(), userId);
+        }else{
+            return verifyChangePasswordDAO.verifyHosPassword(currentPassword.getCurrentPassword(), userId);
+        }
+    }
+
+    @PutMapping("/changePassword")
+    public ResponseEntity<SuccessResponseBody> changePass(@RequestHeader ("Authorization") String userToken ,@RequestBody NewPassword newPassword ) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        if (userType == 1) {
+            return verifyChangePasswordDAO.changeIndPassword(newPassword.getNewPassword(), userId);
+        } else if (userType == 3) {
+            return verifyChangePasswordDAO.changeBbPassword(newPassword.getNewPassword(), userId);
+        } else {
+            return verifyChangePasswordDAO.changeHosPassword(newPassword.getNewPassword(), userId);
+        }
+    }
     //? SETTING NEW DONOR STATUS.
     //! TESTED
     @PutMapping("/donorstatus")
