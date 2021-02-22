@@ -29,7 +29,6 @@ public class ContactUs {
     @Column( name="user_id")
     private String userId;
     private String subject;
-
     private String messageBody;
 
     public ContactUs() {
