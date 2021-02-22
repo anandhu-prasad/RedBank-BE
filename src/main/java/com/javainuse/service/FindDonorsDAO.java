@@ -49,7 +49,7 @@ public class FindDonorsDAO {
         if(!(data.getDistrict().equals("All") || data.getDistrict().equals(""))){
             list = list.stream().filter( item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
         }
-        if(data.getPincode() != null){
+        if(data.getPincode() != ""){
             list = list.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
         }
 

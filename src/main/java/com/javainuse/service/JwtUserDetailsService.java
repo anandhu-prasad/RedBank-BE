@@ -97,16 +97,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 		ProfileBb profileBb = profileBbRepo.findByEmail(user.getEmail());
 
 		if(profileInd != null || profileHos != null || profileBb != null){
-
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("error", "Email is already taken");
 			return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(false));
-
 		}
 
 		else{
 			Date dob = new SimpleDateFormat("dd/MM/yy").parse(user.getDob());
-			System.out.println("DOB: " + dob);
 
 			ProfileInd newIndUser = new ProfileInd(user.getName(), user.getBloodGroup(), user.getEmail(), dob, user.getPhone(), user.getAddress(), user.getState(), user.getDistrict(), user.getPincode(), new Timestamp(System.currentTimeMillis()), bcryptEncoder.encode(user.getPassword()));
         	ProfileInd newProfileInd = profileIndRepo.save(newIndUser);
@@ -114,12 +111,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 			//? GENERATE TOKEN HERE
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileInd.getUserId(), newProfileInd.getEmail(), 1);
-
-
         	AuthResponse authResponse = new AuthResponse(token,  newProfileInd.getUserId(), 1);
         	HttpHeaders responseHeaders = new HttpHeaders();
         	responseHeaders.set("success", "true");
-
         	return ResponseEntity.ok().headers(responseHeaders).body(authResponse);
 
 		}
