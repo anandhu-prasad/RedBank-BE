@@ -11,10 +11,12 @@ public class MyCommitment_RespBody_donation {
     private String recipientEmail;
     private String recipientAddress;
     private Boolean status; // commitment status -> Completed/incomplete
+    private String donationId;
+
 
     public MyCommitment_RespBody_donation(Timestamp commitment_timeStamp, String commitmentType, String recipientType,
             String recipientName, String recipientContact, String recipientEmail, String recipientAddress,
-            Boolean status) {
+            Boolean status, String donationId) {
         this.commitment_timeStamp = commitment_timeStamp;
         this.commitmentType = commitmentType;
         this.recipientType = recipientType;
@@ -23,6 +25,7 @@ public class MyCommitment_RespBody_donation {
         this.recipientEmail = recipientEmail;
         this.recipientAddress = recipientAddress;
         this.status = status;
+        this.donationId = donationId;
     }
 
     public MyCommitment_RespBody_donation() {
@@ -93,11 +96,26 @@ public class MyCommitment_RespBody_donation {
         this.status = status;
     }
 
+    public String getDonationId() {
+        return donationId;
+    }
+
+    public void setDonationId(String donationId) {
+        this.donationId = donationId;
+    }
+
     @Override
     public String toString() {
-        return "MyCommitment_RespBody_donation{" + "commitment_timeStamp=" + commitment_timeStamp + ", commitmentType='"
-                + commitmentType + '\'' + ", recipientType='" + recipientType + '\'' + ", recipientName='"
-                + recipientName + '\'' + ", recipientContact='" + recipientContact + '\'' + ", recipientEmail='"
-                + recipientEmail + '\'' + ", recipientAddress='" + recipientAddress + '\'' + ", status=" + status + '}';
+        return "MyCommitment_RespBody_donation{" +
+                "commitment_timeStamp=" + commitment_timeStamp +
+                ", commitmentType='" + commitmentType + '\'' +
+                ", recipientType='" + recipientType + '\'' +
+                ", recipientName='" + recipientName + '\'' +
+                ", recipientContact='" + recipientContact + '\'' +
+                ", recipientEmail='" + recipientEmail + '\'' +
+                ", recipientAddress='" + recipientAddress + '\'' +
+                ", status=" + status +
+                ", donationId='" + donationId + '\'' +
+                '}';
     }
 }

@@ -13,10 +13,13 @@ public class MyCommitment_RespBody_drive {
     private Boolean status; // commitment status -> Completed/incomplete
     private Timestamp startTimeStamp;
     private Timestamp endTimeStamp;
+    private String driveId;
+
+    // add drive Id
 
     public MyCommitment_RespBody_drive(Timestamp dateTime, String commitmentType, String recipientType,
             String recipientName, String recipientContact, String recipientEmail, String recipientAddress,
-            Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp) {
+            Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp, String driveId) {
         this.dateTime = dateTime;
         this.commitmentType = commitmentType;
         this.recipientType = recipientType;
@@ -27,6 +30,7 @@ public class MyCommitment_RespBody_drive {
         this.status = status;
         this.startTimeStamp = startTimeStamp;
         this.endTimeStamp = endTimeStamp;
+        this.driveId = driveId;
     }
 
     public Timestamp getDateTime() {
@@ -109,12 +113,28 @@ public class MyCommitment_RespBody_drive {
         this.endTimeStamp = endTimeStamp;
     }
 
+    public String getDriveId() {
+        return driveId;
+    }
+
+    public void setDriveId(String driveId) {
+        this.driveId = driveId;
+    }
+
     @Override
     public String toString() {
-        return "MyCommitment_RespBody_drive{" + "dateTime=" + dateTime + ", commitmentType='" + commitmentType + '\''
-                + ", recipientType='" + recipientType + '\'' + ", recipientName='" + recipientName + '\''
-                + ", recipientContact='" + recipientContact + '\'' + ", recipientEmail='" + recipientEmail + '\''
-                + ", recipientAddress='" + recipientAddress + '\'' + ", status=" + status + ", startTimeStamp="
-                + startTimeStamp + ", endTimeStamp=" + endTimeStamp + '}';
+        return "MyCommitment_RespBody_drive{" +
+                "dateTime=" + dateTime +
+                ", commitmentType='" + commitmentType + '\'' +
+                ", recipientType='" + recipientType + '\'' +
+                ", recipientName='" + recipientName + '\'' +
+                ", recipientContact='" + recipientContact + '\'' +
+                ", recipientEmail='" + recipientEmail + '\'' +
+                ", recipientAddress='" + recipientAddress + '\'' +
+                ", status=" + status +
+                ", startTimeStamp=" + startTimeStamp +
+                ", endTimeStamp=" + endTimeStamp +
+                ", driveId='" + driveId + '\'' +
+                '}';
     }
 }
