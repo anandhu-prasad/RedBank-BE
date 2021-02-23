@@ -7,10 +7,13 @@ import com.javainuse.models.ProfileInd;
 import com.javainuse.repositories.ProfileBbRepo;
 import com.javainuse.repositories.ProfileHosRepo;
 import com.javainuse.repositories.ProfileIndRepo;
-import com.javainuse.requests.DonorStatusRequestBody;
-import com.javainuse.requests.ProfileBB_HosData;
-import com.javainuse.requests.ProfileIndData;
+import com.javainuse.requests.*;
+import com.javainuse.responses.ProfileIndividualData;
+import com.javainuse.responses.ProfileDataBb_Hos;
+import com.javainuse.responses.ProfileDataInd;
 import com.javainuse.responses.SuccessResponseBody;
+import com.javainuse.service.ChangePasswordDAO;
+import com.javainuse.service.Verify_ChangePasswordDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +36,103 @@ public class ProfileController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+
+    @Autowired
+    Verify_ChangePasswordDAO verifyChangePasswordDAO;
+
+
+    @GetMapping("/fetchuserprofile")
+    public ResponseEntity<?> getProfileDetails(@RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+
+        if(userType == 1){
+            ProfileInd obj = profileIndRepo.findByUserId(userId);
+            ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+
+        }
+        else if(userType == 3){
+            ProfileBb obj = profileBbRepo.findByUserId(userId);
+            ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+
+        }else{
+            ProfileHos obj = profileHosRepo.findByUserId(userId);
+            ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+        }
+
+
+
+    }
+
+    @GetMapping("/fetchuserdata")
+    public ResponseEntity<?> getProfileDataDetails(@RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+
+        if(userType == 1){
+            //TODO DIDN'T INCLUDE STATS LIKE TOTAL DONATIONS, COMMITMENTS MADE AND DRIVES ATTENDED.
+            ProfileInd obj = profileIndRepo.findByUserId(userId);
+            ProfileIndividualData obj1 = new ProfileIndividualData(obj.getBloodGroup(), obj.getEmail(), obj.getDob(), obj.getPhone(), obj.getAddress(), obj.getState(), obj.getDistrict(),obj.getPincode(),obj.getRegistration_date(),obj.getLast_donation_date());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+        }
+        else if(userType == 3){
+            //TODO ONLY SEND A PHONE NUMBER IF IT'S NOT NULL.
+            //TODO DIDN'T SEND STATS.
+            ProfileBb obj = profileBbRepo.findByUserId(userId);
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(), obj.getLicense_number(), obj.getPhone1(),obj.getPhone2(), obj.getPhone3(),obj.getPhone4(),obj.getPhone5(),obj.getAddress(),obj.getState(),obj.getDistrict(),obj.getPincode(),obj.getRegistration_date());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+        }else{
+            //TODO ONLY SEND A PHONE NUMBER IF IT'S NOT NULL.
+            //TODO DIDN'T SEND STATS.
+            ProfileHos obj = profileHosRepo.findByUserId(userId);
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(),obj.getLicense_number(),obj.getPhone1(),
+                    obj.getPhone2(),obj.getPhone3(),obj.getPhone4(),obj.getPhone5(), obj.getAddress(),obj.getState(),
+                    obj.getDistrict(), obj.getPincode(),obj.getRegistration_date());
+            return ResponseEntity.ok().headers(responseHeaders).body(obj1);
+        }
+    }
+
+//    Password
+    @PostMapping("/verifycurrentpassword")
+    public ResponseEntity<SuccessResponseBody> verifyPass(@RequestHeader ("Authorization") String userToken ,@RequestBody CurrentPassword currentPassword ) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        if(userType == 1){
+            return verifyChangePasswordDAO.verifyIndPassword(currentPassword.getCurrentPassword(), userId);
+        }else if(userType == 3){
+            return verifyChangePasswordDAO.verifyBbPassword(currentPassword.getCurrentPassword(), userId);
+        }else{
+            return verifyChangePasswordDAO.verifyHosPassword(currentPassword.getCurrentPassword(), userId);
+        }
+    }
+
+    @PutMapping("/changepassword")
+    public ResponseEntity<SuccessResponseBody> changePass(@RequestHeader ("Authorization") String userToken ,@RequestBody NewPassword newPassword ) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        if (userType == 1) {
+            return verifyChangePasswordDAO.changeIndPassword(newPassword.getNewPassword(), userId);
+        } else if (userType == 3) {
+            return verifyChangePasswordDAO.changeBbPassword(newPassword.getNewPassword(), userId);
+        } else {
+            return verifyChangePasswordDAO.changeHosPassword(newPassword.getNewPassword(), userId);
+        }
+    }
     //? SETTING NEW DONOR STATUS.
     //! TESTED
     @PutMapping("/donorstatus")
@@ -64,7 +164,7 @@ public class ProfileController {
     //? UPDATING INDIVIDUAL PROFILE
     //! TESTED
     @PutMapping("/updateindprofile")
-    public ResponseEntity<SuccessResponseBody> updateIndProfile(@RequestBody ProfileIndData profile, @RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<SuccessResponseBody> updateIndProfile(@RequestBody ProfileUpdateIndRequestBody profile, @RequestHeader ("Authorization") String userToken){
         try{
 
             Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
@@ -101,7 +201,7 @@ public class ProfileController {
     //? UPDATING HOSPITAL PROFILE
     //!TESTED
     @PutMapping("/updatehosprofile")
-    public ResponseEntity<SuccessResponseBody> updateHosProfile(@RequestBody ProfileBB_HosData profile, @RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<SuccessResponseBody> updateHosProfile(@RequestBody ProfileUpdateHosBbRequestBody profile, @RequestHeader ("Authorization") String userToken){
         try{
             Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
 
@@ -150,7 +250,7 @@ public class ProfileController {
     //? UPDATING BLOOD BANK PROFILE
     //!TESTED
     @PutMapping("/updatebbprofile")
-    public ResponseEntity<SuccessResponseBody> updateBbProfile(@RequestBody ProfileBB_HosData profile, @RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<SuccessResponseBody> updateBbProfile(@RequestBody ProfileUpdateHosBbRequestBody profile, @RequestHeader ("Authorization") String userToken){
         try{
 
             Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));

@@ -1,14 +1,14 @@
-package com.javainuse.requests;
-
+package com.javainuse.responses;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Date;
 
-public class ProfileBB_HosData {
+public class ProfileIndividualData {
 
+    private String bloodGroup;
     private String email;
-    private String license_number;
-    private List<String> phone;
+    private Date dob;
+    private String phone;
     private String address;
     private String state;
     private String district;
@@ -16,13 +16,13 @@ public class ProfileBB_HosData {
     private Timestamp registration_date;
     private Timestamp last_donation_date;
 
-    public ProfileBB_HosData() {
-        super();
-    }
-
-    public ProfileBB_HosData(String email, String license_number, List<String> phone, String address, String state, String district, String pincode, Timestamp registration_date, Timestamp last_donation_date) {
+    public ProfileIndividualData(String bloodGroup, String email, Date dob,
+                                 String phone, String address, String state,
+                                 String district, String pincode, Timestamp registration_date,
+                                 Timestamp last_donation_date) {
+        this.bloodGroup = bloodGroup;
         this.email = email;
-        this.license_number = license_number;
+        this.dob = dob;
         this.phone = phone;
         this.address = address;
         this.state = state;
@@ -32,7 +32,16 @@ public class ProfileBB_HosData {
         this.last_donation_date = last_donation_date;
     }
 
-    public ProfileBB_HosData(String email, String license_number, String phone1, String phone2, String phone3, String phone4, String phone5, String address, String state, String district, String pincode, Timestamp registration_date) {
+    public ProfileIndividualData() {
+        super();
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
     }
 
     public String getEmail() {
@@ -43,19 +52,19 @@ public class ProfileBB_HosData {
         this.email = email;
     }
 
-    public String getLicense_number() {
-        return license_number;
+    public Date getDob() {
+        return dob;
     }
 
-    public void setLicense_number(String license_number) {
-        this.license_number = license_number;
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 
-    public List<String> getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(List<String> phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -107,19 +116,4 @@ public class ProfileBB_HosData {
         this.last_donation_date = last_donation_date;
     }
 
-    @Override
-    public String toString() {
-        return "ProfileBB_HosData{" +
-                "email='" + email + '\'' +
-                ", license_number='" + license_number + '\'' +
-                ", phone=" + phone +
-                ", address='" + address + '\'' +
-                ", state='" + state + '\'' +
-                ", district='" + district + '\'' +
-                ", pincode=" + pincode +
-                ", registration_date=" + registration_date +
-                ", last_donation_date=" + last_donation_date +
-                '}';
-    }
 }
-
