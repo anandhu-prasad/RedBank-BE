@@ -1,12 +1,8 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.models.ProfileBb;
-import com.javainuse.models.ProfileHos;
-import com.javainuse.models.ProfileInd;
-import com.javainuse.repositories.ProfileBbRepo;
-import com.javainuse.repositories.ProfileHosRepo;
-import com.javainuse.repositories.ProfileIndRepo;
+import com.javainuse.models.*;
+import com.javainuse.repositories.*;
 import com.javainuse.requests.*;
 import com.javainuse.responses.ProfileIndividualData;
 import com.javainuse.responses.ProfileDataBb_Hos;
@@ -19,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
@@ -36,6 +36,21 @@ public class ProfileController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    DonationInvitedDonorsRepo donationInvitedDonorsRepo;
+
+    @Autowired
+    DriveInvitedDonorsRepo driveInvitedDonorsRepo;
+
+    @Autowired
+    DrivesRepo drivesRepo;
+
+    @Autowired
+    DonationRequestRepo donationRequestRepo;
+
+    @Autowired
+    SalesRepo salesRepo;
+
 
     @Autowired
     Verify_ChangePasswordDAO verifyChangePasswordDAO;
@@ -52,12 +67,16 @@ public class ProfileController {
 
         if(userType == 1){
             ProfileInd obj = profileIndRepo.findByUserId(userId);
+
+
             ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus());
+
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
 
         }
         else if(userType == 3){
             ProfileBb obj = profileBbRepo.findByUserId(userId);
+            List<Drives> drivesConducted = drivesRepo.findByUserId(userId);
             ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
 
@@ -81,18 +100,65 @@ public class ProfileController {
 
         if(userType == 1){
             ProfileInd obj = profileIndRepo.findByUserId(userId);
-            ProfileIndividualData obj1 = new ProfileIndividualData(obj.getBloodGroup(), obj.getEmail(), obj.getDob(), obj.getPhone(), obj.getAddress(), obj.getState(), obj.getDistrict(),obj.getPincode(),obj.getRegistration_date(),obj.getLast_donation_date());
+            List<DonationInvitedDonors> donationCount = donationInvitedDonorsRepo.findByUserId(userId);
+            List<DriveInvitedDonors> drivesCount = driveInvitedDonorsRepo.findByUserId(userId);
+            ProfileIndividualData obj1 = new ProfileIndividualData(obj.getBloodGroup(), obj.getEmail(), obj.getDob(), obj.getPhone(),
+                    obj.getAddress(), obj.getState(), obj.getDistrict(),obj.getPincode(),
+                    obj.getRegistration_date(),obj.getLast_donation_date(),donationCount.size(),
+                    drivesCount.size()+ donationCount.size() , drivesCount.size());
+
             return  obj1;
         }
         else if(userType == 3){
             ProfileBb obj = profileBbRepo.findByUserId(userId);
-            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(), obj.getLicense_number(), obj.getPhone1(),obj.getPhone2(), obj.getPhone3(),obj.getPhone4(),obj.getPhone5(),obj.getAddress(),obj.getState(),obj.getDistrict(),obj.getPincode(),obj.getRegistration_date());
+            List<Drives> drivesConducted = drivesRepo.findByUserId(userId);
+            List<DonationRequest> requestMade = donationRequestRepo.findByUserId(userId);
+            List<Sales> sales = salesRepo.findBySellerId(userId);
+            List<String> phone = new ArrayList<>();
+            int totalSales= sales.size();
+
+            if(obj.getPhone1()!= null){
+                phone.add(obj.getPhone1());
+            }
+            if(obj.getPhone2()!= null){
+                phone.add(obj.getPhone2());
+            }
+            if(obj.getPhone3()!= null){
+                phone.add(obj.getPhone3());
+            }
+            if(obj.getPhone4()!= null){
+                phone.add(obj.getPhone4());
+            }
+            if(obj.getPhone5()!= null){
+                phone.add(obj.getPhone5());
+            }
+//            phone.addAll(Arrays.asList(obj.getPhone1(),obj.getPhone2(),obj.getPhone3(),obj.getPhone4(),obj.getPhone5()));
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(), obj.getLicense_number(),phone,obj.getAddress(),obj.getState(),
+                    obj.getDistrict(),obj.getPincode(),obj.getRegistration_date(), drivesConducted.size(),totalSales,requestMade.size());
             return  obj1;
         }else{
             ProfileHos obj = profileHosRepo.findByUserId(userId);
-            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(),obj.getLicense_number(),obj.getPhone1(),
-                    obj.getPhone2(),obj.getPhone3(),obj.getPhone4(),obj.getPhone5(), obj.getAddress(),obj.getState(),
-                    obj.getDistrict(), obj.getPincode(),obj.getRegistration_date());
+            List<Drives> drivesConducted = drivesRepo.findByUserId(userId);
+            List<DonationRequest> requestMade = donationRequestRepo.findByUserId(userId);
+            List<String> phone = new ArrayList<>();
+            if(obj.getPhone1()!= null){
+                phone.add(obj.getPhone1());
+            }
+            if(obj.getPhone2()!= null){
+                phone.add(obj.getPhone2());
+            }
+            if(obj.getPhone3()!= null){
+                phone.add(obj.getPhone3());
+            }
+            if(obj.getPhone4()!= null){
+                phone.add(obj.getPhone4());
+            }
+            if(obj.getPhone5()!= null){
+                phone.add(obj.getPhone5());
+            }
+//            phone.addAll(Arrays.asList(obj.getPhone1(),obj.getPhone2(),obj.getPhone3(),obj.getPhone4(),obj.getPhone5()));
+            ProfileBB_HosData obj1 = new ProfileBB_HosData(obj.getEmail(),obj.getLicense_number(), phone, obj.getAddress(),obj.getState(),
+                    obj.getDistrict(), obj.getPincode(),obj.getRegistration_date(), drivesConducted.size(),0,requestMade.size());
             return  obj1;
         }
     }

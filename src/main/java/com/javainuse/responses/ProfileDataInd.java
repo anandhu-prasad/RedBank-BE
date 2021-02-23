@@ -7,12 +7,6 @@ public class ProfileDataInd {
     private String userId;
     private int donorStatus;
 
-
-    public void setDonorStatus(int donorStatus) {
-        this.donorStatus = donorStatus;
-    }
-
-
     public ProfileDataInd(String name, String userId, int donorStatus) {
         this.name = name;
         this.userId = userId;
@@ -38,4 +32,16 @@ public class ProfileDataInd {
     public int getDonorStatus() {
         return donorStatus;
     }
+
+    public void setDonorStatus(int donorStatus) {
+        this.donorStatus = donorStatus;
+    }
 }
+
+
+
+
+
+//List<> list = new ArrayList<>();
+//
+//list = profileIndRepo.findbyUserid

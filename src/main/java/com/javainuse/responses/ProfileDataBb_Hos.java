@@ -11,10 +11,6 @@ public class ProfileDataBb_Hos {
         this.userId = userId;
     }
 
-    public ProfileDataBb_Hos() {
-        super();
-    }
-
     public String getName() {
         return name;
     }
@@ -30,5 +26,4 @@ public class ProfileDataBb_Hos {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }

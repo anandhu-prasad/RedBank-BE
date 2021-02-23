@@ -14,13 +14,15 @@ public class ProfileBB_HosData {
     private String district;
     private String pincode;
     private Timestamp registration_date;
-    private Timestamp last_donation_date;
+    private int drivesConducted;
+    private int salesMade;
+    private int requestMade;
 
     public ProfileBB_HosData() {
         super();
     }
 
-    public ProfileBB_HosData(String email, String license_number, List<String> phone, String address, String state, String district, String pincode, Timestamp registration_date, Timestamp last_donation_date) {
+    public ProfileBB_HosData(String email, String license_number, List<String> phone, String address, String state, String district, String pincode, Timestamp registration_date, int drivesConducted, int salesMade, int requestMade) {
         this.email = email;
         this.license_number = license_number;
         this.phone = phone;
@@ -29,10 +31,9 @@ public class ProfileBB_HosData {
         this.district = district;
         this.pincode = pincode;
         this.registration_date = registration_date;
-        this.last_donation_date = last_donation_date;
-    }
-
-    public ProfileBB_HosData(String email, String license_number, String phone1, String phone2, String phone3, String phone4, String phone5, String address, String state, String district, String pincode, Timestamp registration_date) {
+        this.drivesConducted = drivesConducted;
+        this.salesMade = salesMade;
+        this.requestMade = requestMade;
     }
 
     public String getEmail() {
@@ -99,27 +100,28 @@ public class ProfileBB_HosData {
         this.registration_date = registration_date;
     }
 
-    public Timestamp getLast_donation_date() {
-        return last_donation_date;
+    public int getDrivesConducted() {
+        return drivesConducted;
     }
 
-    public void setLast_donation_date(Timestamp last_donation_date) {
-        this.last_donation_date = last_donation_date;
+    public void setDrivesConducted(int drivesConducted) {
+        this.drivesConducted = drivesConducted;
     }
 
-    @Override
-    public String toString() {
-        return "ProfileBB_HosData{" +
-                "email='" + email + '\'' +
-                ", license_number='" + license_number + '\'' +
-                ", phone=" + phone +
-                ", address='" + address + '\'' +
-                ", state='" + state + '\'' +
-                ", district='" + district + '\'' +
-                ", pincode=" + pincode +
-                ", registration_date=" + registration_date +
-                ", last_donation_date=" + last_donation_date +
-                '}';
+    public int getSalesMade() {
+        return salesMade;
+    }
+
+    public void setSalesMade(int salesMade) {
+        this.salesMade = salesMade;
+    }
+
+    public int getRequestMade() {
+        return requestMade;
+    }
+
+    public void setRequestMade(int requestMade) {
+        this.requestMade = requestMade;
     }
 }
 
