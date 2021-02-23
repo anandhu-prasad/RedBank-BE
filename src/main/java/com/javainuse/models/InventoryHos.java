@@ -46,7 +46,6 @@ public class InventoryHos {
     @Column(name = "ab_neg_units", columnDefinition = "int default 0")
     private int abNegUnits;
 
-    private int units;
 
     public InventoryHos() {
         super();
@@ -137,14 +136,6 @@ public class InventoryHos {
         this.abNegUnits = abNegUnits;
     }
 
-    public int getUnits() {
-        return units;
-    }
-
-    public void setUnits(int units) {
-        this.units = units;
-    }
-
     @Override
     public String toString() {
         return "InventoryHos{" +
@@ -158,7 +149,6 @@ public class InventoryHos {
                 ", oNegUnits=" + oNegUnits +
                 ", abPosUnits=" + abPosUnits +
                 ", abNegUnits=" + abNegUnits +
-                ", units=" + units +
                 '}';
     }
 }
