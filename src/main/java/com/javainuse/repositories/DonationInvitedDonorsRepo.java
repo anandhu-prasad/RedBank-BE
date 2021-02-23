@@ -9,7 +9,6 @@ import java.util.List;
 public interface DonationInvitedDonorsRepo extends JpaRepository<DonationInvitedDonors, DonationInvitedDonorsPk> {
 
 //    public DonationInvitedDonors findByDonationInvitedDonorsId(DonationInvitedDonorsId did);
-
     public DonationInvitedDonors findByDonationIdAndUserId(String did, String uid);
 
     public List<DonationInvitedDonors> findByUserId(String userId);

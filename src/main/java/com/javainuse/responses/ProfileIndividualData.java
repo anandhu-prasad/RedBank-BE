@@ -15,11 +15,11 @@ public class ProfileIndividualData {
     private String pincode;
     private Timestamp registration_date;
     private Timestamp last_donation_date;
+    private int donationMade;
+    private int commitmentMade;
+    private int drivesAttended;
 
-    public ProfileIndividualData(String bloodGroup, String email, Date dob,
-                                 String phone, String address, String state,
-                                 String district, String pincode, Timestamp registration_date,
-                                 Timestamp last_donation_date) {
+    public ProfileIndividualData(String bloodGroup, String email, Date dob, String phone, String address, String state, String district, String pincode, Timestamp registration_date, Timestamp last_donation_date, int donationMade, int commitmentMade, int drivesAttended) {
         this.bloodGroup = bloodGroup;
         this.email = email;
         this.dob = dob;
@@ -30,10 +30,9 @@ public class ProfileIndividualData {
         this.pincode = pincode;
         this.registration_date = registration_date;
         this.last_donation_date = last_donation_date;
-    }
-
-    public ProfileIndividualData() {
-        super();
+        this.donationMade = donationMade;
+        this.commitmentMade = commitmentMade;
+        this.drivesAttended = drivesAttended;
     }
 
     public String getBloodGroup() {
@@ -116,4 +115,27 @@ public class ProfileIndividualData {
         this.last_donation_date = last_donation_date;
     }
 
+    public int getDonationMade() {
+        return donationMade;
+    }
+
+    public void setDonationMade(int donationMade) {
+        this.donationMade = donationMade;
+    }
+
+    public int getCommitmentMade() {
+        return commitmentMade;
+    }
+
+    public void setCommitmentMade(int commitmentMade) {
+        this.commitmentMade = commitmentMade;
+    }
+
+    public int getDrivesAttended() {
+        return drivesAttended;
+    }
+
+    public void setDrivesAttended(int drivesAttended) {
+        this.drivesAttended = drivesAttended;
+    }
 }
