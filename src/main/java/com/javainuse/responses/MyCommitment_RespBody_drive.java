@@ -6,28 +6,31 @@ public class MyCommitment_RespBody_drive {
     private Timestamp dateTime;
     private String commitmentType;
     private String recipientType;
-    private String recipientId;
+    private String recipientName;
     private String recipientContact;
+    private String recipientEmail;
     private String recipientAddress;
-    private Boolean status;    // commitment status -> Completed/incomplete
+    private Boolean status; // commitment status -> Completed/incomplete
     private Timestamp startTimeStamp;
     private Timestamp endTimeStamp;
+    private String driveId;
 
+    // add drive Id
 
-    public MyCommitment_RespBody_drive(Timestamp dateTime, String commitmentType, String recipientType, String recipientId, String recipientContact, String recipientAddress, Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp) {
+    public MyCommitment_RespBody_drive(Timestamp dateTime, String commitmentType, String recipientType,
+            String recipientName, String recipientContact, String recipientEmail, String recipientAddress,
+            Boolean status, Timestamp startTimeStamp, Timestamp endTimeStamp, String driveId) {
         this.dateTime = dateTime;
         this.commitmentType = commitmentType;
         this.recipientType = recipientType;
-        this.recipientId = recipientId;
+        this.recipientName = recipientName;
         this.recipientContact = recipientContact;
+        this.recipientEmail = recipientEmail;
         this.recipientAddress = recipientAddress;
         this.status = status;
         this.startTimeStamp = startTimeStamp;
         this.endTimeStamp = endTimeStamp;
-    }
-
-    public MyCommitment_RespBody_drive(){
-        super();
+        this.driveId = driveId;
     }
 
     public Timestamp getDateTime() {
@@ -54,12 +57,12 @@ public class MyCommitment_RespBody_drive {
         this.recipientType = recipientType;
     }
 
-    public String getRecipientId() {
-        return recipientId;
+    public String getRecipientName() {
+        return recipientName;
     }
 
-    public void setRecipientId(String recipientId) {
-        this.recipientId = recipientId;
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
     }
 
     public String getRecipientContact() {
@@ -68,6 +71,14 @@ public class MyCommitment_RespBody_drive {
 
     public void setRecipientContact(String recipientContact) {
         this.recipientContact = recipientContact;
+    }
+
+    public String getRecipientEmail() {
+        return recipientEmail;
+    }
+
+    public void setRecipientEmail(String recipientEmail) {
+        this.recipientEmail = recipientEmail;
     }
 
     public String getRecipientAddress() {
@@ -102,18 +113,28 @@ public class MyCommitment_RespBody_drive {
         this.endTimeStamp = endTimeStamp;
     }
 
+    public String getDriveId() {
+        return driveId;
+    }
+
+    public void setDriveId(String driveId) {
+        this.driveId = driveId;
+    }
+
     @Override
     public String toString() {
-        return "MyCommintment_RespBody_drive{" +
+        return "MyCommitment_RespBody_drive{" +
                 "dateTime=" + dateTime +
                 ", commitmentType='" + commitmentType + '\'' +
                 ", recipientType='" + recipientType + '\'' +
-                ", recipientId='" + recipientId + '\'' +
-                ", recipientContact=" + recipientContact +
+                ", recipientName='" + recipientName + '\'' +
+                ", recipientContact='" + recipientContact + '\'' +
+                ", recipientEmail='" + recipientEmail + '\'' +
                 ", recipientAddress='" + recipientAddress + '\'' +
                 ", status=" + status +
                 ", startTimeStamp=" + startTimeStamp +
                 ", endTimeStamp=" + endTimeStamp +
+                ", driveId='" + driveId + '\'' +
                 '}';
     }
 }

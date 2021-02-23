@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
@@ -35,13 +36,13 @@ public class Sales {
     //? PRICE PER UNIT
     private Double price;
     @Column(name ="date_of_transaction")
-    private LocalDate date;
+    private Timestamp date;
 
     public Sales() {
         super();
     }
 
-    public Sales(String sellerId, String buyerId, String component, String bloodGroup, Double units, Double price, LocalDate date) {
+    public Sales(String sellerId, String buyerId, String component, String bloodGroup, Double units, Double price, Timestamp date) {
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.component = component;
@@ -75,11 +76,11 @@ public class Sales {
         this.buyerId = buyer;
     }
 
-    public LocalDate getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

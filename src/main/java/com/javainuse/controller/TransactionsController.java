@@ -1,13 +1,14 @@
 package com.javainuse.controller;
 
 import com.javainuse.models.Sales;
+import com.javainuse.responses.Purchases_RespBody;
+import com.javainuse.responses.Sales_RespBody;
 import com.javainuse.service.PurchasesDAO;
 import com.javainuse.service.SalesDAO;
+import io.jsonwebtoken.Claims;
+import com.javainuse.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,13 +22,24 @@ public class TransactionsController {
     @Autowired
     SalesDAO salesDAO;
 
-    @GetMapping("/fetchpurchaseslist/{id}")
-    public List<Sales> getPurchasesList(@PathVariable(value = "id") String id) {
-        return purchasesDAO.getPurchasesList(id);
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @GetMapping("/fetchpurchaseslist")
+    public List<Purchases_RespBody> getPurchasesList(@RequestHeader("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        return purchasesDAO.getPurchasesList(userId);
     }
 
-    @GetMapping("/fetchsaleslist/{id}")
-    public List<Sales> getSalesList(@PathVariable(value = "id") String id) {
-        return salesDAO.getSalesList(id);
+    @GetMapping("/fetchsaleslist")
+    public List<Sales_RespBody> getSalesList(@RequestHeader ("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        return salesDAO.getSalesList(userId);
     }
 }
