@@ -4,6 +4,7 @@ package com.javainuse.service;
 import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.responses.MyCommitment_RespBody_donation;
+import com.javainuse.responses.MyCommitment_RespBody_drive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,9 @@ public class CommitmentsDAO {
     @Autowired
     ProfileHosRepo profileHosRepo;
 
+    @Autowired
+    ProfileIndRepo profileIndRepo;
+
 
     public List<?> getDetails(String userId){
 
@@ -47,12 +51,17 @@ public class CommitmentsDAO {
                 if (obj4.getStatus()) {
                     if(obj4.getUserId().substring(0, 3).equals("BOB")){
 
-                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "blood bank", obj4.getUserId(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
+                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail(), obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
+                            obj3.add(donationDetails);
+                    }
+                    else if(obj4.getUserId().substring(0, 3).equals("HOS"))
+                        {
+                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
                             obj3.add(donationDetails);
                     }
                     else{
-                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "hospital", obj4.getUserId(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
-                            obj3.add(donationDetails);
+                        MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "individual", profileIndRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone, profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
+                        obj3.add(donationDetails);
                     }
                 }
             }
@@ -65,12 +74,12 @@ public class CommitmentsDAO {
                 if (obj4.getStatus()) {
                     if(obj4.getUserId().substring(0, 3).equals("BOB")){
 
-                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(driveInvitedDonors.getResponseTimeStamp(), "drive", "blood bank", obj4.getUserId(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
-                            obj3.add(donationDetails);
+                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() , obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimeStamp(),obj4.getEndTimeStamp());
+                            obj3.add(driveDetails);
                     }
                     else{
-                            MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(driveInvitedDonors.getResponseTimeStamp(), "drive", "hospital", obj4.getUserId(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
-                            obj3.add(donationDetails);
+                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() ,obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimeStamp(),obj4.getEndTimeStamp());
+                            obj3.add(driveDetails);
                     }
                 }
             }
