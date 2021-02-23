@@ -5,6 +5,8 @@ import com.javainuse.requests.UpcomingDrives_ReqBody;
 import com.javainuse.responses.UpcomingDrives_RespBody;
 import com.javainuse.service.UpcomingDrivesDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,9 @@ public class UpcomingDrivesController {
     UpcomingDrivesDAO upcomingDrivesDAO;
 
     @PostMapping("/fetchdriveslist")
-    public List<UpcomingDrives_RespBody> getDrivesList(@RequestBody UpcomingDrives_ReqBody data){
-        return upcomingDrivesDAO.getDrives(data);
+    public ResponseEntity<List<UpcomingDrives_RespBody>> getDrivesList(@RequestBody UpcomingDrives_ReqBody data){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+        return ResponseEntity.ok().headers(responseHeaders).body(upcomingDrivesDAO.getDrives(data));
     }
 }

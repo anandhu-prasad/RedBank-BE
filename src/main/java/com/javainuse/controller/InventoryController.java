@@ -55,13 +55,14 @@ public class InventoryController {
             String userId = claims.get("userId").toString();
             int userType = Integer.parseInt(claims.get("userType").toString());
 
-            if(userType == 2 || userType == 2){
+            if(userType == 2 || userType == 3){
                 HttpHeaders responseHeaders = new HttpHeaders();
                 responseHeaders.set("success", "true");
                 if(userType == 3){
                     return ResponseEntity.ok().headers(responseHeaders).body(inventoryBbRepo.findByUserId(userId));
                 }
                 else{
+                    System.out.print(userId);
                     return ResponseEntity.ok().headers(responseHeaders).body(inventoryHosRepo.findByUserId(userId));
                 }
             }

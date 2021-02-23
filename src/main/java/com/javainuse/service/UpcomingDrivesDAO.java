@@ -37,15 +37,15 @@ public class UpcomingDrivesDAO {
         driveList = drivesRepo.findAll();
 
         // filtering the data  on basis of state ( because it's mandatory ), district , pincode
-        if (!data.getState().equals("All")) {
+        if (!data.getState().equals("All") && !data.getState().equals("Select state") && data.getState() != null) {
             driveList = driveList.stream().filter(item -> item.getState().equals(data.getState())).collect(Collectors.toList());
         }
-        if (!(data.getDistrict().equals("All") || data.getDistrict().equals(""))) {
+        if (!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict()  != null)) {
             driveList = driveList.stream().filter(item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
             System.out.println("b");
         }
-        if (data.getPincode() != null) {
-            driveList = driveList.stream().filter(item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
+        if (!data.getPincode().equals("") && data.getPincode() != null) {
+            driveList = driveList.stream().filter(item -> item.getPincode().equals(data.getPincode())).collect(Collectors.toList());
             System.out.println("c");
         }
 
