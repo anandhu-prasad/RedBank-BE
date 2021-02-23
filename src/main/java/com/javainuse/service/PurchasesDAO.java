@@ -4,6 +4,9 @@ package com.javainuse.service;
 
 import com.javainuse.models.Sales;
 
+import com.javainuse.repositories.ProfileBbRepo;
+import com.javainuse.repositories.ProfileHosRepo;
+import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.repositories.SalesRepo;
 import com.javainuse.responses.Purchases_RespBody;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -60,7 +60,7 @@ public class CommitmentsDAO {
                             obj3.add(donationDetails);
                     }
                     else{
-                        MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "individual", profileIndRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone, profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
+                        MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(), "donation", "individual", profileIndRepo.findByUserId(obj4.getUserId()).getName(), profileIndRepo.findByUserId(obj4.getUserId()).getPhone(), profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true);
                         obj3.add(donationDetails);
                     }
                 }
@@ -74,11 +74,11 @@ public class CommitmentsDAO {
                 if (obj4.getStatus()) {
                     if(obj4.getUserId().substring(0, 3).equals("BOB")){
 
-                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() , obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimeStamp(),obj4.getEndTimeStamp());
+                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(), profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() , obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimestamp(), obj4.getEndTimestamp());
                             obj3.add(driveDetails);
                     }
                     else{
-                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() ,obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimeStamp(),obj4.getEndTimeStamp());
+                            MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(), "drive", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(), profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() ,obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(), true, obj4.getStartTimestamp(),obj4.getEndTimestamp());
                             obj3.add(driveDetails);
                     }
                 }
