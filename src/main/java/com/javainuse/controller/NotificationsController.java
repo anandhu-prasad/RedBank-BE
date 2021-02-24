@@ -5,6 +5,7 @@ import com.javainuse.models.*;
 import com.javainuse.repositories.NotificationRepo;
 import com.javainuse.responses.ProfileDataBb_Hos;
 import com.javainuse.responses.ProfileDataInd;
+import com.javainuse.service.NotificationDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,31 +23,17 @@ public class NotificationsController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
+
     @Autowired
-    NotificationRepo notificationRepo;
+    NotificationDAO notificationDAO;
 
     @GetMapping("/notifications")
-    public ResponseEntity<List<Notification>> getProfileDetails(@RequestHeader("Authorization") String userToken){
-        try{
-            Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
-            String userId = claims.get("userId").toString();
-            Integer userType = Integer.parseInt(claims.get("userType").toString());
+    public ResponseEntity<List<Notification>> getNotificationList(@RequestHeader("Authorization") String userToken){
 
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
 
-            List<Notification> notifications = notificationRepo.findByUserId(userId);
-            for( Notification note : notificationRepo.findByUserId(userId)){
-                note.setStatus(true);
-                notificationRepo.save(note);
-            }
-            return ResponseEntity.ok().headers(responseHeaders).body(notifications);
-        }
-        catch(Exception e){
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("error", "Error fetching notifications. Please try again later.");
-            return ResponseEntity.notFound().headers(responseHeaders).build();
-        }
+        return notificationDAO.getNotificationList(userId);
 
     }
 }
