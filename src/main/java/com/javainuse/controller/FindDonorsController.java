@@ -9,6 +9,7 @@ import com.javainuse.responses.SuccessResponseBody;
 import com.javainuse.service.FindDonorsDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,10 @@ public class FindDonorsController {
 
 
     @PostMapping("/donorslist")
-    public List<FindDonors_RespBody> getDonorsList(@RequestBody FindDonors_ReqBody data) {
-        return findDonorsDAO.getDonorsList(data);
+    public ResponseEntity<List<FindDonors_RespBody>> getDonorsList(@RequestBody FindDonors_ReqBody data) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+        return ResponseEntity.ok().headers(responseHeaders).body(findDonorsDAO.getDonorsList(data));
     }
 
     @PostMapping("/sendnotification")
