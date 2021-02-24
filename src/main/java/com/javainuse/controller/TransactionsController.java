@@ -8,6 +8,8 @@ import com.javainuse.service.SalesDAO;
 import io.jsonwebtoken.Claims;
 import com.javainuse.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,20 +28,26 @@ public class TransactionsController {
     JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/fetchpurchaseslist")
-    public List<Purchases_RespBody> getPurchasesList(@RequestHeader("Authorization") String userToken) {
+    public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(@RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-        return purchasesDAO.getPurchasesList(userId);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+        System.out.println(purchasesDAO.getPurchasesList(userId));
+        return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
     }
 
     @GetMapping("/fetchsaleslist")
-    public List<Sales_RespBody> getSalesList(@RequestHeader ("Authorization") String userToken) {
+    public ResponseEntity<List<Sales_RespBody>> getSalesList(@RequestHeader ("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-        return salesDAO.getSalesList(userId);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+        System.out.println(salesDAO.getSalesList(userId));
+        return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
     }
 }
