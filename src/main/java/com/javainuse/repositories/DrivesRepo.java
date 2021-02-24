@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface DrivesRepo extends JpaRepository<Drives, String> {
 
     public Drives findByDriveId(String did);
+    public Drives findByUserId(String uid);
 
 }

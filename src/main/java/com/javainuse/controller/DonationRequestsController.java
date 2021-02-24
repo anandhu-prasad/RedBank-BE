@@ -1,10 +1,13 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.models.DonationRequest;
+import com.javainuse.models.*;
+import com.javainuse.repositories.DonationInvitedDonorsRepo;
 import com.javainuse.repositories.DonationRequestRepo;
+import com.javainuse.requests.DonationDonorVerification_ReqBody;
 import com.javainuse.requests.ExpireRequestBody;
 import com.javainuse.responses.SuccessResponseBody;
+import com.javainuse.service.FindDonorsDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +25,9 @@ public class DonationRequestsController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    DonationInvitedDonorsRepo donationInvitedDonorsRepo;
 
     //? TO EXPIRE A DONATION REQUEST MADE BY CURRENT USER.
 
@@ -66,6 +72,40 @@ public class DonationRequestsController {
             responseHeaders.set("error", "Error accessing the requests, Please try again later.");
             return ResponseEntity.notFound().headers(responseHeaders).build();
         }
+        @Autowired
+        FindDonorsDAO findDonorsDAO;
+
+        @GetMapping("/fetchdonationdonorlist/donationid")
+        public List<ProfileInd> getDonorsList(@PathVariable(value = "id") String id) {
+            return findDonorsDAO.getDonorsList(id);
+        }
+
+
+        @PutMapping("/donationdonorverification")
+        public ResponseEntity<SuccessResponseBody> donationdonorverify(DonationDonorVerification_ReqBody donationdonorVerification_ReqBody){
+
+
+            try{
+                DonationInvitedDonors donationInvitedDonors = donationInvitedDonorsRepo.findByDonationIdAndUserId(donationDonorVerification_ReqBody.getDonatioId(), donationDonorVerification_ReqBody.getUserId());
+                donationInvitedDonors.setDonation_status(true);
+
+                donationInvitedDonorsRepo.save(donationInvitedDonors);
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+            }
+            catch(Exception e){
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("error", "This status is not set right now, please try again later.");
+                return ResponseEntity.notFound().headers(responseHeaders).build();
+            }
+        }
+
+
+
+
+
     }
 
 //
