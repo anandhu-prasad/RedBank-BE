@@ -30,8 +30,10 @@ public class FindDonorsController {
 
     @PostMapping("/donorslist")
     public ResponseEntity<List<FindDonors_RespBody>> getDonorsList(@RequestBody FindDonors_ReqBody data) {
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
+
         return ResponseEntity.ok().headers(responseHeaders).body(findDonorsDAO.getDonorsList(data));
     }
 

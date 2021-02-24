@@ -35,8 +35,9 @@ public class TransactionsController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-        System.out.println(purchasesDAO.getPurchasesList(userId));
         return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
+
+
     }
 
     @GetMapping("/fetchsaleslist")
@@ -47,7 +48,6 @@ public class TransactionsController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-        System.out.println(salesDAO.getSalesList(userId));
         return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
     }
 }
