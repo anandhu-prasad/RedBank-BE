@@ -1,6 +1,5 @@
 package com.javainuse.controller;
 
-
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.requests.FindDonors_ReqBody;
 import com.javainuse.requests.FindDonors_ReqBody_withSelectedDonors;
@@ -13,12 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping( path="/finddonors")
+@RequestMapping(path = "/finddonors")
 public class FindDonorsController {
 
     @Autowired
@@ -26,7 +24,6 @@ public class FindDonorsController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
-
 
     @PostMapping("/donorslist")
     public ResponseEntity<List<FindDonors_RespBody>> getDonorsList(@RequestBody FindDonors_ReqBody data) {
@@ -38,7 +35,8 @@ public class FindDonorsController {
     }
 
     @PostMapping("/sendnotification")
-    public ResponseEntity<SuccessResponseBody> getResponse(@RequestBody FindDonors_ReqBody_withSelectedDonors data, @RequestHeader("Authorization") String userToken){
+    public ResponseEntity<SuccessResponseBody> getResponse(@RequestBody FindDonors_ReqBody_withSelectedDonors data,
+            @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         Integer userType = Integer.parseInt(claims.get("userType").toString());
