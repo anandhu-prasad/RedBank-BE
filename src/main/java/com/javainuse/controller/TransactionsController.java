@@ -35,8 +35,8 @@ public class TransactionsController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
         return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
+
 
     }
 
@@ -48,7 +48,6 @@ public class TransactionsController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
         return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
     }
 }

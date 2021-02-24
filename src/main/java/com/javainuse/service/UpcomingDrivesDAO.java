@@ -1,17 +1,17 @@
 package com.javainuse.service;
 
 
-import com.javainuse.models.Drives;
-import com.javainuse.models.ProfileBb;
-import com.javainuse.models.ProfileHos;
-import com.javainuse.repositories.DrivesRepo;
-import com.javainuse.repositories.ProfileBbRepo;
-import com.javainuse.repositories.ProfileHosRepo;
+import com.javainuse.models.*;
+import com.javainuse.repositories.*;
 import com.javainuse.requests.UpcomingDrives_ReqBody;
+import com.javainuse.responses.SuccessResponseBody;
 import com.javainuse.responses.UpcomingDrives_RespBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +27,15 @@ public class UpcomingDrivesDAO {
 
     @Autowired
     ProfileHosRepo profileHosRepo;
+
+    @Autowired
+    DriveInvitedDonorsRepo driveInvitedDonorsRepo;
+
+    @Autowired
+    NotificationRepo notificationRepo;
+
+    @Autowired
+    ProfileIndRepo profileIndRepo;
 
 
     public List<UpcomingDrives_RespBody> getDrives(UpcomingDrives_ReqBody data) {
@@ -94,4 +103,34 @@ public class UpcomingDrivesDAO {
 
         return resultsList;
     }
+
+    public ResponseEntity<SuccessResponseBody> registerForDrive(String userId, String driveId){
+
+        if(driveInvitedDonorsRepo.findByDriveIdAndUserId(driveId, userId) == null){
+
+            DriveInvitedDonors driveInvitedDonors = new DriveInvitedDonors(driveId, userId);
+            driveInvitedDonors.setAcceptance(1);
+            driveInvitedDonors.setResponseTimeStamp(new Timestamp(System.currentTimeMillis()));
+            System.out.println(driveId);
+            driveInvitedDonorsRepo.save(driveInvitedDonors);
+
+            //? SENDING NOTIFICATION TO THE ORGANIZER.
+
+            String donorName = profileIndRepo.findByUserId(userId).getName();
+
+            String organizerId = drivesRepo.findByDriveId(driveId).getUserId();
+
+            notificationRepo.save(new Notification(organizerId, "New donor!", donorName + "has registered drive: " + driveId, new Timestamp(System.currentTimeMillis())));
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+        }
+        else{
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("error", "You are already registered for this drive.");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(false));
+        }
+    }
+
 }
