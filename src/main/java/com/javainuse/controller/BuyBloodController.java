@@ -116,6 +116,6 @@ public class BuyBloodController {
 
 
 
-        return salesDAO.submitsale(userId,data,userType);
+        return salesDAO.submitSale(userId,data,userType);
    }
 }

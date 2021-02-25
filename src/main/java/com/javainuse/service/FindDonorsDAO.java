@@ -43,13 +43,13 @@ public class FindDonorsDAO {
         list = list.stream().filter( item -> item.getDonorStatus() == 1).collect(Collectors.toList());
 
         //change the selection criterion in the form for the front end accordingly ( either check for empty state, district fields or check for 'ALL')
-        if(!(data.getState().equals("All") || data.getDistrict().equals(""))){
+        if(!(data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null)){
            list = list.stream().filter( item -> item.getState().equals(data.getState())).collect(Collectors.toList());
         }
-        if(!(data.getDistrict().equals("All") || data.getDistrict().equals(""))){
+        if(!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select state") || data.getDistrict() == null)){
             list = list.stream().filter( item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
         }
-        if(data.getPincode() != ""){
+        if(data.getPincode() != "" && data.getPincode() != null){
             list = list.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
         }
 

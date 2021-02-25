@@ -1,33 +1,55 @@
 package com.javainuse.controller;
 
 import com.javainuse.models.Sales;
+import com.javainuse.responses.Purchases_RespBody;
+import com.javainuse.responses.Sales_RespBody;
 import com.javainuse.service.PurchasesDAO;
 import com.javainuse.service.SalesDAO;
+import io.jsonwebtoken.Claims;
+import com.javainuse.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping( path="/transactions" )
+@CrossOrigin
+@RequestMapping(path = "/transactions")
 public class TransactionsController {
 
-    @Autowired
-    PurchasesDAO purchasesDAO;
+        @Autowired
+        PurchasesDAO purchasesDAO;
 
-    @Autowired
-    SalesDAO salesDAO;
+        @Autowired
+        SalesDAO salesDAO;
 
-    @GetMapping("/fetchpurchaseslist/{id}")
-    public List<Sales> getPurchasesList(@PathVariable(value = "id") String id) {
-        return purchasesDAO.getPurchasesList(id);
-    }
+        @Autowired
+        JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/fetchsaleslist/{id}")
-    public List<Sales> getSalesList(@PathVariable(value = "id") String id) {
-        return salesDAO.getSalesList(id);
-    }
+        @GetMapping("/fetchpurchaseslist")
+        public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(
+                        @RequestHeader("Authorization") String userToken) {
+                Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+                String userId = claims.get("userId").toString();
+                Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+
+                return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
+
+        }
+
+        @GetMapping("/fetchsaleslist")
+        public ResponseEntity<List<Sales_RespBody>> getSalesList(@RequestHeader("Authorization") String userToken) {
+                Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+                String userId = claims.get("userId").toString();
+                Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
+        }
 }
