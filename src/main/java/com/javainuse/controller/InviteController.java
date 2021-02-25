@@ -59,10 +59,8 @@ public class InviteController {
 
     @GetMapping("/fetchinvites")
     public ResponseEntity<List<?>> fetchInvites(@RequestHeader ("Authorization") String userToken){
-
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-
         return invitesDAO.fetchInvites(userId);
 
     }
@@ -74,10 +72,8 @@ public class InviteController {
     public ResponseEntity<SuccessResponseBody> setInviteResponse(@RequestBody InviteRequestBody inviteRequestBody, @RequestHeader ("Authorization") String userToken){
 
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
-
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
-
         return invitesDAO.setInviteResponse(inviteRequestBody, userId);
     }
 

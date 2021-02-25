@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -109,7 +111,14 @@ public class InvitesDAO {
                     String driveId = driveInvitedDonor.getDriveId();
                     Drives drive = drivesRepo.findByDriveId(driveId);
 
-                    if(drive.getStatus()){
+
+                    //? IF THE DRIVE IS ACTIVE AND START TIMESTAMP > CURRENT DATE
+                    Date start = new Date();
+                    start.setTime(drive.getStartTimestamp().getTime());
+                    Date current = new Date();
+                    current.setTime(new Timestamp(System.currentTimeMillis()).getTime());
+
+                    if(drive.getStatus() && start.compareTo(current) > 0){
 
                         String recipientName;
                         String recipientType;
@@ -130,15 +139,6 @@ public class InvitesDAO {
                             recipientEmail = profileBb.getEmail();
                             recipientContact = profileBb.getPhone1();
                         }
-                        System.out.print(drive.getStartTimestamp());
-                        System.out.println(currTime);
-
-
-//                 && new Timestamp().compareTo(currTime) > 0
-                        //TODO CONDITION BASED ON DATE.
-
-
-                        System.out.println("6");
 
                         InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress(), drive.getDistrict(), drive.getState(), drive.getPincode(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage());
                         responseList.add(inviteDriveResponseBody);
