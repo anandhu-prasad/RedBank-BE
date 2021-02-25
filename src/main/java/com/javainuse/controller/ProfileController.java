@@ -4,10 +4,7 @@ import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.requests.*;
-import com.javainuse.responses.ProfileIndividualData;
-import com.javainuse.responses.ProfileDataBb_Hos;
-import com.javainuse.responses.ProfileDataInd;
-import com.javainuse.responses.SuccessResponseBody;
+import com.javainuse.responses.*;
 import com.javainuse.service.ChangePasswordDAO;
 import com.javainuse.service.ProfileDAO;
 import com.javainuse.service.Verify_ChangePasswordDAO;
@@ -32,6 +29,15 @@ public class ProfileController {
     @Autowired
     ProfileDAO profileDAO;
 
+
+    @PostMapping("/setdonornotification")
+    public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(@RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
+
+        return profileDAO.setDonorStatusNotification(userId);
+    }
 
     @GetMapping("/fetchuserprofile")
     public ResponseEntity<?> getProfileDetails(@RequestHeader ("Authorization") String userToken){
