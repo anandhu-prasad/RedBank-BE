@@ -32,7 +32,7 @@ public class PurchasesDAO {
 
     public List<Purchases_RespBody> getPurchasesList (String id) {
 
-        List<Sales> salesList = salesRepo.findBySellerId(id);
+        List<Sales> salesList = salesRepo.findByBuyerId(id);
         List<Purchases_RespBody> results = new ArrayList<>();
 
         for(Sales item : salesList){
