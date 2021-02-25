@@ -8,6 +8,7 @@ import com.javainuse.repositories.DrivesRepo;
 import com.javainuse.repositories.NotificationRepo;
 import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.requests.ConductADrive_ReqBody;
+import com.javainuse.responses.DriveDonorsList_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +36,7 @@ public class DrivesDAO {
 
 
     public List<ProfileInd> individuals = new ArrayList<>(); // list to store individual details
+
 
     public ResponseEntity<SuccessResponseBody> saveDriveDetails(ConductADrive_ReqBody data, String userId, int userType) {
 
@@ -70,4 +72,25 @@ public class DrivesDAO {
 
 
     }
-}
+
+
+    public List<DriveDonorsList_RespBody> getDriveDonorDetails(String driveId) {
+
+        List<DriveDonorsList_RespBody> driveDonorsLists= new ArrayList<>();
+        List<DriveInvitedDonors> driveInvitedDonorsList = driveInvitedDonorRepo.findByDriveId(driveId);
+        for(DriveInvitedDonors driveInvitedDonors:driveInvitedDonorsList )
+        {
+            ProfileInd profileInd=profileIndRepo.findByUserId(driveInvitedDonors.getUserId());
+            driveDonorsLists.add(new DriveDonorsList_RespBody(driveInvitedDonors.getUserId(), profileInd.getName(),profileInd.getBloodGroup(),driveInvitedDonors.getDonation_status()));
+
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+
+        return driveDonorsLists;
+
+    }
+
+
+    }

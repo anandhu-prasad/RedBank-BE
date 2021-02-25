@@ -1,17 +1,14 @@
 package com.javainuse.controller;
 
 import com.javainuse.config.JwtTokenUtil;
-import com.javainuse.models.DonationRequest;
 import com.javainuse.models.DriveInvitedDonors;
 import com.javainuse.models.Drives;
-import com.javainuse.models.ProfileInd;
 import com.javainuse.repositories.DriveInvitedDonorsRepo;
 import com.javainuse.repositories.DrivesRepo;
 import com.javainuse.requests.CancelMyDrives;
 import com.javainuse.requests.DriveDonorVerification_ReqBody;
-import com.javainuse.requests.ExpireRequestBody;
+import com.javainuse.responses.DriveDonorsList_RespBody;
 import com.javainuse.responses.MyDrivesData;
-import com.javainuse.responses.ProfileDataInd;
 import com.javainuse.responses.SuccessResponseBody;
 import com.javainuse.service.DrivesDAO;
 import io.jsonwebtoken.Claims;
@@ -41,7 +38,7 @@ public class MyDrivesController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
+        //have to adde the arraylist of blood groups
         Drives obj = drivesRepo.findByUserId(userId);
         MyDrivesData obj1 = new MyDrivesData(obj.getDriveId(),obj.getStartTimestamp(),obj.getEndTimestamp(),obj.getAddress(),obj.getState(),obj.getDistrict(),obj.getPincode(),obj.getStatus(),obj.getaPos(),obj.getaNeg(),obj.getbPos(),obj.getbNeg()
         ,obj.getoPos(),obj.getoNeg(),obj.getAbPos(),obj.getAbNeg());
@@ -72,9 +69,15 @@ public class MyDrivesController {
 
     @Autowired
     DrivesDAO drivesDAO;
-    @GetMapping("/fetchdrivedonorlist/driveId")
-    public List<ProfileInd> saveDriveDetails(@PathVariable(value = "id") String id) {
-        return DrivesDAO.saveDriveDetails(id);
+    @GetMapping("/fetchdrivedonorlist/{driveId}")
+    public ResponseEntity<List<DriveDonorsList_RespBody>> getDriveDetails(@PathVariable(value = "driveId") String driveId, @RequestHeader("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+        return ResponseEntity.ok().headers(responseHeaders).body(drivesDAO.getDriveDonorDetails(driveId));
     }
 
 

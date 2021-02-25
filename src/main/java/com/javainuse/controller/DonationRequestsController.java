@@ -6,6 +6,8 @@ import com.javainuse.repositories.DonationInvitedDonorsRepo;
 import com.javainuse.repositories.DonationRequestRepo;
 import com.javainuse.requests.DonationDonorVerification_ReqBody;
 import com.javainuse.requests.ExpireRequestBody;
+import com.javainuse.responses.DonationDonorsList_RespBody;
+import com.javainuse.responses.DriveDonorsList_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
 import com.javainuse.service.FindDonorsDAO;
 import io.jsonwebtoken.Claims;
@@ -25,6 +27,9 @@ public class DonationRequestsController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    FindDonorsDAO findDonorsDAO;
 
     @Autowired
     DonationInvitedDonorsRepo donationInvitedDonorsRepo;
@@ -75,9 +80,19 @@ public class DonationRequestsController {
         @Autowired
         FindDonorsDAO findDonorsDAO;
 
-        @GetMapping("/fetchdonationdonorlist/donationid")
-        public List<ProfileInd> getDonorsList(@PathVariable(value = "id") String id) {
-            return findDonorsDAO.getDonorsList(id);
+        @GetMapping("/fetchdonationdonorlist/{donationid}")
+
+            public ResponseEntity<List<DonationDonorsList_RespBody>> getDonationDonorDetails((@PathVariable(value = "donationId") String donationId, @RequestHeader("Authorization") String userToken)) {
+            Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+            String userId = claims.get("userId").toString();
+
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(findDonorsDAO.getDonationDonorDetails(donationId));
+        }
+
+
         }
 
 
@@ -101,7 +116,6 @@ public class DonationRequestsController {
                 return ResponseEntity.notFound().headers(responseHeaders).build();
             }
         }
-
 
 
 

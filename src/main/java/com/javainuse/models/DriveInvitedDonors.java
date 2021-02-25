@@ -22,7 +22,7 @@ public class DriveInvitedDonors {
     private String userId;
 
     @Column( name="donation_status", columnDefinition = "boolean default false")
-    private boolean donation_status;
+    private Boolean donation_status;
 
     @Column( name="response_timestamp")
     private Timestamp responseTimeStamp;
@@ -61,11 +61,11 @@ public class DriveInvitedDonors {
         this.userId = userId;
     }
 
-    public boolean isDonation_status() {
+    public Boolean getDonation_status() {
         return donation_status;
     }
 
-    public void setDonation_status(boolean donation_status) {
+    public void setDonation_status(Boolean donation_status) {
         this.donation_status = donation_status;
     }
 

@@ -3,12 +3,15 @@ package com.javainuse.service;
 
 import com.javainuse.models.DonationInvitedDonors;
 import com.javainuse.models.DonationRequest;
+import com.javainuse.models.DriveInvitedDonors;
 import com.javainuse.models.ProfileInd;
 import com.javainuse.repositories.DonationInvitedDonorsRepo;
 import com.javainuse.repositories.DonationRequestRepo;
 import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.requests.FindDonors_ReqBody;
 import com.javainuse.requests.FindDonors_ReqBody_withSelectedDonors;
+import com.javainuse.responses.DonationDonorsList_RespBody;
+import com.javainuse.responses.DriveDonorsList_RespBody;
 import com.javainuse.responses.FindDonors_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +84,21 @@ public class FindDonorsDAO {
         responseHeaders.set("success", "true");
 
         return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+    }
+
+    public List<DonationDonorsList_RespBody> getDonationDonorDetails(String donationId) {
+
+        List<DonationDonorsList_RespBody> donationDonorsLists = new ArrayList<>();
+        List<DonationInvitedDonors> donationInvitedDonorsList = donationInvitedDonorsRepo.findByDonationId(donationId);
+        for (DonationInvitedDonors donationInvitedDonors : donationInvitedDonorsList) {
+            ProfileInd profileInd = profileIndRepo.findByUserId(donationInvitedDonors.getUserId());
+            donationDonorsLists.add(new DonationDonorsList_RespBody(donationInvitedDonors.getUserId(), profileInd.getName(), profileInd.getBloodGroup(), donationInvitedDonors.getDonation_status()));
+
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("success", "true");
+
+        return donationDonorsLists;
     }
 }

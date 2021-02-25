@@ -36,7 +36,7 @@ public class ProfileInd {
     private Timestamp registration_date;
     private Timestamp last_donation_date;
     @Column(name="donor_status", columnDefinition = "int default 0")
-    private int donorStatus;
+    private Integer donorStatus;
     private String password;
 
 
@@ -139,11 +139,11 @@ public class ProfileInd {
         this.last_donation_date = last_donation_date;
     }
 
-    public int getDonorStatus() {
+    public Integer getDonorStatus() {
         return donorStatus;
     }
 
-    public void setDonorStatus(int donorStatus) {
+    public void setDonorStatus(Integer donorStatus) {
         this.donorStatus = donorStatus;
     }
 

@@ -1,9 +1,9 @@
 package com.javainuse.requests;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+
 
 public class DriveDonorVerification_ReqBody {
-    private Boolean status;
+
     private String driveId;
     private String userId;
 
@@ -12,17 +12,9 @@ public class DriveDonorVerification_ReqBody {
     }
 
     public DriveDonorVerification_ReqBody(Boolean status, String driveId, String userId) {
-        this.status = status;
+
         this.driveId = driveId;
         this.userId = userId;
-    }
-
-    public Boolean getstatus() {
-        return status;
-    }
-
-    public void setstatus(Boolean status) {
-        this.status = status;
     }
 
     public String getDriveId() {
@@ -44,7 +36,6 @@ public class DriveDonorVerification_ReqBody {
     @Override
     public String toString() {
         return "DriveDonorVerification_ReqBody{" +
-                "status=" + status +
                 ", driveId='" + driveId + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';

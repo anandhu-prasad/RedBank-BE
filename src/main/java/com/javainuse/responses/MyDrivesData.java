@@ -12,6 +12,7 @@ public class MyDrivesData {
     private String district;
     private String pincode;
     private Boolean status;
+    //have to create a list for the blood groups
     private Boolean aPos;
     private Boolean aNeg;
     private Boolean bPos;

@@ -11,5 +11,7 @@ public interface DriveInvitedDonorsRepo extends JpaRepository<DriveInvitedDonors
     public DriveInvitedDonors findByDriveIdAndUserId(String did, String uid);
 
     public List<DriveInvitedDonors> findByUserId(String id);
+    public List<DriveInvitedDonors> findByDriveId(String did);
+
 
 }
