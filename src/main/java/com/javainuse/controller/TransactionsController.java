@@ -15,39 +15,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping( path="/transactions" )
+@CrossOrigin
+@RequestMapping(path = "/transactions")
 public class TransactionsController {
 
-    @Autowired
-    PurchasesDAO purchasesDAO;
+        @Autowired
+        PurchasesDAO purchasesDAO;
 
-    @Autowired
-    SalesDAO salesDAO;
+        @Autowired
+        SalesDAO salesDAO;
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+        @Autowired
+        JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/fetchpurchaseslist")
-    public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(@RequestHeader("Authorization") String userToken) {
-        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
-        String userId = claims.get("userId").toString();
-        Integer userType = Integer.parseInt(claims.get("userType").toString());
+        @GetMapping("/fetchpurchaseslist")
+        public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(
+                        @RequestHeader("Authorization") String userToken) {
+                Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+                String userId = claims.get("userId").toString();
+                Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
 
+                return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
 
-    }
+        }
 
-    @GetMapping("/fetchsaleslist")
-    public ResponseEntity<List<Sales_RespBody>> getSalesList(@RequestHeader ("Authorization") String userToken) {
-        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
-        String userId = claims.get("userId").toString();
-        Integer userType = Integer.parseInt(claims.get("userType").toString());
+        @GetMapping("/fetchsaleslist")
+        public ResponseEntity<List<Sales_RespBody>> getSalesList(@RequestHeader("Authorization") String userToken) {
+                Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+                String userId = claims.get("userId").toString();
+                Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
-    }
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
+        }
 }

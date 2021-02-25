@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,14 +39,38 @@ public class UpcomingDrivesDAO {
     ProfileIndRepo profileIndRepo;
 
 
-    public List<UpcomingDrives_RespBody> getDrives(UpcomingDrives_ReqBody data) {
+    public List<UpcomingDrives_RespBody> getDrives(UpcomingDrives_ReqBody data, String userId) {
 
+        ProfileInd currUserProfile = profileIndRepo.findByUserId(userId);
         List<Drives> driveList = new ArrayList<>();
         List<UpcomingDrives_RespBody> resultsList = new ArrayList<>();
 
-        driveList = drivesRepo.findAll();
+        // filtering drives according to status
 
-        // filtering the data  on basis of state ( because it's mandatory ), district , pincode
+        driveList = drivesRepo.findByStatus(true);
+
+        //filtering drives according to user's blood group
+        String bloodGroup = currUserProfile.getBloodGroup();
+
+        if(bloodGroup.equals("A+")){
+            driveList = driveList.stream().filter(item -> item.getaPos()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("A-")){
+            driveList = driveList.stream().filter(item -> item.getaNeg()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("B+")){
+            driveList = driveList.stream().filter(item -> item.getbPos()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("B-")){
+            driveList = driveList.stream().filter(item -> item.getbNeg()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("O-")){
+            driveList = driveList.stream().filter(item -> item.getoNeg()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("O+")){
+            driveList = driveList.stream().filter(item -> item.getoPos()).collect(Collectors.toList());
+        }else if(bloodGroup.equals("AB+")){
+            driveList = driveList.stream().filter(item -> item.getAbPos()).collect(Collectors.toList());
+        }else{
+            driveList = driveList.stream().filter(item -> item.getAbNeg()).collect(Collectors.toList());
+        }
+
+        // filtering the drives on basis of state ( because it's mandatory ), district , pincode
         if (!data.getState().equals("All") && !data.getState().equals("Select state") && data.getState() != null) {
             driveList = driveList.stream().filter(item -> item.getState().equals(data.getState())).collect(Collectors.toList());
         }
@@ -61,42 +86,51 @@ public class UpcomingDrivesDAO {
 
         for (Drives drives : driveList) {
 
-            ProfileHos profileHos = new ProfileHos();
-            ProfileBb profileBb = new ProfileBb();
+            Date start = new Date();
+            start.setTime(drives.getStartTimestamp().getTime());
+            Date current = new Date();
+            current.setTime(new Timestamp(System.currentTimeMillis()).getTime());
 
-            // fetching the name and contact of the organizer (HOS/BB)  from it's table using the user id
-            if(drives.getUserId().substring(0,3).equals("BOB")){
-                profileBb = profileBbRepo.findByUserId(drives.getUserId());
-            }else{
-                profileHos = profileHosRepo.findByUserId(drives.getUserId());
-            }
+            if(start.compareTo(current) > 0)
+            {
+                ProfileHos profileHos = new ProfileHos();
+                ProfileBb profileBb = new ProfileBb();
 
-            // list to store the invited blood groups by the drive
-            List<String> bloodGroups = new ArrayList<>();
+                // fetching the name and contact of the organizer (HOS/BB)  from it's table using the user id
+                if(drives.getUserId().substring(0,3).equals("BOB")){
+                    profileBb = profileBbRepo.findByUserId(drives.getUserId());
+                }else{
+                    profileHos = profileHosRepo.findByUserId(drives.getUserId());
+                }
 
-            if (drives.getaPos())
-                bloodGroups.add("A+");
-            if (drives.getaNeg())
-                bloodGroups.add("A-");
-            if (drives.getbPos())
-                bloodGroups.add("B+");
-            if (drives.getbNeg())
-                bloodGroups.add("B-");
-            if (drives.getoPos())
-                bloodGroups.add("O+");
-            if (drives.getoNeg())
-                bloodGroups.add("O-");
-            if (drives.getAbPos())
-                bloodGroups.add("AB+");
-            if (drives.getAbNeg())
-                bloodGroups.add("AB-");
+                // list to store the invited blood groups by the drive
+                List<String> bloodGroups = new ArrayList<>();
+
+                if (drives.getaPos())
+                    bloodGroups.add("A+");
+                if (drives.getaNeg())
+                    bloodGroups.add("A-");
+                if (drives.getbPos())
+                    bloodGroups.add("B+");
+                if (drives.getbNeg())
+                    bloodGroups.add("B-");
+                if (drives.getoPos())
+                    bloodGroups.add("O+");
+                if (drives.getoNeg())
+                    bloodGroups.add("O-");
+                if (drives.getAbPos())
+                    bloodGroups.add("AB+");
+                if (drives.getAbNeg())
+                    bloodGroups.add("AB-");
 
 
-            //saving the results in the result list
-            if(drives.getUserId().substring(0,3).equals("BOB")){
-                resultsList.add(new UpcomingDrives_RespBody(profileBb.getName(), profileBb.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups));
-            }else{
-                resultsList.add(new UpcomingDrives_RespBody(profileHos.getName(), profileHos.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups));
+                //saving the results in the result list
+                if(drives.getUserId().substring(0,3).equals("BOB")){
+                    resultsList.add(new UpcomingDrives_RespBody(profileBb.getName(), profileBb.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileBb.getEmail()));
+                }else{
+                    resultsList.add(new UpcomingDrives_RespBody(profileHos.getName(), profileHos.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileHos.getEmail()));
+                }
+
             }
 
         }

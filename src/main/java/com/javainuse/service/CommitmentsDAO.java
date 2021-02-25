@@ -60,7 +60,7 @@ public class CommitmentsDAO {
                                     "donation", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail(),
                                     obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
-                                    true, obj4.getDonationId());
+                                    donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                             obj3.add(donationDetails);
                     }
                     else if(obj4.getUserId().substring(0, 3).equals("HOS"))
@@ -69,7 +69,7 @@ public class CommitmentsDAO {
                                     "donation", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),
                                     obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
-                                    true, obj4.getDonationId());
+                                    donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                             obj3.add(donationDetails);
                     }
                     else{
@@ -77,7 +77,7 @@ public class CommitmentsDAO {
                                 "donation", "individual", profileIndRepo.findByUserId(obj4.getUserId()).getName(),
                                 profileIndRepo.findByUserId(obj4.getUserId()).getPhone(), profileIndRepo.findByUserId(obj4.getUserId()).getEmail(),
                                 obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
-                                true, obj4.getDonationId());
+                                donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                         obj3.add(donationDetails);
                     }
                 }
@@ -95,7 +95,7 @@ public class CommitmentsDAO {
                                     "drive", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail() ,
                                     obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
-                                    true, obj4.getStartTimestamp(), obj4.getEndTimestamp(), obj4.getDriveId());
+                                    driveInvitedDonors.isDonation_status(), obj4.getStartTimestamp(), obj4.getEndTimestamp(), obj4.getDriveId());
                             obj3.add(driveDetails);
                     }
                     else{
@@ -103,7 +103,7 @@ public class CommitmentsDAO {
                                     "drive", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),
                                     obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
-                                    true, obj4.getStartTimestamp(),obj4.getEndTimestamp(), obj4.getDriveId());
+                                    driveInvitedDonors.isDonation_status(), obj4.getStartTimestamp(),obj4.getEndTimestamp(), obj4.getDriveId());
                             obj3.add(driveDetails);
                     }
                 }

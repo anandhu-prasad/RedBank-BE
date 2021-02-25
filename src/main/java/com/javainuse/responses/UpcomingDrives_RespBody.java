@@ -22,4 +22,6 @@ public class UpcomingDrives_RespBody {
     private String district;
     private String pincode;
     private List<String> bloodGroups;
+    private String driveId;
+    private String email;
 }
