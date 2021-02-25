@@ -105,6 +105,7 @@ public class MyDrivesDAO {
 
             DriveInvitedDonors driveInvitedDonor = driveInvitedDonorsRepo.findByDriveIdAndUserId(driveDonorVerification_reqBody.getDriveId(), driveDonorVerification_reqBody.getUserId());
             driveInvitedDonor.setDonation_status(true);
+            driveInvitedDonor.setDonationTimestamp(new Timestamp(System.currentTimeMillis()));
             driveInvitedDonorsRepo.save(driveInvitedDonor);
 
             //? CHANGING LAST DONATION DATE AND DONOR STATUS AT FRONT END.

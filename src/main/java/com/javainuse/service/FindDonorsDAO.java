@@ -9,6 +9,7 @@ import com.javainuse.repositories.DonationRequestRepo;
 import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.requests.FindDonors_ReqBody;
 import com.javainuse.requests.FindDonors_ReqBody_withSelectedDonors;
+import com.javainuse.responses.DonationDonorsList_RespBody;
 import com.javainuse.responses.FindDonors_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,4 +83,5 @@ public class FindDonorsDAO {
 
         return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
     }
+
 }

@@ -12,5 +12,6 @@ public interface DonationInvitedDonorsRepo extends JpaRepository<DonationInvited
     public DonationInvitedDonors findByDonationIdAndUserId(String did, String uid);
 
     public List<DonationInvitedDonors> findByUserId(String userId);
+    public List<DonationInvitedDonors> findByDonationId(String did);
 
 }
