@@ -11,7 +11,7 @@ public class BuyBlood_RespBody {
         super();
     }
 
-    public BuyBlood_RespBody(String bbId,String bbName, String email, double price, String phoneNo) {
+    public BuyBlood_RespBody(String bbId, String bbName, String email, double price, String phoneNo) {
         this.bbId = bbId;
         this.bbName = bbName;
         this.email = email;

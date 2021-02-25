@@ -17,4 +17,5 @@ public interface InventoryBbRepo extends JpaRepository<InventoryBb, InventoryPk>
     public InventoryBb findByUserIdAndComponent(String id, String comp);
 
 
+    List<InventoryBb> findByComponent(String component);
 }
