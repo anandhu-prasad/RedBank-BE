@@ -13,12 +13,13 @@ public class FetchDrivesResponseBody {
     private String pincode;
     private List<String> bloodGroups;
     private Boolean status;
+    private Timestamp organizeDate;
 
     public FetchDrivesResponseBody() {
         super();
     }
 
-    public FetchDrivesResponseBody(String driveId, Timestamp startTimestamp, Timestamp endTimestamp, String address, String state, String district, String pincode, List<String> bloodGroups, Boolean status) {
+    public FetchDrivesResponseBody(String driveId, Timestamp startTimestamp, Timestamp endTimestamp, String address, String state, String district, String pincode, List<String> bloodGroups, Boolean status, Timestamp organizeDate) {
         this.driveId = driveId;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -28,6 +29,7 @@ public class FetchDrivesResponseBody {
         this.pincode = pincode;
         this.bloodGroups = bloodGroups;
         this.status = status;
+        this.organizeDate = organizeDate;
     }
 
     public String getDriveId() {
@@ -102,6 +104,14 @@ public class FetchDrivesResponseBody {
         this.status = status;
     }
 
+    public Timestamp getOrganizeDate() {
+        return organizeDate;
+    }
+
+    public void setOrganizeDate(Timestamp organizeDate) {
+        this.organizeDate = organizeDate;
+    }
+
     @Override
     public String toString() {
         return "FetchDrivesResponseBody{" +
@@ -114,6 +124,7 @@ public class FetchDrivesResponseBody {
                 ", pincode='" + pincode + '\'' +
                 ", bloodGroups=" + bloodGroups +
                 ", status=" + status +
+                ", organizeDate=" + organizeDate +
                 '}';
     }
 }

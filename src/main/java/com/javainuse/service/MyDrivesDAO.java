@@ -85,7 +85,7 @@ public class MyDrivesDAO {
                         bloodGroups.add(allBloodGroups.get(i));
                     }
                 }
-                responseList.add(new FetchDrivesResponseBody(drive.getDriveId(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getAddress(), drive.getState(), drive.getState(), drive.getPincode(), bloodGroups, drive.getStatus()));
+                responseList.add(new FetchDrivesResponseBody(drive.getDriveId(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getAddress(), drive.getState(), drive.getState(), drive.getPincode(), bloodGroups, drive.getStatus(), drive.getRequestTime()));
             }
 
             HttpHeaders responseHeaders = new HttpHeaders();
