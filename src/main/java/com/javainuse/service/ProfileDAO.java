@@ -3,15 +3,13 @@ package com.javainuse.service;
 import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.requests.*;
-import com.javainuse.responses.ProfileDataBb_Hos;
-import com.javainuse.responses.ProfileDataInd;
-import com.javainuse.responses.ProfileIndividualData;
-import com.javainuse.responses.SuccessResponseBody;
+import com.javainuse.responses.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +42,29 @@ public class ProfileDAO {
 
     @Autowired
     Verify_ChangePasswordDAO verifyChangePasswordDAO;
+
+    @Autowired
+    NotificationRepo notificationRepo;
+
+    public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId){
+        try{
+
+            Notification notification = new Notification(userId, "Eligibility update","You are now eligible to donate blood!" ,new Timestamp(System.currentTimeMillis()));
+            notificationRepo.save(notification);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+
+        }
+        catch (Exception e){
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("error", "Notification cannot be set right now!");
+            return ResponseEntity.notFound().headers(responseHeaders).build();
+        }
+    }
+
+
+//    last donation date - > condition - > set notification -> set donation status
 
 
     public ResponseEntity<SuccessResponseBody> changePassword(NewPassword newPassword, String userId, int userType){
