@@ -10,7 +10,7 @@ public class Purchases_RespBody {
     private String sellerContact;
     private String soldComponent;
     private String soldGroup;
-    private Double soldQuantity;
+    private int soldQuantity;
     private Double pricePerUnit;
 
     public Purchases_RespBody(){
@@ -19,7 +19,7 @@ public class Purchases_RespBody {
     public Purchases_RespBody(String purchaseId, Timestamp dateOfTransaction,
                               String sellerName, String sellerEmail, String sellerContact,
                               String soldComponent, String soldGroup,
-                              Double soldQuantity, Double pricePerUnit) {
+                              int soldQuantity, Double pricePerUnit) {
         this.purchaseId = purchaseId;
         this.dateOfTransaction = dateOfTransaction;
         this.sellerName = sellerName;
@@ -87,11 +87,11 @@ public class Purchases_RespBody {
         this.soldGroup = soldGroup;
     }
 
-    public Double getSoldQuantity() {
+    public int getSoldQuantity() {
         return soldQuantity;
     }
 
-    public void setSoldQuantity(Double soldQuantity) {
+    public void setSoldQuantity(int soldQuantity) {
         this.soldQuantity = soldQuantity;
     }
 

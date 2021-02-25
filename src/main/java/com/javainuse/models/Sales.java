@@ -32,7 +32,7 @@ public class Sales {
     private String component;
     @Column(name="blood_group")
     private String bloodGroup;
-    private Double units;
+    private int units;
     //? PRICE PER UNIT
     private Double price;
     @Column(name ="date_of_transaction")
@@ -42,7 +42,7 @@ public class Sales {
         super();
     }
 
-    public Sales(String sellerId, String buyerId, String component, String bloodGroup, Double units, Double price, Timestamp date) {
+    public Sales(String sellerId, String buyerId, String component, String bloodGroup, int units, Double price, Timestamp date) {
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.component = component;
@@ -100,11 +100,11 @@ public class Sales {
         this.bloodGroup = bloodGroup;
     }
 
-    public Double getUnits() {
+    public int getUnits() {
         return units;
     }
 
-    public void setUnits(Double units) {
+    public void setUnits(int units) {
         this.units = units;
     }
 

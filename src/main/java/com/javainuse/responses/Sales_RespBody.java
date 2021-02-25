@@ -11,7 +11,7 @@ public class Sales_RespBody {
     private String buyerContact;
     private String purchasedComponent;
     private String purchasedGroup;
-    private Double purchasedQuantity;
+    private int purchasedQuantity;
     private Double pricePerUnit;
 
     public Sales_RespBody() {
@@ -21,7 +21,7 @@ public class Sales_RespBody {
     public Sales_RespBody(String salesId, Timestamp dateOfTransaction,
                           String buyerName, String buyerEmail, String buyerContact,
                           String purchasedComponent, String purchasedGroup,
-                          Double purchasedQuantity, Double pricePerUnit) {
+                          int purchasedQuantity, Double pricePerUnit) {
         this.salesId = salesId;
         this.dateOfTransaction = dateOfTransaction;
         this.buyerName = buyerName;
@@ -89,11 +89,11 @@ public class Sales_RespBody {
         this.purchasedGroup = purchasedGroup;
     }
 
-    public Double getPurchasedQuantity() {
+    public int getPurchasedQuantity() {
         return purchasedQuantity;
     }
 
-    public void setPurchasedQuantity(Double purchasedQuantity) {
+    public void setPurchasedQuantity(int purchasedQuantity) {
         this.purchasedQuantity = purchasedQuantity;
     }
 
