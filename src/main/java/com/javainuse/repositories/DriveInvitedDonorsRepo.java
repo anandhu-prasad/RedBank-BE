@@ -1,6 +1,7 @@
 package com.javainuse.repositories;
 
 import com.javainuse.models.DriveInvitedDonors;
+import com.javainuse.models.Drives;
 import com.javainuse.util.DriveInvitedDonorsPk;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,5 +12,7 @@ public interface DriveInvitedDonorsRepo extends JpaRepository<DriveInvitedDonors
     public DriveInvitedDonors findByDriveIdAndUserId(String did, String uid);
 
     public List<DriveInvitedDonors> findByUserId(String id);
+
+    public List<DriveInvitedDonors> findByDriveId(String did);
 
 }

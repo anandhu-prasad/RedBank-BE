@@ -27,10 +27,16 @@ public class UpcomingDrivesController {
     JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/fetchdriveslist")
-    public ResponseEntity<List<UpcomingDrives_RespBody>> getDrivesList(@RequestBody UpcomingDrives_ReqBody data){
+    public ResponseEntity<List<UpcomingDrives_RespBody>> getDrivesList(@RequestBody UpcomingDrives_ReqBody data, @RequestHeader ("Authorization") String userToken){
+
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(upcomingDrivesDAO.getDrives(data));
+
+        return ResponseEntity.ok().headers(responseHeaders).body(upcomingDrivesDAO.getDrives(data, userId));
     }
 
     @PostMapping("/registerfordrive")
