@@ -73,7 +73,6 @@ public class MyDrivesController {
     public ResponseEntity<List<DriveDonorsList_RespBody>> getDriveDetails(@PathVariable(value = "driveId") String driveId, @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        Integer userType = Integer.parseInt(claims.get("userType").toString());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");

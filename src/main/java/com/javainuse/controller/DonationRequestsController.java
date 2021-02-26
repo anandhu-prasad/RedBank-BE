@@ -26,10 +26,14 @@ public class DonationRequestsController {
     DonationRequestRepo donationRequestRepo;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    FindDonorsDAO findDonorsDAO;
+    @Autowired
+    DonationDonorVerification_ReqBody donationDonorVerification_reqBody;
 
     @Autowired
-    FindDonorsDAO findDonorsDAO;
+    JwtTokenUtil jwtTokenUtil;
+
+
 
     @Autowired
     DonationInvitedDonorsRepo donationInvitedDonorsRepo;
@@ -77,8 +81,7 @@ public class DonationRequestsController {
             responseHeaders.set("error", "Error accessing the requests, Please try again later.");
             return ResponseEntity.notFound().headers(responseHeaders).build();
         }
-        @Autowired
-        FindDonorsDAO findDonorsDAO;
+
 
         @GetMapping("/fetchdonationdonorlist/{donationid}")
 
