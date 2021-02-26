@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -53,15 +54,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// We don't need CSRF for this example
 		httpSecurity.cors().and().csrf().disable()
 				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/authenticate", "/registerind", "/registerhos", "/registerbb").permitAll().
+				.authorizeRequests().antMatchers("/authenticate", "/registerind", "/registerhos", "/registerbb","/generateotp").permitAll().
 				// all other requests need to be authenticated
-				anyRequest().authenticated().and().
+						anyRequest().authenticated().and()
+				//OTP generation
+				.formLogin()
+				.loginPage("/authenticate")
+				.defaultSuccessUrl("")//after login the user will be taken to this
+				.failureUrl("/authenticate?error")
+				.permitAll()
+				.logout()
+				.permitAll().and()
 				// make sure we use stateless session; session won't be used to
 				// store user's state.
-				exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
 		// Add a filter to validate the tokens with every request
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	}
+		//This is for the OTP generation part
+		@Bean
+		public AccessDeniedHandler accessDeniedHandler(){
+			return new CustomAccessDeniedHandler();
 	}
 }
