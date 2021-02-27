@@ -73,8 +73,8 @@ public class FindDonorsDAO {
         String donationId = donationRequest.getDonationId();
         List<String> idList = data.getIdList();
 
-        for(int i = 0; i < idList.size(); i++) {
-           DonationInvitedDonors obj = new DonationInvitedDonors(donationId, idList.get(i));  //2-> pending , 0-> rejected
+        for (String s : idList) {
+            DonationInvitedDonors obj = new DonationInvitedDonors(donationId, s);  //2-> pending , 0-> rejected
             donationInvitedDonorsRepo.save(obj);
         }
 
