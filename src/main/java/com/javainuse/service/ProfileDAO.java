@@ -7,6 +7,7 @@ import com.javainuse.responses.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -45,6 +46,9 @@ public class ProfileDAO {
 
     @Autowired
     NotificationRepo notificationRepo;
+
+    @Autowired
+    PasswordEncoder bcryptEncoder;
 
     public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId){
         try{
@@ -311,6 +315,45 @@ public class ProfileDAO {
             responseHeaders.set("error", "Cannot update your profile at the moment, please try again.");
             return ResponseEntity.notFound().headers(responseHeaders).build();
         }
+    }
+
+
+    public ResponseEntity<SuccessResponseBody> resetPassword(ResetPassword_ReqBody data){
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        ProfileInd indObj = profileIndRepo.findByEmail(data.getUserEmail());
+        ProfileHos hosObj = profileHosRepo.findByEmail(data.getUserEmail());
+        ProfileBb bbObj = profileBbRepo.findByEmail(data.getUserEmail());
+
+
+        if(indObj != null){
+            indObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+            profileIndRepo.save(indObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else if(hosObj != null){
+            hosObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+
+            profileHosRepo.save(hosObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else if(bbObj != null){
+            bbObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+            profileBbRepo.save(bbObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else{
+            responseHeaders.set("success", "false");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((false)));
+        }
+
     }
 
 }

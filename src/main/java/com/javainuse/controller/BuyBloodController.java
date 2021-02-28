@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/buyblood")
 public class BuyBloodController {
     @Autowired
@@ -49,6 +50,8 @@ public class BuyBloodController {
         return price;
 
     }
+
+
     @PostMapping("/findbb")
     public List<BuyBlood_RespBody> getBloodBanksList(@RequestBody BuyBlood_ReqBody data , @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
