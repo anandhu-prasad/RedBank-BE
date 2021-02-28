@@ -1,16 +1,24 @@
 package com.javainuse.responses;
 
 
+import java.sql.Timestamp;
+
 public class ProfileDataInd {
 
     private String name;
     private String userId;
     private int donorStatus;
+    private Timestamp lastDonationDate;
 
-    public ProfileDataInd(String name, String userId, int donorStatus) {
+    public ProfileDataInd() {
+        super();
+    }
+
+    public ProfileDataInd(String name, String userId, int donorStatus, Timestamp lastDonationDate) {
         this.name = name;
         this.userId = userId;
         this.donorStatus = donorStatus;
+        this.lastDonationDate = lastDonationDate;
     }
 
     public String getName() {
@@ -35,6 +43,24 @@ public class ProfileDataInd {
 
     public void setDonorStatus(int donorStatus) {
         this.donorStatus = donorStatus;
+    }
+
+    public Timestamp getLastDonationDate() {
+        return lastDonationDate;
+    }
+
+    public void setLastDonationDate(Timestamp lastDonationDate) {
+        this.lastDonationDate = lastDonationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileDataInd{" +
+                "name='" + name + '\'' +
+                ", userId='" + userId + '\'' +
+                ", donorStatus=" + donorStatus +
+                ", lastDonationDate=" + lastDonationDate +
+                '}';
     }
 }
 

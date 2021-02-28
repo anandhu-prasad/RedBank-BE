@@ -75,7 +75,7 @@ public class ProfileController {
     //? SETTING NEW DONOR STATUS.
     //! TESTED
     @PutMapping("/donorstatus")
-    public ResponseEntity<SuccessResponseBody> updateDonorStatus(@RequestBody DonorStatusRequestBody donorStatusRequestBody, @RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<DonorStatusRequestBody> updateDonorStatus(@RequestBody DonorStatusRequestBody donorStatusRequestBody, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         return profileDAO.updateDonorStatus(donorStatusRequestBody, userId);

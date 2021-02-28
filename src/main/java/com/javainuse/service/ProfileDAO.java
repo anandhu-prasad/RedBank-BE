@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -172,7 +173,7 @@ public class ProfileDAO {
             ProfileInd obj = profileIndRepo.findByUserId(userId);
 
 
-            ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus());
+            ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus(), obj.getLast_donation_date());
 
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
 
@@ -191,15 +192,31 @@ public class ProfileDAO {
 
     }
 
-    public ResponseEntity<SuccessResponseBody> updateDonorStatus(DonorStatusRequestBody donorStatusRequestBody, String userId){
+    public ResponseEntity<DonorStatusRequestBody> updateDonorStatus(DonorStatusRequestBody donorStatusRequestBody, String userId){
         try{
             ProfileInd profileInd = profileIndRepo.findByUserId(userId);
-            profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
-            profileIndRepo.save(profileInd);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
-            System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
-            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+
+            System.out.println("Donor status to be set: " + donorStatusRequestBody.getDonorStatus());
+
+            long lastDonated = profileInd.getLast_donation_date().getTime();
+            long current = new Timestamp(System.currentTimeMillis()).getTime();
+
+            //? FOR ANY CASE, DONOR STATUS OF AN INDIVIDUAL CAN ONLY BE CHANGED FROM 2 TO ANYTHING ONLY AFTER 55 DAYS OR MORE.
+            if(profileInd.getDonorStatus() == 2 && profileInd.getLast_donation_date() != null && (current - lastDonated) / (1000 * 60 * 60 * 24) < 55) {
+            //TODO brief web team on the return object change.
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+                System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
+                return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(2));
+            }
+            else{
+                profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
+                profileIndRepo.save(profileInd);
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("success", "true");
+                System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
+                return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(profileInd.getDonorStatus()));
+            }
         }
         catch(Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();
