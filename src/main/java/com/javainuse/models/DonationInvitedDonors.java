@@ -40,9 +40,10 @@ public class DonationInvitedDonors {
         super();
     }
 
-    public DonationInvitedDonors(String donationId, String userId) {
+    public DonationInvitedDonors(String donationId, String userId, int acceptance) {
         this.donationId = donationId;
         this.userId = userId;
+        this.acceptance = acceptance;
     }
 
     public String getDonationId() {
