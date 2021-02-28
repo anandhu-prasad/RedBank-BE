@@ -91,7 +91,7 @@ public class EmailService {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         if(data.getOtp() == otpData.getOtpReceived()){
-            otpRepo.deleteById(otpData.getOtpId());
+            otpRepo.deleteById(otpData.getUserEmail());
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
         }

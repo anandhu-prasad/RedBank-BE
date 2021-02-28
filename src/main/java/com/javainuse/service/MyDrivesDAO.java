@@ -138,9 +138,11 @@ public class MyDrivesDAO {
             List<DriveInvitedDonors> driveInvitedDonorsList = driveInvitedDonorsRepo.findByDriveId(driveId);
             for(DriveInvitedDonors driveInvitedDonors : driveInvitedDonorsList)
             {
-                ProfileInd profileInd=profileIndRepo.findByUserId(driveInvitedDonors.getUserId());
-                responseList.add(new DriveDonorsList_RespBody(driveInvitedDonors.getUserId(), profileInd.getName(),profileInd.getBloodGroup(),driveInvitedDonors.isDonation_status()));
+                if(driveInvitedDonors.getAcceptance() == 1){
+                    ProfileInd profileInd=profileIndRepo.findByUserId(driveInvitedDonors.getUserId());
+                    responseList.add(new DriveDonorsList_RespBody(driveInvitedDonors.getUserId(), profileInd.getName(),profileInd.getBloodGroup(),driveInvitedDonors.isDonation_status()));
 
+                }
             }
 
             return ResponseEntity.ok().headers(responseHeaders).body(responseList);

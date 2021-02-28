@@ -8,9 +8,6 @@ import org.springframework.http.ResponseEntity;
 import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-
 @RestController
 @CrossOrigin
 @RequestMapping(path="/email")
