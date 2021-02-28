@@ -29,7 +29,7 @@ public class DonationInvitedDonors {
     @Column( name="donation_status", columnDefinition = "boolean default false")
     private boolean donation_status;
 
-    @Column( name="acceptance", columnDefinition = "int default 2")
+    @Column( name="acceptance")
     private int acceptance;
 
     @Column( name="rejection_message")
