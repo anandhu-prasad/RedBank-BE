@@ -10,16 +10,16 @@ import javax.persistence.*;
 public class EmailOtpMapping {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "otp_seq")
-    @GenericGenerator(
-            name = "otp_seq",
-            strategy = "com.javainuse.util.StringSequenceIdentifier",
-            parameters = {
-                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.INCREMENT_PARAM, value = "1"),
-                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.VALUE_PREFIX_PARAMETER, value = "OTP"),
-                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.NUMBER_FORMAT_PARAMETER, value = "%02d") })
-    @Column(name="otp_id")
-    private String otpId;
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "otp_seq")
+//    @GenericGenerator(
+//            name = "otp_seq",
+//            strategy = "com.javainuse.util.StringSequenceIdentifier",
+//            parameters = {
+//                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.INCREMENT_PARAM, value = "1"),
+//                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.VALUE_PREFIX_PARAMETER, value = "OTP"),
+//                    @org.hibernate.annotations.Parameter(name = StringSequenceIdentifier.NUMBER_FORMAT_PARAMETER, value = "%02d") })
+//    @Column(name="otp_id")
+//    private String otpId;
 
     @Column(name="user_email")
     private String userEmail;
@@ -35,13 +35,13 @@ public class EmailOtpMapping {
         super();
     }
 
-    public String getOtpId() {
-        return otpId;
-    }
-
-    public void setOtpId(String otpId) {
-        this.otpId = otpId;
-    }
+//    public String getOtpId() {
+//        return otpId;
+//    }
+//
+//    public void setOtpId(String otpId) {
+//        this.otpId = otpId;
+//    }
 
     public String getUserEmail() {
         return userEmail;
@@ -62,7 +62,8 @@ public class EmailOtpMapping {
     @Override
     public String toString() {
         return "EmailOtpMapping{" +
-                "otpId='" + otpId + '\'' +
+//                "otpId='" + otpId + '\'' +
+                ", userEmail='" + userEmail + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", otpReceived='" + otpReceived + '\'' +
                 '}';
