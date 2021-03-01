@@ -30,7 +30,7 @@ public class DriveInvitedDonors {
     @Column( name="donation_timestamp")
     private Timestamp donationTimestamp;
 
-    @Column( name="acceptance", columnDefinition = "int default 2")
+    @Column( name="acceptance")
     private int acceptance;
 
     @Column( name="rejection_message")
@@ -40,9 +40,10 @@ public class DriveInvitedDonors {
         super();
     }
 
-    public DriveInvitedDonors(String driveId, String userId) {
+    public DriveInvitedDonors(String driveId, String userId, int acceptance) {
         this.driveId = driveId;
         this.userId = userId;
+        this.acceptance = acceptance;
     }
 
     public String getDriveId() {

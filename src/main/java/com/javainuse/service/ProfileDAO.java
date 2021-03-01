@@ -197,9 +197,14 @@ public class ProfileDAO {
             ProfileInd profileInd = profileIndRepo.findByUserId(userId);
 
             System.out.println("Donor status to be set: " + donorStatusRequestBody.getDonorStatus());
+            long lastDonated = 0;
+            Timestamp lastDonationTimestamp = profileInd.getLast_donation_date();
+            if(lastDonationTimestamp != null){
+                lastDonated =  lastDonationTimestamp.getTime();
+            }
 
-            long lastDonated = profileInd.getLast_donation_date().getTime();
             long current = new Timestamp(System.currentTimeMillis()).getTime();
+
 
             //? FOR ANY CASE, DONOR STATUS OF AN INDIVIDUAL CAN ONLY BE CHANGED FROM 2 TO ANYTHING ONLY AFTER 55 DAYS OR MORE.
             if(profileInd.getDonorStatus() == 2 && profileInd.getLast_donation_date() != null && (current - lastDonated) / (1000 * 60 * 60 * 24) < 55) {
@@ -210,6 +215,7 @@ public class ProfileDAO {
                 return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(2));
             }
             else{
+                System.out.print("ok");
                 profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
                 profileIndRepo.save(profileInd);
                 HttpHeaders responseHeaders = new HttpHeaders();
