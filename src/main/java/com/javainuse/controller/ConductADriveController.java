@@ -4,7 +4,7 @@ package com.javainuse.controller;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.requests.ConductADrive_ReqBody;
 import com.javainuse.responses.SuccessResponseBody;
-import com.javainuse.service.DrivesDAO;
+import com.javainuse.service.ConductADriveDAO;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ConductADriveController {
 
     @Autowired
-    public DrivesDAO conductadrive;
+    public ConductADriveDAO conductadrive;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
