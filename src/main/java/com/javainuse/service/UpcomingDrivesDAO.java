@@ -142,8 +142,7 @@ public class UpcomingDrivesDAO {
 
         if(driveInvitedDonorsRepo.findByDriveIdAndUserId(driveId, userId) == null){
 
-            DriveInvitedDonors driveInvitedDonors = new DriveInvitedDonors(driveId, userId);
-            driveInvitedDonors.setAcceptance(1);
+            DriveInvitedDonors driveInvitedDonors = new DriveInvitedDonors(driveId, userId, 1);
             driveInvitedDonors.setResponseTimeStamp(new Timestamp(System.currentTimeMillis()));
             System.out.println(driveId);
             driveInvitedDonorsRepo.save(driveInvitedDonors);
