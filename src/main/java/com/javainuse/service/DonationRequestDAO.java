@@ -77,11 +77,11 @@ public class DonationRequestDAO {
         List<DonationDonorsList_RespBody> donationDonorsLists = new ArrayList<>();
         List<DonationInvitedDonors> donationInvitedDonorsList = donationInvitedDonorsRepo.findByDonationId(donationId);
         for (DonationInvitedDonors donationInvitedDonors : donationInvitedDonorsList) {
-            if(donationInvitedDonors.getAcceptance() == 1){
+//            if(donationInvitedDonors.getAcceptance() == 1){
                 ProfileInd profileInd = profileIndRepo.findByUserId(donationInvitedDonors.getUserId());
-                donationDonorsLists.add(new DonationDonorsList_RespBody(donationInvitedDonors.getUserId(), profileInd.getName(), profileInd.getBloodGroup(), donationInvitedDonors.isDonation_status()));
+                donationDonorsLists.add(new DonationDonorsList_RespBody(donationInvitedDonors.getUserId(), profileInd.getName(), profileInd.getBloodGroup(), donationInvitedDonors.isDonation_status(), donationInvitedDonors.getAcceptance()));
 
-            }
+//            }
         }
         return donationDonorsLists;
     }
