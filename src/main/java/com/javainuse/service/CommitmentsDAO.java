@@ -59,7 +59,7 @@ public class CommitmentsDAO {
                             MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(),
                                     "donation", "blood bank", profileBbRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileBbRepo.findByUserId(obj4.getUserId()).getPhone1(), profileBbRepo.findByUserId(obj4.getUserId()).getEmail(),
-                                    obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
+                                    obj4.getAddress(),
                                     donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                             obj3.add(donationDetails);
                     }
@@ -68,7 +68,7 @@ public class CommitmentsDAO {
                             MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(),
                                     "donation", "hospital", profileHosRepo.findByUserId(obj4.getUserId()).getName(),
                                     profileHosRepo.findByUserId(obj4.getUserId()).getPhone1(), profileHosRepo.findByUserId(obj4.getUserId()).getEmail(),
-                                    obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
+                                    obj4.getAddress(),
                                     donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                             obj3.add(donationDetails);
                     }
@@ -76,7 +76,7 @@ public class CommitmentsDAO {
                         MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(),
                                 "donation", "individual", profileIndRepo.findByUserId(obj4.getUserId()).getName(),
                                 profileIndRepo.findByUserId(obj4.getUserId()).getPhone(), profileIndRepo.findByUserId(obj4.getUserId()).getEmail(),
-                                obj4.getAddress() + ", " + obj4.getState() + ", " +obj4.getDistrict() + ", " + obj4.getPincode(),
+                                obj4.getAddress(),
                                 donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                         obj3.add(donationDetails);
                     }

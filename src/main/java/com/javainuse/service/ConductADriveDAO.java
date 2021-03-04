@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DrivesDAO {
+public class ConductADriveDAO {
 
     @Autowired
     DrivesRepo drivesRepo;
@@ -58,8 +58,8 @@ public class DrivesDAO {
         String driveId = returnObj.getDriveId();
 
         // saving the details in the 'drives_invited_donors';
-        for (int i = 0; i < individuals.size(); i++) {
-            DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individuals.get(i).getUserId());   // 2 -> pending, 0 -> rejected
+        for (ProfileInd individual : individuals) {
+            DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individual.getUserId(), 2);   // 2 -> pending, 0 -> rejected
             driveInvitedDonorRepo.save(obj2);
         }
 

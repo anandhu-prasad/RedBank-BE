@@ -96,7 +96,6 @@ public class InvitesDAO {
                             recipientContact = profileInd.getPhone();
                         }
 
-
                         InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress());
                         responseList.add(inviteDonationResponseBody);
 
@@ -106,11 +105,9 @@ public class InvitesDAO {
 
             for (DriveInvitedDonors driveInvitedDonor : driveInvitedDonors) {
 
-
                 if (driveInvitedDonor.getAcceptance() == 2) {
                     String driveId = driveInvitedDonor.getDriveId();
                     Drives drive = drivesRepo.findByDriveId(driveId);
-
 
                     //? IF THE DRIVE IS ACTIVE AND START TIMESTAMP > CURRENT DATE
                     Date start = new Date();
@@ -125,7 +122,7 @@ public class InvitesDAO {
                         String recipientEmail;
                         String recipientContact;
 
-                        if(drive.getUserId().substring(0, 3).equals("HOS")){
+                        if(drive.getUserId().startsWith("HOS")){
                             recipientType = "Hospital";
                             ProfileHos profileHos = profileHosRepo.findByUserId(drive.getUserId());
                             recipientName = profileHos.getName();

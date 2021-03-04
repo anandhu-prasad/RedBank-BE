@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/buyblood")
 public class BuyBloodController {
     @Autowired
@@ -49,6 +50,8 @@ public class BuyBloodController {
         return price;
 
     }
+
+
     @PostMapping("/findbb")
     public ResponseEntity<List<BuyBlood_RespBody>> getBloodBanksList(@RequestBody BuyBlood_ReqBody data , @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
@@ -69,7 +72,7 @@ public class BuyBloodController {
                         double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
                         // TODO add to a new Array list after comparison
                         if (price != -1) {
-                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1()));
+                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
                         }
                     }
                 } else {
@@ -78,7 +81,7 @@ public class BuyBloodController {
                         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
                         double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
                         if (price != -1) {
-                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1()));
+                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
                         }
                     }
                 }
@@ -88,7 +91,7 @@ public class BuyBloodController {
                         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
                         double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
                         if (price != -1) {
-                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1()));
+                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
                         }
                     }
                 }
@@ -98,7 +101,7 @@ public class BuyBloodController {
                 InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
                 double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
                 if (price != -1) {
-                    responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1()));
+                    responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
                 }
             }
         }

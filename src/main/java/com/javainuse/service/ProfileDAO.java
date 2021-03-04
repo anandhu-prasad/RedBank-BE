@@ -7,6 +7,7 @@ import com.javainuse.responses.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -46,6 +47,9 @@ public class ProfileDAO {
 
     @Autowired
     NotificationRepo notificationRepo;
+
+    @Autowired
+    PasswordEncoder bcryptEncoder;
 
     public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId){
         try{
@@ -193,9 +197,14 @@ public class ProfileDAO {
             ProfileInd profileInd = profileIndRepo.findByUserId(userId);
 
             System.out.println("Donor status to be set: " + donorStatusRequestBody.getDonorStatus());
+            long lastDonated = 0;
+            Timestamp lastDonationTimestamp = profileInd.getLast_donation_date();
+            if(lastDonationTimestamp != null){
+                lastDonated =  lastDonationTimestamp.getTime();
+            }
 
-            long lastDonated = profileInd.getLast_donation_date().getTime();
             long current = new Timestamp(System.currentTimeMillis()).getTime();
+
 
             //? FOR ANY CASE, DONOR STATUS OF AN INDIVIDUAL CAN ONLY BE CHANGED FROM 2 TO ANYTHING ONLY AFTER 55 DAYS OR MORE.
             if(profileInd.getDonorStatus() == 2 && profileInd.getLast_donation_date() != null && (current - lastDonated) / (1000 * 60 * 60 * 24) < 55) {
@@ -206,6 +215,7 @@ public class ProfileDAO {
                 return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(2));
             }
             else{
+                System.out.print("ok");
                 profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
                 profileIndRepo.save(profileInd);
                 HttpHeaders responseHeaders = new HttpHeaders();
@@ -328,6 +338,45 @@ public class ProfileDAO {
             responseHeaders.set("error", "Cannot update your profile at the moment, please try again.");
             return ResponseEntity.notFound().headers(responseHeaders).build();
         }
+    }
+
+
+    public ResponseEntity<SuccessResponseBody> resetPassword(ResetPassword_ReqBody data){
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        ProfileInd indObj = profileIndRepo.findByEmail(data.getUserEmail());
+        ProfileHos hosObj = profileHosRepo.findByEmail(data.getUserEmail());
+        ProfileBb bbObj = profileBbRepo.findByEmail(data.getUserEmail());
+
+
+        if(indObj != null){
+            indObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+            profileIndRepo.save(indObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else if(hosObj != null){
+            hosObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+
+            profileHosRepo.save(hosObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else if(bbObj != null){
+            bbObj.setPassword(bcryptEncoder.encode(data.getNewPassword()));
+            profileBbRepo.save(bbObj);
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+        else{
+            responseHeaders.set("success", "false");
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((false)));
+        }
+
     }
 
 }

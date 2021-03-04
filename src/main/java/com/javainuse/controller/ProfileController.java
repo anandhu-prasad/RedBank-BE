@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/profile")
 public class ProfileController {
 
@@ -105,6 +106,11 @@ public class ProfileController {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         return profileDAO.updateBbProfile(profile, userId);
+    }
+
+    @PutMapping("/resetpassword")
+    public ResponseEntity<SuccessResponseBody> updateBbProfile(@RequestBody ResetPassword_ReqBody data){
+        return profileDAO.resetPassword(data);
     }
 
 }

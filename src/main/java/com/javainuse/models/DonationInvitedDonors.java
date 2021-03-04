@@ -29,7 +29,7 @@ public class DonationInvitedDonors {
     @Column( name="donation_status", columnDefinition = "boolean default false")
     private boolean donation_status;
 
-    @Column( name="acceptance", columnDefinition = "int default 2")
+    @Column( name="acceptance")
     private int acceptance;
 
     @Column( name="rejection_message")
@@ -40,9 +40,10 @@ public class DonationInvitedDonors {
         super();
     }
 
-    public DonationInvitedDonors(String donationId, String userId) {
+    public DonationInvitedDonors(String donationId, String userId, int acceptance) {
         this.donationId = donationId;
         this.userId = userId;
+        this.acceptance = acceptance;
     }
 
     public String getDonationId() {
