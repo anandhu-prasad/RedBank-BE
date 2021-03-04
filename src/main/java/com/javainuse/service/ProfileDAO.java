@@ -270,9 +270,13 @@ public class ProfileDAO {
             match.setState(profile.getState());
             match.setPincode(profile.getPincode());
 
-            if(profile.getPhone().size() >= 1){
-                match.setPhone1(profile.getPhone().get(0));
-            }
+            match.setPhone2(null);
+            match.setPhone3(null);
+            match.setPhone4(null);
+            match.setPhone5(null);
+
+            match.setPhone1(profile.getPhone().get(0));
+
             if(profile.getPhone().size() >= 2){
                 match.setPhone2(profile.getPhone().get(1));
             }
@@ -310,9 +314,13 @@ public class ProfileDAO {
             match.setState(profile.getState());
             match.setPincode(profile.getPincode());
 
-            if(profile.getPhone().size() >= 1){
-                match.setPhone1(profile.getPhone().get(0));
-            }
+            match.setPhone2(null);
+            match.setPhone3(null);
+            match.setPhone4(null);
+            match.setPhone5(null);
+
+            match.setPhone1(profile.getPhone().get(0));
+
             if(profile.getPhone().size() >= 2){
                 match.setPhone2(profile.getPhone().get(1));
             }
