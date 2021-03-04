@@ -1,4 +1,4 @@
-package com.javainuse.analyticsModels;
+package com.javainuse.analyticsModels.objects;
 
 import java.util.List;
 

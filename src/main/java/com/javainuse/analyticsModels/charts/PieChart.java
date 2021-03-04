@@ -1,4 +1,4 @@
-package com.javainuse.analyticsModels;
+package com.javainuse.analyticsModels.charts;
 
 public class PieChart {
     private  String name;
