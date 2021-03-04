@@ -1,4 +1,6 @@
-package com.javainuse.analyticsModels;
+package com.javainuse.analyticsModels.charts;
+
+import com.javainuse.analyticsModels.objects.DatasetObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.javainuse.analyticsModels;
+package com.javainuse.analyticsModels.charts;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,5 +1,7 @@
 package com.javainuse.controller;
 
+import com.javainuse.analyticsModels.charts.BarChartMonth;
+//import com.javainuse.analyticsModels.charts.InventoryPieChart;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.models.InventoryBb;
 import com.javainuse.models.InventoryHos;
@@ -60,4 +62,15 @@ public class InventoryController {
         return inventoryDAO.updateBbInventory(userId, inventoryBbList);
 
     }
+//    @GetMapping("/piechart/{type}")
+//    public ResponseEntity<List<InventoryPieChart>> getCurrentYearStats  (@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
+//        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+//        String userId = claims.get("userId").toString();
+//
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("success", "true");
+//
+//        return ResponseEntity.ok().headers(responseHeaders).body(InventoryDAO.getInventoryStats(userId,type));
+//    }
+
 }
