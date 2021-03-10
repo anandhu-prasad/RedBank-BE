@@ -106,7 +106,7 @@ public class DonationRequestDAO {
 
             System.out.println("two");
             //? SENDING NOTIFICATION TO THE DONOR.
-            Notification notification = new Notification(donationDonorVerification_ReqBody.getUserId(), "Donation complete", "Your blood donation for Donation Id" + donationDonorVerification_ReqBody.getDonationId() + " is approved by the recipient.", new Timestamp(System.currentTimeMillis()));
+            Notification notification = new Notification(donationDonorVerification_ReqBody.getUserId(), "Donation complete", "Your blood donation for Donation Id " + donationDonorVerification_ReqBody.getDonationId() + " is approved by the recipient.", new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
 
             HttpHeaders responseHeaders = new HttpHeaders();
