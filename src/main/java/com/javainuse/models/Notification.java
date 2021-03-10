@@ -22,7 +22,8 @@ public class Notification {
             strategy = SEQUENCE,
             generator = "\"notification_sequence\""
     )
-    private int notification_id;
+    @Column(name="notification_id")
+    private int notificationId;
 
     @Column(name="user_id")
     private String userId;
@@ -49,11 +50,11 @@ public class Notification {
     }
 
     public int getNotification_id() {
-        return notification_id;
+        return notificationId;
     }
 
-    public void setNotification_id(int notification_id) {
-        this.notification_id = notification_id;
+    public void setNotification_id(int notificationId) {
+        this.notificationId = notificationId;
     }
 
     public String getUserId() {
@@ -99,7 +100,7 @@ public class Notification {
     @Override
     public String toString() {
         return "Notification{" +
-                "notification_id=" + notification_id +
+                "notificationId=" + notificationId +
                 ", userId='" + userId + '\'' +
                 ", title='" + title + '\'' +
                 ", message='" + message + '\'' +

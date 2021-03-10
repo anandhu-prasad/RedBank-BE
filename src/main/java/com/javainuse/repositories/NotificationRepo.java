@@ -9,4 +9,6 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
 
     public List<Notification> findByUserId(String uid);
 
+    public Notification findByNotificationId(int nid);
+
 }
