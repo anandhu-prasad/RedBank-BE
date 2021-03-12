@@ -38,6 +38,7 @@ public class ProfileInd {
     @Column(name="donor_status", columnDefinition = "int default 0")
     private int donorStatus;
     private String password;
+    private String avatar;
 
 
     public ProfileInd() {
@@ -171,6 +172,14 @@ public class ProfileInd {
         return pincode;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
         return "ProfileInd{" +
@@ -179,15 +188,16 @@ public class ProfileInd {
                 ", bloodGroup='" + bloodGroup + '\'' +
                 ", email='" + email + '\'' +
                 ", dob=" + dob +
-                ", phone=" + phone +
+                ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", state='" + state + '\'' +
                 ", district='" + district + '\'' +
-                ", pincode=" + pincode +
+                ", pincode='" + pincode + '\'' +
                 ", registration_date=" + registration_date +
                 ", last_donation_date=" + last_donation_date +
                 ", donorStatus=" + donorStatus +
                 ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

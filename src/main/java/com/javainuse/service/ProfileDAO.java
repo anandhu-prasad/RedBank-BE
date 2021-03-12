@@ -165,6 +165,38 @@ public class ProfileDAO {
         }
     }
 
+    public ResponseEntity<SuccessResponseBody> updateAvatar(String avatar, String userId, int userType){
+        try{
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("success", "true");
+
+            if(userType == 1){
+                ProfileInd profileInd = profileIndRepo.findByUserId(userId);
+                profileInd.setAvatar(avatar);
+                profileIndRepo.save(profileInd);
+            }
+            else if(userType == 2){
+                ProfileHos profileHos = profileHosRepo.findByUserId(userId);
+                profileHos.setAvatar(avatar);
+                profileHosRepo.save(profileHos);
+            }
+            else{
+                ProfileBb profileBb = profileBbRepo.findByUserId(userId);
+                profileBb.setAvatar(avatar);
+                profileBbRepo.save(profileBb);
+            }
+
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+
+        }
+        catch (Exception e){
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("error", e.getMessage());
+            return ResponseEntity.notFound().headers(responseHeaders).build();
+        }
+    }
+
+
     public ResponseEntity<?> getProfileDetails(String userId, int userType){
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
@@ -174,6 +206,13 @@ public class ProfileDAO {
 
 
             ProfileDataInd obj1 = new ProfileDataInd(obj.getName(), obj.getUserId(), obj.getDonorStatus(), obj.getLast_donation_date());
+
+            if(obj.getAvatar() == null){
+                obj1.setProfilePicture("");
+            }
+            else{
+                obj1.setProfilePicture(obj.getAvatar());
+            }
 
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
 

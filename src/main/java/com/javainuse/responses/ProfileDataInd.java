@@ -9,6 +9,7 @@ public class ProfileDataInd {
     private String userId;
     private int donorStatus;
     private Timestamp lastDonationDate;
+    private String profilePicture;
 
     public ProfileDataInd() {
         super();
@@ -53,6 +54,14 @@ public class ProfileDataInd {
         this.lastDonationDate = lastDonationDate;
     }
 
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     @Override
     public String toString() {
         return "ProfileDataInd{" +
@@ -60,6 +69,7 @@ public class ProfileDataInd {
                 ", userId='" + userId + '\'' +
                 ", donorStatus=" + donorStatus +
                 ", lastDonationDate=" + lastDonationDate +
+                ", profilePicture='" + profilePicture + '\'' +
                 '}';
     }
 }
