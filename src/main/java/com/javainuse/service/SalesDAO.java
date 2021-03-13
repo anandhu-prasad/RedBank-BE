@@ -47,7 +47,7 @@ public class SalesDAO {
     @Autowired
     NotificationRepo notificationRepo;
 
-    public ResponseEntity<SuccessResponseBody> submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
+    public SuccessResponseBody submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
@@ -67,7 +67,7 @@ public class SalesDAO {
         Notification notification = new Notification(data.getSellerId(),"New booking",customer + " has booked "+ data.getUnits() + " units of "+ data.getComponent(),new Timestamp(System.currentTimeMillis()));
         notificationRepo.save(notification);
 
-        return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(status));
+        return new SuccessResponseBody(status);
     }
 
     private Boolean updateinventory(InventoryBb inventoryBb, String bloodGroup, int units) {
