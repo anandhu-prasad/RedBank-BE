@@ -12,12 +12,13 @@ public class InviteDonationResponseBody {
     private String recipientEmail;
     private String recipientContact;
     private String address;
+    private String avatar;
 
     public InviteDonationResponseBody() {
         super();
     }
 
-    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address) {
+    public InviteDonationResponseBody(Timestamp inviteTimestamp, String donationId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address, String avatar) {
         this.inviteTimestamp = inviteTimestamp;
         this.donationId = donationId;
         this.status = status;
@@ -26,6 +27,7 @@ public class InviteDonationResponseBody {
         this.recipientEmail = recipientEmail;
         this.recipientContact = recipientContact;
         this.address = address;
+        this.avatar = avatar;
     }
 
     public Timestamp getInviteTimestamp() {
@@ -96,10 +98,17 @@ public class InviteDonationResponseBody {
         this.address = address;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     @Override
     public String toString() {
-        return "InviteDriveResponseBody{" +
+        return "InviteDonationResponseBody{" +
                 "inviteTimestamp=" + inviteTimestamp +
                 ", inviteType='" + inviteType + '\'' +
                 ", donationId='" + donationId + '\'' +
@@ -107,8 +116,9 @@ public class InviteDonationResponseBody {
                 ", recipientName='" + recipientName + '\'' +
                 ", recipientType='" + recipientType + '\'' +
                 ", recipientEmail='" + recipientEmail + '\'' +
-                ", recipientContact=" + recipientContact +
+                ", recipientContact='" + recipientContact + '\'' +
                 ", address='" + address + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

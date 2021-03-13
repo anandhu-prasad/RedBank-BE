@@ -5,6 +5,7 @@ public class ProfileDataBb_Hos {
 
     private String name;
     private String userId;
+    private String profilePicture;
 
     public ProfileDataBb_Hos(String name, String userId) {
         this.name = name;
@@ -25,5 +26,22 @@ public class ProfileDataBb_Hos {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileDataBb_Hos{" +
+                "name='" + name + '\'' +
+                ", userId='" + userId + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                '}';
     }
 }

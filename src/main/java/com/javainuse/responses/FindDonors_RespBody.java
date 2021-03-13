@@ -7,14 +7,16 @@ public class FindDonors_RespBody {
     private String state;
     private String district;
     private String pincode;
+    private String avatar;
 
-    public FindDonors_RespBody(String userId, String name, String address, String state, String district, String pincode) {
+    public FindDonors_RespBody(String userId, String name, String address, String state, String district, String pincode, String avatar) {
         this.userId = userId;
         this.name = name;
         this.address = address;
         this.state = state;
         this.district = district;
         this.pincode = pincode;
+        this.avatar = avatar;
     }
     public FindDonors_RespBody(){
         super();
@@ -68,15 +70,24 @@ public class FindDonors_RespBody {
         this.pincode = pincode;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
-        return "FindDonorsResults{" +
+        return "FindDonors_RespBody{" +
                 "userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", state='" + state + '\'' +
                 ", district='" + district + '\'' +
-                ", pincode=" + pincode +
+                ", pincode='" + pincode + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

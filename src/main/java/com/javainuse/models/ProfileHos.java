@@ -37,7 +37,7 @@ public class ProfileHos {
     private String pincode;
     private String password;
     private Timestamp registration_date;
-
+    private String avatar;
 
     public ProfileHos() {
         super();
@@ -173,5 +173,35 @@ public class ProfileHos {
 
     public void setRegistration_date(Timestamp registration_date) {
         this.registration_date = registration_date;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileHos{" +
+                "userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", license_number='" + license_number + '\'' +
+                ", phone1='" + phone1 + '\'' +
+                ", phone2='" + phone2 + '\'' +
+                ", phone3='" + phone3 + '\'' +
+                ", phone4='" + phone4 + '\'' +
+                ", phone5='" + phone5 + '\'' +
+                ", address='" + address + '\'' +
+                ", state='" + state + '\'' +
+                ", district='" + district + '\'' +
+                ", pincode='" + pincode + '\'' +
+                ", password='" + password + '\'' +
+                ", registration_date=" + registration_date +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

@@ -18,12 +18,13 @@ public class InviteDriveResponseBody {
     private Timestamp startTimestamp;
     private Timestamp endTimestamp;
     private String message;
+    private String avatar;
 
     public InviteDriveResponseBody() {
         super();
     }
 
-    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address, String district, String state, String pincode, Timestamp startTimestamp, Timestamp endTimestamp, String message) {
+    public InviteDriveResponseBody(Timestamp inviteTimestamp, String driveId, int status, String recipientName, String recipientType, String recipientEmail, String recipientContact, String address, String district, String state, String pincode, Timestamp startTimestamp, Timestamp endTimestamp, String message, String avatar) {
         this.inviteTimestamp = inviteTimestamp;
         this.driveId = driveId;
         this.status = status;
@@ -38,6 +39,7 @@ public class InviteDriveResponseBody {
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.message = message;
+        this.avatar = avatar;
     }
 
     public Timestamp getInviteTimestamp() {
@@ -156,6 +158,14 @@ public class InviteDriveResponseBody {
         this.pincode = pincode;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
         return "InviteDriveResponseBody{" +
@@ -174,6 +184,7 @@ public class InviteDriveResponseBody {
                 ", startTimestamp=" + startTimestamp +
                 ", endTimestamp=" + endTimestamp +
                 ", message='" + message + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

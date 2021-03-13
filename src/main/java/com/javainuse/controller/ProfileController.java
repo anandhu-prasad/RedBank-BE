@@ -113,4 +113,12 @@ public class ProfileController {
         return profileDAO.resetPassword(data);
     }
 
+    @PutMapping("/setavatar")
+    public ResponseEntity<SuccessResponseBody> setAvatar(@RequestBody AvatarReqBody avatarReqBody, @RequestHeader ("Authorization") String userToken){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return profileDAO.updateAvatar(avatarReqBody.getAvatar(), userId, userType);
+    }
+
 }

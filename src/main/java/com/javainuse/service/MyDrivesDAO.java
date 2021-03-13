@@ -114,6 +114,9 @@ public class MyDrivesDAO {
             profileInd.setLast_donation_date(new Timestamp(System.currentTimeMillis()));
             profileIndRepo.save(profileInd);
 
+            //TODO POST REQUEST TO FIREBASE HERE
+
+
             //? SENDING NOTIFICATION TO THE DONOR.
             Notification notification = new Notification(driveDonorVerification_reqBody.getUserId(), "Donation complete", "Your blood donation has been verified for drive: " + driveDonorVerification_reqBody.getDriveId(), new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
