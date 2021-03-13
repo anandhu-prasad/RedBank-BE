@@ -41,6 +41,7 @@ public class UpcomingDrivesDAO {
 
     public List<UpcomingDrives_RespBody> getDrives(UpcomingDrives_ReqBody data, String userId) {
 
+
         ProfileInd currUserProfile = profileIndRepo.findByUserId(userId);
         List<Drives> driveList = new ArrayList<>();
         List<UpcomingDrives_RespBody> resultsList = new ArrayList<>();
@@ -71,16 +72,14 @@ public class UpcomingDrivesDAO {
         }
 
         // filtering the drives on basis of state ( because it's mandatory ), district , pincode
-        if (!data.getState().equals("All") && !data.getState().equals("Select state") && data.getState() != null) {
+        if (!data.getState().equals("All") && !data.getState().equals("Select state")  && !data.getState().equals("")  && data.getState() != null) {
             driveList = driveList.stream().filter(item -> item.getState().equals(data.getState())).collect(Collectors.toList());
         }
         if (!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict()  != null)) {
             driveList = driveList.stream().filter(item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
-            System.out.println("b");
         }
         if (!data.getPincode().equals("") && data.getPincode() != null) {
             driveList = driveList.stream().filter(item -> item.getPincode().equals(data.getPincode())).collect(Collectors.toList());
-            System.out.println("c");
         }
 
 
@@ -126,9 +125,23 @@ public class UpcomingDrivesDAO {
 
                 //saving the results in the result list
                 if(drives.getUserId().substring(0,3).equals("BOB")){
-                    resultsList.add(new UpcomingDrives_RespBody(profileBb.getName(), profileBb.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileBb.getEmail()));
+                    String avatar;
+                    if(profileBb.getAvatar() == null){
+                        avatar = "";
+                    }
+                    else{
+                        avatar = profileBb.getAvatar();
+                    }
+                    resultsList.add(new UpcomingDrives_RespBody(profileBb.getName(), profileBb.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileBb.getEmail(), avatar));
                 }else{
-                    resultsList.add(new UpcomingDrives_RespBody(profileHos.getName(), profileHos.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileHos.getEmail()));
+                    String avatar;
+                    if(profileHos.getAvatar() == null){
+                        avatar = "";
+                    }
+                    else{
+                        avatar = profileHos.getAvatar();
+                    }
+                    resultsList.add(new UpcomingDrives_RespBody(profileHos.getName(), profileHos.getPhone1(), drives.getStartTimestamp(), drives.getEndTimestamp(), drives.getAddress(), drives.getState(), drives.getDistrict(), drives.getPincode(), bloodGroups, drives.getDriveId(), profileHos.getEmail(), avatar));
                 }
 
             }

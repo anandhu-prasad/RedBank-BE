@@ -221,11 +221,23 @@ public class ProfileDAO {
             ProfileBb obj = profileBbRepo.findByUserId(userId);
 //            List<Drives> drivesConducted = drivesRepo.findByUserId(userId);
             ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            if(obj.getAvatar() == null){
+                obj1.setProfilePicture("");
+            }
+            else{
+                obj1.setProfilePicture(obj.getAvatar());
+            }
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
 
         }else{
             ProfileHos obj = profileHosRepo.findByUserId(userId);
             ProfileDataBb_Hos obj1 = new ProfileDataBb_Hos(obj.getName(), obj.getUserId());
+            if(obj.getAvatar() == null){
+                obj1.setProfilePicture("");
+            }
+            else{
+                obj1.setProfilePicture(obj.getAvatar());
+            }
             return ResponseEntity.ok().headers(responseHeaders).body(obj1);
         }
 

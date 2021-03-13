@@ -73,6 +73,7 @@ public class InvitesDAO {
                         String recipientType;
                         String recipientEmail;
                         String recipientContact;
+                        String avatar;
 
                         if(donationRequest.getUserId().substring(0, 3).equals("HOS")){
                             recipientType = "Hospital";
@@ -80,6 +81,12 @@ public class InvitesDAO {
                             recipientName = profileHos.getName();
                             recipientEmail = profileHos.getEmail();
                             recipientContact = profileHos.getPhone1();
+                            if(profileHos.getAvatar() == null){
+                                avatar = "";
+                            }
+                            else{
+                                avatar = profileHos.getAvatar();
+                            }
                         }
                         else if(donationRequest.getUserId().substring(0, 3).equals("BOB")){
                             recipientType = "Blood Bank";
@@ -87,6 +94,12 @@ public class InvitesDAO {
                             recipientName = profileBb.getName();
                             recipientEmail = profileBb.getEmail();
                             recipientContact = profileBb.getPhone1();
+                            if(profileBb.getAvatar() == null){
+                                avatar = "";
+                            }
+                            else{
+                                avatar = profileBb.getAvatar();
+                            }
                         }
                         else{
                             recipientType = "Individual";
@@ -94,9 +107,15 @@ public class InvitesDAO {
                             recipientName = profileInd.getName();
                             recipientEmail = profileInd.getEmail();
                             recipientContact = profileInd.getPhone();
+                            if(profileInd.getAvatar() == null){
+                                avatar = "";
+                            }
+                            else{
+                                avatar = profileInd.getAvatar();
+                            }
                         }
 
-                        InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress());
+                        InviteDonationResponseBody inviteDonationResponseBody = new InviteDonationResponseBody(donationRequest.getRequestTime(), donationId, donationInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, donationRequest.getAddress(), avatar);
                         responseList.add(inviteDonationResponseBody);
 
                     }}
@@ -121,6 +140,7 @@ public class InvitesDAO {
                         String recipientType;
                         String recipientEmail;
                         String recipientContact;
+                        String avatar;
 
                         if(drive.getUserId().startsWith("HOS")){
                             recipientType = "Hospital";
@@ -128,6 +148,12 @@ public class InvitesDAO {
                             recipientName = profileHos.getName();
                             recipientEmail = profileHos.getEmail();
                             recipientContact = profileHos.getPhone1();
+                            if(profileHos.getAvatar() == null){
+                                avatar = "";
+                            }
+                            else{
+                                avatar = profileHos.getAvatar();
+                            }
                         }
                         else{
                             recipientType = "Blood Bank";
@@ -135,9 +161,15 @@ public class InvitesDAO {
                             recipientName = profileBb.getName();
                             recipientEmail = profileBb.getEmail();
                             recipientContact = profileBb.getPhone1();
+                            if(profileBb.getAvatar() == null){
+                                avatar = "";
+                            }
+                            else{
+                                avatar = profileBb.getAvatar();
+                            }
                         }
 
-                        InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress(), drive.getDistrict(), drive.getState(), drive.getPincode(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage());
+                        InviteDriveResponseBody inviteDriveResponseBody = new InviteDriveResponseBody(drive.getRequestTime(), driveId, driveInvitedDonor.getAcceptance(), recipientName, recipientType, recipientEmail, recipientContact, drive.getAddress(), drive.getDistrict(), drive.getState(), drive.getPincode(), drive.getStartTimestamp(), drive.getEndTimestamp(), drive.getMessage(), avatar);
                         responseList.add(inviteDriveResponseBody);
                     }
                 }

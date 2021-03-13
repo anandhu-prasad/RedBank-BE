@@ -24,4 +24,5 @@ public class UpcomingDrives_RespBody {
     private List<String> bloodGroups;
     private String driveId;
     private String email;
+    private String avatar;
 }

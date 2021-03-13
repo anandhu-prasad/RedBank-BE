@@ -47,15 +47,17 @@ public class FindDonorsDAO {
         if(!(data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null)){
            list = list.stream().filter( item -> item.getState().equals(data.getState())).collect(Collectors.toList());
         }
-        if(!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select state") || data.getDistrict() == null)){
+        if(!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict() == null)){
             list = list.stream().filter( item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
         }
         if(data.getPincode() != "" && data.getPincode() != null){
             list = list.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
         }
 
+        String avatar;
+
         //this list will populate the find donors results table
-        result = list.stream().map(item -> new FindDonors_RespBody(item.getUserId(), item.getName(), item.getAddress(),item.getState(), item.getDistrict(), item.getPincode() )).collect(Collectors.toList());
+        result = list.stream().map(item -> new FindDonors_RespBody(item.getUserId(), item.getName(), item.getAddress(),item.getState(), item.getDistrict(), item.getPincode(), item.getAvatar())).collect(Collectors.toList());
         return result;
     }
 
