@@ -120,8 +120,9 @@ public class DonationRequestDAO {
             body.put("priority", "high");
 
             JSONObject firebaseNotification = new JSONObject();
-            firebaseNotification.put("title", "Eligibility Update");
-            firebaseNotification.put("body", "You are not eligible to donate blood");
+            firebaseNotification.put("title", "Donation Verified");
+            firebaseNotification.put("body", "Your donation for the donation request : " + donationDonorVerification_ReqBody.getDonationId()  + " has been verified by the organizer.");
+
 
             JSONObject data = new JSONObject();
 

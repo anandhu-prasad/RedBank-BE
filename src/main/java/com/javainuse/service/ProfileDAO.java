@@ -70,7 +70,7 @@ public class ProfileDAO {
 
             JSONObject firebaseNotification = new JSONObject();
             firebaseNotification.put("title", "Eligibility Update");
-            firebaseNotification.put("body", "You are not eligible to donate blood");
+            firebaseNotification.put("body", "You are now eligible to donate blood");
 
             JSONObject data = new JSONObject();
 

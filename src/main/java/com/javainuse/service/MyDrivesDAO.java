@@ -126,13 +126,13 @@ public class MyDrivesDAO {
             body.put("priority", "high");
 
             JSONObject firebaseNotification = new JSONObject();
-            firebaseNotification.put("title", "Eligibility Update");
-            firebaseNotification.put("body", "You are not eligible to donate blood");
+            firebaseNotification.put("title", "Donation Verified!");
+            firebaseNotification.put("body", "Your donation for drive : " + driveDonorVerification_reqBody.getDriveId() + " has been verified by the organizer.");
 
             JSONObject data = new JSONObject();
 
 
-            body.put("notification", firebaseNotification);
+            body.put("notification", firebaseNotification);driveDonorVerification_reqBody.getDriveId();
             body.put("data", data);
 
             HttpEntity request = new HttpEntity<>(body.toString());
