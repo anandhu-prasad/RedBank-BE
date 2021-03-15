@@ -12,7 +12,9 @@ import com.javainuse.requests.FindDonors_ReqBody_withSelectedDonors;
 import com.javainuse.responses.DonationDonorsList_RespBody;
 import com.javainuse.responses.FindDonors_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +36,9 @@ public class FindDonorsDAO {
 
     @Autowired
     DonationInvitedDonorsRepo donationInvitedDonorsRepo;
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
 
 
     public List<FindDonors_RespBody> getDonorsList(FindDonors_ReqBody data){
@@ -78,6 +84,23 @@ public class FindDonorsDAO {
         for (String s : idList) {
             DonationInvitedDonors obj = new DonationInvitedDonors(donationId, s, 2);  //2-> pending , 0-> rejected
             donationInvitedDonorsRepo.save(obj);
+            // SENDING push notification
+            JSONObject body = new JSONObject();
+            body.put("to", "/topics/" + s);
+            body.put("priority", "high");
+
+            JSONObject notification = new JSONObject();
+            notification.put("title", "Donation Invite");
+            notification.put("body", "You have been invited to " + donationId + " donation . Please check My Invites Section for more details." );
+
+            JSONObject data2 = new JSONObject();
+
+            body.put("notification", notification);
+            body.put("data", data2);
+            HttpEntity request = new HttpEntity<>(body.toString());
+
+            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();

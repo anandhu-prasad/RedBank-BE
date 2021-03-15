@@ -13,7 +13,9 @@ import com.javainuse.requests.DriveDonorVerification_ReqBody;
 import com.javainuse.responses.DriveDonorsList_RespBody;
 import com.javainuse.responses.FetchDrivesResponseBody;
 import com.javainuse.responses.SuccessResponseBody;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class MyDrivesDAO {
@@ -37,6 +40,9 @@ public class MyDrivesDAO {
 
     @Autowired
     ProfileIndRepo profileIndRepo;
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
 
     private final List<String> allBloodGroups = new ArrayList<>(Arrays.asList("B+", "B-", "A+", "A-", "O+", "O-", "AB+", "AB-"));
 
@@ -114,7 +120,25 @@ public class MyDrivesDAO {
             profileInd.setLast_donation_date(new Timestamp(System.currentTimeMillis()));
             profileIndRepo.save(profileInd);
 
-            //TODO POST REQUEST TO FIREBASE HERE
+            //FIREBASE NOTIFICATION
+            JSONObject body = new JSONObject();
+            body.put("to", "/topics/" + driveDonorVerification_reqBody.getUserId());
+            body.put("priority", "high");
+
+            JSONObject firebaseNotification = new JSONObject();
+            firebaseNotification.put("title", "Eligibility Update");
+            firebaseNotification.put("body", "You are not eligible to donate blood");
+
+            JSONObject data = new JSONObject();
+
+
+            body.put("notification", firebaseNotification);
+            body.put("data", data);
+
+            HttpEntity request = new HttpEntity<>(body.toString());
+
+            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
 
 
             //? SENDING NOTIFICATION TO THE DONOR.

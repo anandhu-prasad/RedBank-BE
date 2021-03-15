@@ -12,7 +12,9 @@ import com.javainuse.requests.DonationDonorVerification_ReqBody;
 import com.javainuse.requests.ExpireRequestBody;
 import com.javainuse.responses.DonationDonorsList_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class DonationRequestDAO {
@@ -35,6 +38,9 @@ public class DonationRequestDAO {
 
     @Autowired
     NotificationRepo notificationRepo;
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
 
 
     public ResponseEntity<SuccessResponseBody> expireRequest(ExpireRequestBody expireRequestBody){
@@ -104,10 +110,30 @@ public class DonationRequestDAO {
             profileInd.setLast_donation_date(new Timestamp(System.currentTimeMillis()));
             profileIndRepo.save(profileInd);
 
-            System.out.println("two");
             //? SENDING NOTIFICATION TO THE DONOR.
             Notification notification = new Notification(donationDonorVerification_ReqBody.getUserId(), "Donation complete", "Your blood donation for Donation Id " + donationDonorVerification_ReqBody.getDonationId() + " is approved by the recipient.", new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
+
+            // FIREBASE NOTIFICATION
+            JSONObject body = new JSONObject();
+            body.put("to", "/topics/" + donationDonorVerification_ReqBody.getUserId());
+            body.put("priority", "high");
+
+            JSONObject firebaseNotification = new JSONObject();
+            firebaseNotification.put("title", "Eligibility Update");
+            firebaseNotification.put("body", "You are not eligible to donate blood");
+
+            JSONObject data = new JSONObject();
+
+
+            body.put("notification", firebaseNotification);
+            body.put("data", data);
+
+            HttpEntity request = new HttpEntity<>(body.toString());
+
+            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
+
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");

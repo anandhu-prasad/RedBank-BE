@@ -9,7 +9,9 @@ import com.javainuse.requests.BuyBlood_ReqBody;
 import com.javainuse.requests.ConfirmBuy_ReqBody;
 import com.javainuse.responses.BuyBlood_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class BuyBloodDAO {
 
@@ -37,6 +41,9 @@ public class BuyBloodDAO {
 
     @Autowired
     NotificationRepo notificationRepo;
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
 
 
     private double compareUnits(InventoryBb inventoryBb, String bloodGroup, int reqUnits){
@@ -191,8 +198,30 @@ public class BuyBloodDAO {
         } else {
             customer = profileBbRepo.findByUserId(userId).getName();
         }
-        Notification notification = new Notification(data.getSellerId(),"New booking",customer + " has booked "+ data.getUnits() + " units of "+ data.getComponent(),new Timestamp(System.currentTimeMillis()));
-        notificationRepo.save(notification);
+
+        // SENDING push notification
+        if ( status == true){
+            Notification notification = new Notification(data.getSellerId(),"New booking",customer + " has booked "+ data.getUnits() + " units of "+ data.getComponent(),new Timestamp(System.currentTimeMillis()));
+            notificationRepo.save(notification);
+
+            JSONObject body = new JSONObject();
+            body.put("to", "/topics/" + data.getSellerId());
+            body.put("priority", "high");
+
+            JSONObject fireNotification = new JSONObject();
+            fireNotification.put("title", "New Purchase");
+            fireNotification.put("body", customer + " has booked "+ data.getUnits() + " units of "+ data.getComponent() );
+
+            JSONObject data2 = new JSONObject();
+
+            body.put("notification", fireNotification);
+            body.put("data", data2);
+            HttpEntity request = new HttpEntity<>(body.toString());
+
+            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
+        }
+
 
         return new SuccessResponseBody(status);
     }
