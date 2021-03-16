@@ -4,7 +4,9 @@ import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.requests.*;
 import com.javainuse.responses.*;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ProfileDAO {
@@ -51,11 +54,35 @@ public class ProfileDAO {
     @Autowired
     PasswordEncoder bcryptEncoder;
 
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
+
     public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId){
         try{
 
             Notification notification = new Notification(userId, "Eligibility update","You are now eligible to donate blood!" ,new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
+            // firebase notification
+
+            JSONObject body = new JSONObject();
+            body.put("to", "/topics/" + userId);
+            body.put("priority", "high");
+
+            JSONObject firebaseNotification = new JSONObject();
+            firebaseNotification.put("title", "Eligibility Update");
+            firebaseNotification.put("body", "You are now eligible to donate blood");
+
+            JSONObject data = new JSONObject();
+
+
+            body.put("notification", firebaseNotification);
+            body.put("data", data);
+
+            HttpEntity request = new HttpEntity<>(body.toString());
+
+            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
+
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));

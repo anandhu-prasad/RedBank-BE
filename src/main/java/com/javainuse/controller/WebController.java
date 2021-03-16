@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WebController {
 
-    private final String TOPIC = "redbankTest";
+    private final String TOPIC = "BOB05";
 
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
