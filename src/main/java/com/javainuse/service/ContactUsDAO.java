@@ -7,6 +7,8 @@ import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,9 @@ public class ContactUsDAO {
     @Autowired
     ContactUsRepo contactusRepo;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     public ResponseEntity<SuccessResponseBody> save(ContactUs_ReqBody message, String userId) {
 
         ContactUs obj = new ContactUs(userId, message.getSubject(), message.getMessage());
@@ -22,7 +27,6 @@ public class ContactUsDAO {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
         return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
     }
 }

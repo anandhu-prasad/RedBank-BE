@@ -54,18 +54,22 @@ public class ConductADriveDAO {
         // getting the details of the individuals matching the blood group criterion of 'conduct a drive' form
         individuals = profileIndRepo.findByBloodGroupIn(data.getBloodGroups());
 
+
         //getting the drive Id
         String driveId = returnObj.getDriveId();
 
         // saving the details in the 'drives_invited_donors';
         for (ProfileInd individual : individuals) {
-            DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individual.getUserId(), 2);   // 2 -> pending, 0 -> rejected
-            driveInvitedDonorRepo.save(obj2);
+            //saving the details of active donors only
+            if(individual.getDonorStatus() != 2){
+                DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individual.getUserId(), 2);   // 2 -> pending, 0 -> rejected
+                driveInvitedDonorRepo.save(obj2);
+            }
+
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
         return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
 
 
