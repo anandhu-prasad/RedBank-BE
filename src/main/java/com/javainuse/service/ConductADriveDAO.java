@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class ConductADriveDAO {
 
+
     @Autowired
     DrivesRepo drivesRepo;
 
@@ -64,32 +65,37 @@ public class ConductADriveDAO {
         // getting the details of the individuals matching the blood group criterion of 'conduct a drive' form
         individuals = profileIndRepo.findByBloodGroupIn(data.getBloodGroups());
 
+
         //getting the drive Id
         String driveId = returnObj.getDriveId();
 
         // saving the details in the 'drives_invited_donors';
         for (ProfileInd individual : individuals) {
-            DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individual.getUserId(), 2);   // 2 -> pending, 0 -> rejected
-            driveInvitedDonorRepo.save(obj2);
-            // SENDING push notification
-            JSONObject body = new JSONObject();
-            body.put("to", "/topics/" + individual.getUserId());
-            body.put("priority", "high");
+            //saving the details of active donors only
+            if(individual.getDonorStatus() != 2){
+                DriveInvitedDonors obj2 = new DriveInvitedDonors(driveId, individual.getUserId(), 2);   // 2 -> pending, 0 -> rejected
+                driveInvitedDonorRepo.save(obj2);
 
-            JSONObject notification = new JSONObject();
-            notification.put("title", "Drive Invite");
-            notification.put("body", "You have been invited to " + driveId + " drive . Please check My Invites Section for more details." );
+                // SENDING push notification
+                JSONObject body = new JSONObject();
+                body.put("to", "/topics/" + individual.getUserId());
+                body.put("priority", "high");
 
-            JSONObject data2 = new JSONObject();
-            data2.put("Key-1", "test data 1");
-            data2.put("Key-2", "test data 2");
+                JSONObject notification = new JSONObject();
+                notification.put("title", "Drive Invite");
+                notification.put("body", "You have been invited to " + driveId + " drive . Please check My Invites Section for more details." );
 
-            body.put("notification", notification);
-            body.put("data", data2);
-            HttpEntity request = new HttpEntity<>(body.toString());
+                JSONObject data2 = new JSONObject();
+                data2.put("Key-1", "test data 1");
+                data2.put("Key-2", "test data 2");
 
-            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
-            CompletableFuture.allOf(pushNotification).join();
+                body.put("notification", notification);
+                body.put("data", data2);
+                HttpEntity request = new HttpEntity<>(body.toString());
+
+                CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+                CompletableFuture.allOf(pushNotification).join();
+            }
 
 
 
@@ -97,9 +103,7 @@ public class ConductADriveDAO {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
-
         return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
-
 
     }
 }

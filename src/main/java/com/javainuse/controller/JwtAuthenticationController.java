@@ -9,6 +9,7 @@ import com.javainuse.requests.ProfileBbDTO;
 import com.javainuse.requests.ProfileHosDTO;
 import com.javainuse.requests.ProfileIndDTO;
 import com.javainuse.responses.AuthResponse;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import com.javainuse.config.JwtTokenUtil;
 
 @RestController
 @CrossOrigin
+//This controller is for generating the JWT token for the user and also for registering the user
 public class JwtAuthenticationController {
 
 	@Autowired
@@ -47,17 +49,18 @@ public class JwtAuthenticationController {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
+	@ApiOperation(value ="Individual registers")
 	@RequestMapping(value = "/registerind", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUserInd(@RequestBody ProfileIndDTO user) throws Exception {
 		System.out.println(user);
 		return userDetailsService.saveInd(user);
 	}
-
+	@ApiOperation(value ="Hospital registers")
 	@RequestMapping(value = "/registerhos", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUserHos(@RequestBody ProfileHosDTO user) throws Exception {
 		return userDetailsService.saveHos(user);
 	}
-
+	@ApiOperation(value ="Blood Banks registers")
 	@RequestMapping(value = "/registerbb", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUserBb(@RequestBody ProfileBbDTO user) throws Exception {
 		return userDetailsService.saveBb(user);

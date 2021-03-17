@@ -6,6 +6,7 @@ import com.javainuse.responses.SuccessResponseBody;
 import com.javainuse.service.ContactUsDAO;
 import io.jsonwebtoken.Claims;
 import com.javainuse.config.JwtTokenUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/contactus")
+//This controller is for getting connected with Admins of the RedBank
 public class ContactUsController {
 
     @Autowired
@@ -20,7 +22,8 @@ public class ContactUsController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
-
+    //This Post Mapping is for sending the message to the ADMINS of the RedBank app
+    @ApiOperation(value= "User sends message to Developers")
     @PostMapping("/addmessage")
     public ResponseEntity<SuccessResponseBody> addMessage(@RequestBody ContactUs_ReqBody message,
             @RequestHeader("Authorization") String userToken) {
