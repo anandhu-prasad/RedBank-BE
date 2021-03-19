@@ -42,15 +42,17 @@ public class MyDrivesController {
     }
 
     @PutMapping("/drivedonorverification")
-    public ResponseEntity<SuccessResponseBody> driveDonorVerify(@RequestBody DriveDonorVerification_ReqBody driveDonorVerification_reqBody) {
-        return myDrivesDAO.driveDonorVerify(driveDonorVerification_reqBody);
+    public ResponseEntity<SuccessResponseBody> driveDonorVerify(@RequestBody DriveDonorVerification_ReqBody driveDonorVerification_reqBody, @RequestHeader("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        return myDrivesDAO.driveDonorVerify(driveDonorVerification_reqBody, userId);
     }
 
     @GetMapping("/fetchdrivedonorlist/{driveId}")
     public ResponseEntity<List<DriveDonorsList_RespBody>> getDriveDetails(@PathVariable(value = "driveId") String driveId, @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return myDrivesDAO.getDriveDonorList(driveId);
+        return myDrivesDAO.getDriveDonorList(driveId, userId);
     }
 
 

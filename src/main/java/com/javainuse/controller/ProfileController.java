@@ -37,7 +37,7 @@ public class ProfileController {
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
 
-        return profileDAO.setDonorStatusNotification(userId);
+        return profileDAO.setDonorStatusNotification(userId, userType);
     }
 
     @GetMapping("/fetchuserprofile")
@@ -78,7 +78,8 @@ public class ProfileController {
     public ResponseEntity<DonorStatusRequestBody> updateDonorStatus(@RequestBody DonorStatusRequestBody donorStatusRequestBody, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return profileDAO.updateDonorStatus(donorStatusRequestBody, userId);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return profileDAO.updateDonorStatus(donorStatusRequestBody, userId, userType);
     }
 
     //? UPDATING INDIVIDUAL PROFILE
@@ -87,7 +88,8 @@ public class ProfileController {
     public ResponseEntity<SuccessResponseBody> updateIndProfile(@RequestBody ProfileUpdateIndRequestBody profile, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return profileDAO.updateIndProfile(profile, userId);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return profileDAO.updateIndProfile(profile, userId, userType);
     }
 
     //? UPDATING HOSPITAL PROFILE
@@ -96,7 +98,8 @@ public class ProfileController {
     public ResponseEntity<SuccessResponseBody> updateHosProfile(@RequestBody ProfileUpdateHosBbRequestBody profile, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return profileDAO.updateHosProfile(profile, userId);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return profileDAO.updateHosProfile(profile, userId, userType);
     }
 
     //? UPDATING BLOOD BANK PROFILE
@@ -105,7 +108,8 @@ public class ProfileController {
     public ResponseEntity<SuccessResponseBody> updateBbProfile(@RequestBody ProfileUpdateHosBbRequestBody profile, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return profileDAO.updateBbProfile(profile, userId);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return profileDAO.updateBbProfile(profile, userId, userType);
     }
 
     @PutMapping("/resetpassword")

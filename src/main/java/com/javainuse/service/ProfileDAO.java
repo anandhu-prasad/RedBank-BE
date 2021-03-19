@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,35 +58,41 @@ public class ProfileDAO {
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
 
-    public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId){
+    public ResponseEntity<SuccessResponseBody> setDonorStatusNotification(String userId, int userType){
         try{
-
-            Notification notification = new Notification(userId, "Eligibility update","You are now eligible to donate blood!" ,new Timestamp(System.currentTimeMillis()));
-            notificationRepo.save(notification);
-            // firebase notification
-
-            JSONObject body = new JSONObject();
-            body.put("to", "/topics/" + userId);
-            body.put("priority", "high");
-
-            JSONObject firebaseNotification = new JSONObject();
-            firebaseNotification.put("title", "Eligibility Update");
-            firebaseNotification.put("body", "You are now eligible to donate blood");
-
-            JSONObject data = new JSONObject();
-
-
-            body.put("notification", firebaseNotification);
-            body.put("data", data);
-
-            HttpEntity request = new HttpEntity<>(body.toString());
-
-            CompletableFuture pushNotification = androidPushNotificationsService.send(request);
-            CompletableFuture.allOf(pushNotification).join();
-
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+
+            if(userType == 1){
+                Notification notification = new Notification(userId, "Eligibility update","You are now eligible to donate blood!" ,new Timestamp(System.currentTimeMillis()));
+                notificationRepo.save(notification);
+                // firebase notification
+
+                JSONObject body = new JSONObject();
+                body.put("to", "/topics/" + userId);
+                body.put("priority", "high");
+
+                JSONObject firebaseNotification = new JSONObject();
+                firebaseNotification.put("title", "Eligibility Update");
+                firebaseNotification.put("body", "You are now eligible to donate blood");
+
+                JSONObject data = new JSONObject();
+
+
+                body.put("notification", firebaseNotification);
+                body.put("data", data);
+
+                HttpEntity request = new HttpEntity<>(body.toString());
+
+                CompletableFuture pushNotification = androidPushNotificationsService.send(request);
+                CompletableFuture.allOf(pushNotification).join();
+
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+            }
+            else{
+                responseHeaders.set("error", "You are not authorized to perform this action.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+            }
 
         }
         catch (Exception e){
@@ -270,36 +277,41 @@ public class ProfileDAO {
 
     }
 
-    public ResponseEntity<DonorStatusRequestBody> updateDonorStatus(DonorStatusRequestBody donorStatusRequestBody, String userId){
+    public ResponseEntity<DonorStatusRequestBody> updateDonorStatus(DonorStatusRequestBody donorStatusRequestBody, String userId, int userType){
         try{
-            ProfileInd profileInd = profileIndRepo.findByUserId(userId);
+            HttpHeaders responseHeaders = new HttpHeaders();
 
-            System.out.println("Donor status to be set: " + donorStatusRequestBody.getDonorStatus());
-            long lastDonated = 0;
-            Timestamp lastDonationTimestamp = profileInd.getLast_donation_date();
-            if(lastDonationTimestamp != null){
-                lastDonated =  lastDonationTimestamp.getTime();
-            }
+            if(userType == 1){
+                ProfileInd profileInd = profileIndRepo.findByUserId(userId);
 
-            long current = new Timestamp(System.currentTimeMillis()).getTime();
+                System.out.println("Donor status to be set: " + donorStatusRequestBody.getDonorStatus());
+                long lastDonated = 0;
+                Timestamp lastDonationTimestamp = profileInd.getLast_donation_date();
+                if(lastDonationTimestamp != null){
+                    lastDonated =  lastDonationTimestamp.getTime();
+                }
+
+                long current = new Timestamp(System.currentTimeMillis()).getTime();
 
 
-            //? FOR ANY CASE, DONOR STATUS OF AN INDIVIDUAL CAN ONLY BE CHANGED FROM 2 TO ANYTHING ONLY AFTER 55 DAYS OR MORE.
-            if(profileInd.getDonorStatus() == 2 && profileInd.getLast_donation_date() != null && (current - lastDonated) / (1000 * 60 * 60 * 24) < 55) {
-            //TODO brief web team on the return object change.
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.set("success", "true");
-                System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
-                return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(2));
-            }
+                //? FOR ANY CASE, DONOR STATUS OF AN INDIVIDUAL CAN ONLY BE CHANGED FROM 2 TO ANYTHING ONLY AFTER 55 DAYS OR MORE.
+                if(profileInd.getDonorStatus() == 2 && profileInd.getLast_donation_date() != null && (current - lastDonated) / (1000 * 60 * 60 * 24) < 55) {
+                    responseHeaders.set("success", "true");
+                    System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
+                    return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(2));
+                }
+                else{
+                    System.out.print("ok");
+                    profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
+                    profileIndRepo.save(profileInd);
+                    responseHeaders.set("success", "true");
+                    System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
+                    return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(profileInd.getDonorStatus()));
+                }
+        }
             else{
-                System.out.print("ok");
-                profileInd.setDonorStatus(donorStatusRequestBody.getDonorStatus());
-                profileIndRepo.save(profileInd);
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.set("success", "true");
-                System.out.println("Donor status changed to " + donorStatusRequestBody.getDonorStatus());
-                return ResponseEntity.ok().headers(responseHeaders).body(new DonorStatusRequestBody(profileInd.getDonorStatus()));
+                responseHeaders.set("error", "You are not authorized to perform this action.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
             }
         }
         catch(Exception e){
@@ -309,26 +321,33 @@ public class ProfileDAO {
         }
     }
 
-    public ResponseEntity<SuccessResponseBody> updateIndProfile(ProfileUpdateIndRequestBody profile, String userId){
-        try{
-
-            ProfileInd match = profileIndRepo.findByUserId(userId);
-
-            //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
-            match.setAddress(profile.getAddress());
-            match.setDistrict(profile.getDistrict());
-            match.setState(profile.getState());
-            match.setPincode(profile.getPincode());
-            match.setPhone(profile.getPhone());
-            match.setBloodGroup(profile.getBloodGroup());
-
-            profileIndRepo.save(match);
-
-            //! SEND THE NEWLY UPDATED PROFILE DETAILS AS RESPONSE BODY IF REQUIRED.
-
+    public ResponseEntity<SuccessResponseBody> updateIndProfile(ProfileUpdateIndRequestBody profile, String userId, int userType){
+        try {
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+
+            if (userType == 1) {
+                ProfileInd match = profileIndRepo.findByUserId(userId);
+
+                //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
+                match.setAddress(profile.getAddress());
+                match.setDistrict(profile.getDistrict());
+                match.setState(profile.getState());
+                match.setPincode(profile.getPincode());
+                match.setPhone(profile.getPhone());
+                match.setBloodGroup(profile.getBloodGroup());
+
+                profileIndRepo.save(match);
+
+                //! SEND THE NEWLY UPDATED PROFILE DETAILS AS RESPONSE BODY IF REQUIRED.
+
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+            }
+
+            else{
+                responseHeaders.set("error", "You are not authorized to perform this action.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+            }
         }
         catch(Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -337,9 +356,13 @@ public class ProfileDAO {
         }
     }
 
-    public ResponseEntity<SuccessResponseBody> updateHosProfile(ProfileUpdateHosBbRequestBody profile, String userId){
+    public ResponseEntity<SuccessResponseBody> updateHosProfile(ProfileUpdateHosBbRequestBody profile, String userId, int userType){
 
         try{
+            HttpHeaders responseHeaders = new HttpHeaders();
+
+            if(userType == 2){
+
             ProfileHos match = profileHosRepo.findByUserId(userId);
 
             //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
@@ -369,9 +392,14 @@ public class ProfileDAO {
             }
 
             profileHosRepo.save(match);
-            HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+        }
+
+            else{
+            responseHeaders.set("error", "You are not authorized to perform this action.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+        }
         }
         catch(Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -380,44 +408,48 @@ public class ProfileDAO {
         }
     }
 
-    public ResponseEntity<SuccessResponseBody> updateBbProfile(ProfileUpdateHosBbRequestBody profile, String userId){
+    public ResponseEntity<SuccessResponseBody> updateBbProfile(ProfileUpdateHosBbRequestBody profile, String userId, int userType){
 
-        try{
-
-            ProfileBb match = profileBbRepo.findByUserId(userId);
-
-            //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
-            match.setAddress(profile.getAddress());
-            match.setDistrict(profile.getDistrict());
-            match.setState(profile.getState());
-            match.setPincode(profile.getPincode());
-
-            match.setPhone2(null);
-            match.setPhone3(null);
-            match.setPhone4(null);
-            match.setPhone5(null);
-
-            match.setPhone1(profile.getPhone().get(0));
-
-            if(profile.getPhone().size() >= 2){
-                match.setPhone2(profile.getPhone().get(1));
-            }
-            if(profile.getPhone().size() >= 3){
-                match.setPhone3(profile.getPhone().get(2));
-            }
-            if(profile.getPhone().size() >= 4){
-                match.setPhone4(profile.getPhone().get(3));
-            }
-            if(profile.getPhone().size() >= 5){
-                match.setPhone5(profile.getPhone().get(4));
-            }
-
-
-            profileBbRepo.save(match);
+        try {
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+            if (userType == 3) {
+                ProfileBb match = profileBbRepo.findByUserId(userId);
 
+                //? SETTING NEW VALUES OF THOSE FIELDS THAT ARE EDITABLE.
+                match.setAddress(profile.getAddress());
+                match.setDistrict(profile.getDistrict());
+                match.setState(profile.getState());
+                match.setPincode(profile.getPincode());
+
+                match.setPhone2(null);
+                match.setPhone3(null);
+                match.setPhone4(null);
+                match.setPhone5(null);
+
+                match.setPhone1(profile.getPhone().get(0));
+
+                if (profile.getPhone().size() >= 2) {
+                    match.setPhone2(profile.getPhone().get(1));
+                }
+                if (profile.getPhone().size() >= 3) {
+                    match.setPhone3(profile.getPhone().get(2));
+                }
+                if (profile.getPhone().size() >= 4) {
+                    match.setPhone4(profile.getPhone().get(3));
+                }
+                if (profile.getPhone().size() >= 5) {
+                    match.setPhone5(profile.getPhone().get(4));
+                }
+
+
+                profileBbRepo.save(match);
+                responseHeaders.set("success", "true");
+                return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody((true)));
+
+            } else {
+                responseHeaders.set("error", "You are not authorized to perform this action.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+            }
         }
         catch(Exception e){
             HttpHeaders responseHeaders = new HttpHeaders();

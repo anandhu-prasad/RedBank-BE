@@ -61,7 +61,9 @@ public class InviteController {
     public ResponseEntity<List<?>> fetchInvites(@RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return invitesDAO.fetchInvites(userId);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+
+        return invitesDAO.fetchInvites(userId, userType);
 
     }
 
@@ -74,7 +76,7 @@ public class InviteController {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
-        return invitesDAO.setInviteResponse(inviteRequestBody, userId);
+        return invitesDAO.setInviteResponse(inviteRequestBody, userId, userType);
     }
 
 }
