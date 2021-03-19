@@ -4,6 +4,7 @@ import com.javainuse.analyticsModels.charts.*;
 import com.javainuse.analyticsModels.objects.BarChartMonthObject;
 import com.javainuse.analyticsModels.objects.BarChartObject;
 import com.javainuse.analyticsModels.objects.DatasetObject;
+import com.javainuse.analyticsModels.objects.NewBarChart;
 import com.javainuse.models.Sales;
 import com.javainuse.repositories.SalesRepo;
 import com.javainuse.responses.TodaysSale_RespBody;
@@ -106,16 +107,22 @@ public class SalesAnalyticsDAO {
 
     }
 
-    public BarChart getCurrentYearStats(String userId, String year, int type) {
+    public NewBarChart getCurrentYearStats(String userId, String year, int type) {
         List<Sales> sellerSalesList = salesRepo.findBySellerId(userId);
         List<Sales> buyerSalesList = salesRepo.findByBuyerId(userId);
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
         Calendar calendar = new GregorianCalendar();
-        BarChartObject barChartObject = new BarChartObject(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
-        List<Double> yearObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
 
+
+
+        List<Double> yearObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
+        List<Double> bloodObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
+        List<Double> plasmaObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
+        List<Double> plateletObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
+
+        List<String> months = new ArrayList<>(Arrays.asList("01","02","03","04","05","06","07","08","09","10","11","12")) ;
 
         ///type = 0 => revenue
         ///type = 1 => sold
@@ -123,66 +130,116 @@ public class SalesAnalyticsDAO {
 
 
         if(type == 2){
+
+
+            Double totalBlood = 0.0;
+            Double totalPlasma= 0.0;
+            Double totalPlatelets = 0.0;
             Double totalBought = 0.0;
+
+
             for(Sales sales:buyerSalesList){
                 String saleDate = yearFormat.format(sales.getDate());
-                String saleYear = Integer.toString(calendar.get(Calendar.YEAR));
-
-                System.out.println(saleDate);
-                System.out.println(year);
-                System.out.println("ok");
 
                 if(saleDate.equals(year)) {
                     String saleMonth = monthFormat.format(sales.getDate());
-                    if(saleMonth.equals("01")){
+                    for (int i= 0; i< 12; i++){
+                        System.out.println(sales.getDate());
+                        System.out.println(saleMonth);
+                        System.out.println(months.get(i));
+
+
+                        if(saleMonth.equals(months.get(i))){
                         totalBought = totalBought + sales.getUnits();
-                        yearObject.set(0,totalBought);
-                        System.out.println(totalBought);
+                        yearObject.set(i,totalBought);
+                        }
                     }
-                    if(saleMonth.equals("02")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(1,totalBought);
+
+
+                    for (int i = 0; i<12; i++ ){
+//
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(i,totalBought);
+
+                        if(saleMonth.equals(months.get(i))){
+
+                            if(sales.getComponent().equals("Blood")){
+                                totalBlood = totalBlood + sales.getUnits();
+                                bloodObject.set(i,totalBlood);
+                            }
+                            if(sales.getComponent().equals("Plasma")){
+                                totalPlasma = totalPlasma+ sales.getUnits();
+                                plasmaObject.set(i,totalPlasma);
+                            }
+                            if(sales.getComponent().equals("Platelets")){
+                                totalPlatelets= totalPlatelets+ sales.getUnits();
+                                plateletObject.set(i, Double.valueOf(sales.getUnits()));
+                            }
+
+                        }
+//
+
                     }
-                    if(saleMonth.equals("03")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(2,totalBought);
-                    }
-                    if(saleMonth.equals("04")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(3,totalBought);
-                    }
-                    if(saleMonth.equals("05")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(4,totalBought);
-                    }
-                    if(saleMonth.equals("06")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(5,totalBought);
-                    }
-                    if(saleMonth.equals("07")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(6,totalBought);
-                    }
-                    if(saleMonth.equals("08")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(7,totalBought);
-                    }
-                    if(saleMonth.equals("09")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(8,totalBought);
-                    }
-                    if(saleMonth.equals("10")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(9,totalBought);
-                    }
-                    if(saleMonth.equals("11")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(10,totalBought);
-                    }
-                    if(saleMonth.equals("12")){
-                        totalBought = totalBought + sales.getUnits();
-                        yearObject.set(11,totalBought);
-                    }
+//                    if(saleMonth.equals("01")){
+//                        if(sales.getComponent().equals("Blood")){
+//                            totalBlood = totalBlood + sales.getUnits();
+//                            bloodObject.set(0,totalBlood);
+//                        }
+//                        if(sales.getComponent().equals("Plasma")){
+//                            totalPlasma = totalPlasma+ sales.getUnits();
+//                            plasmaObject.set(0,totalPlasma);
+//                        }
+//                        if(sales.getComponent().equals("Platelets")){
+//                            totalPlatelets= totalPlatelets+ sales.getUnits();
+//                            plateletObject.set(0, sales.getUnits());
+//                        }
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(0,totalBought);
+//                    }
+//                    if(saleMonth.equals("02")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(1,totalBought);
+//                    }
+//                    if(saleMonth.equals("03")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(2,totalBought);
+//                    }
+//                    if(saleMonth.equals("04")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(3,totalBought);
+//                    }
+//                    if(saleMonth.equals("05")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(4,totalBought);
+//                    }
+//                    if(saleMonth.equals("06")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(5,totalBought);
+//                    }
+//                    if(saleMonth.equals("07")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(6,totalBought);
+//                    }
+//                    if(saleMonth.equals("08")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(7,totalBought);
+//                    }
+//                    if(saleMonth.equals("09")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(8,totalBought);
+//                    }
+//                    if(saleMonth.equals("10")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(9,totalBought);
+//                    }
+//                    if(saleMonth.equals("11")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(10,totalBought);
+//                    }
+//                    if(saleMonth.equals("12")){
+//                        totalBought = totalBought + sales.getUnits();
+//                        yearObject.set(11,totalBought);
+//                    }
                 }
             }
 
@@ -325,8 +382,9 @@ public class SalesAnalyticsDAO {
                 }
             }
         }
-        barChartObject.setData(yearObject);
-        return new BarChart(new ArrayList<>(Arrays.asList(barChartObject)));
+        //barChartObject.setData(yearObject);
+        return new NewBarChart(bloodObject,plasmaObject,plateletObject,yearObject);
+        //return new BarChart(new ArrayList<>(Arrays.asList(barChartObject)));
     }
 
     public BarChartMonth getSelectedMonthStats(String userId, String year, String month, int type) {
