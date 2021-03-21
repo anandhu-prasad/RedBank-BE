@@ -27,42 +27,6 @@ public class InventoryDAO {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-//    public  List<InventoryPieChart> getInventoryStats(String userId, int type) {
-//        List<InventoryBb> inventoryBbList = inventoryBbRepo.findByUserId(userId);
-//        final List<String> bloodGroups = new ArrayList<>(Arrays.asList("A+","A-", "B+","B-","AB+", "AB-", "O+","O-"));
-//        final List<String> invBloodgroups = new ArrayList<>(Arrays.asList("aPosUnits","aNegUnits","bPosUnits","bNegUnits"));
-//
-//
-//        List<Integer> inventoryPieChart = new ArrayList<>();
-//        Integer plasmaUnits= 0;
-//        InventoryPieChart aPosIntem = new InventoryPieChart();
-//
-//
-//        for(InventoryBb inventoryBb:inventoryBbList){
-//            if(inventoryBb.getComponent().equals("Plasma")){
-////                inventoryPieChart.set(0,inventoryBb.getaPosUnits());
-////                inventoryPieChart.set(1,inventoryBb.getaNegUnits());
-////                inventoryPieChart.set(2,inventoryBb.getbPosUnits());
-////                inventoryPieChart.set(3,inventoryBb.getbNegUnits());
-////                inventoryPieChart.set(4,inventoryBb.getAbPosUnits());
-////                inventoryPieChart.set(5,inventoryBb.getAbNegUnits());
-////                inventoryPieChart.set(6,inventoryBb.getoPosUnits());
-////                inventoryPieChart.set(7,inventoryBb.getoNegUnits());
-////                aPosIntem.set(1,inventoryBb.getaNegUnits());
-//                aPosIntem.setName("A+");
-//                aPosIntem.setPopulation(inventoryBb.getaPosUnits());
-//                aPosIntem.setColor("red");
-//                aPosIntem.getLegendFontColor("red");
-//                System.out.println("ok");
-//            }
-//        }
-////        if (inventoryBbList.)
-////        List<InventoryPieChart> inventoryPieChartList = null;
-////        inventoryPieChart.add(inventoryPieChart);
-//
-//        return new ArrayList<>(Arrays.asList(inventoryPieChart));
-//    }
-
     public ResponseEntity<List<?>> extractInventory(String userId, int userType){
 
         try{
