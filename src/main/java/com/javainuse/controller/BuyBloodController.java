@@ -36,7 +36,7 @@ public class BuyBloodController {
         responseHeaders.set("success", "true");
 
 
-        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.findBloodBanks(data));
+        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.findBloodBanks(data,userId));
     }
 
    @PostMapping("/confirmbuy")

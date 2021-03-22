@@ -27,6 +27,7 @@ public class BuyBlood_RespBody {
         this.pincode = pincode;
     }
 
+
     public String getBbId() {
         return bbId;
     }

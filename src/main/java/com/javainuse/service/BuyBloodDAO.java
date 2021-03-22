@@ -1,13 +1,11 @@
 package com.javainuse.service;
 
-import com.javainuse.models.InventoryBb;
-import com.javainuse.models.Notification;
-import com.javainuse.models.ProfileBb;
-import com.javainuse.models.Sales;
+import com.javainuse.models.*;
 import com.javainuse.repositories.*;
 import com.javainuse.requests.BuyBlood_ReqBody;
 import com.javainuse.requests.ConfirmBuy_ReqBody;
 import com.javainuse.responses.BuyBlood_RespBody;
+import com.javainuse.responses.FindDonors_RespBody;
 import com.javainuse.responses.SuccessResponseBody;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class BuyBloodDAO {
@@ -68,21 +67,21 @@ public class BuyBloodDAO {
         boolean status = false;
 
         if(bloodGroup.equals("A+") ){
-            if(inventoryBb.getaPosUnits()>units){
+            if(inventoryBb.getaPosUnits()>=units){
                 inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() - units);
                 status= true;
             } else {
                 status = false;
             }
         } else if(bloodGroup.equals("A-")){
-            if(inventoryBb.getaNegUnits()>units){
+            if(inventoryBb.getaNegUnits()>=units){
                 inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() - units);
                 status= true;
             } else {
                 status = false;
             }
         } else if(bloodGroup.equals("B+")){
-            if(inventoryBb.getbPosUnits()>units){
+            if(inventoryBb.getbPosUnits()>=units){
                 inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() - units);
                 status= true;
             } else {
@@ -91,7 +90,7 @@ public class BuyBloodDAO {
 
 
         } else if(bloodGroup.equals("B-")){
-            if(inventoryBb.getbNegUnits()>units){
+            if(inventoryBb.getbNegUnits()>=units){
                 inventoryBb.setbNegUnits(inventoryBb.getbNegUnits() - units);
                 status= true;
             } else {
@@ -99,28 +98,28 @@ public class BuyBloodDAO {
             }
 
         } else if(bloodGroup.equals("AB+")){
-            if(inventoryBb.getAbPosUnits()>units){
+            if(inventoryBb.getAbPosUnits()>=units){
                 inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() - units);
                 status= true;
             } else {
                 status = false;
             }
         } else if(bloodGroup.equals("AB-")){
-            if(inventoryBb.getAbNegUnits()>units){
+            if(inventoryBb.getAbNegUnits()>=units){
                 inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() - units);
                 status= true;
             } else {
                 status = false;
             }
         } else if(bloodGroup.equals("O+")){
-            if(inventoryBb.getoPosUnits()>units){
+            if(inventoryBb.getoPosUnits()>=units){
                 inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() - units);
                 status= true;
             } else {
                 status = false;
             }
         } else if(bloodGroup.equals("O-")){
-            if(inventoryBb.getoNegUnits()>units){
+            if(inventoryBb.getoNegUnits()>=units){
                 inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() - units);
                 status= true;
             } else {
@@ -132,53 +131,34 @@ public class BuyBloodDAO {
         return status;
     }
 
-    public List<BuyBlood_RespBody> findBloodBanks(BuyBlood_ReqBody data) {
-
+    public List<BuyBlood_RespBody> findBloodBanks(BuyBlood_ReqBody data, String userId) {
         List<BuyBlood_RespBody> responseList = new ArrayList<>();
+        List<ProfileBb> list = profileBbRepo.findAll();
 
-        if (data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null) {
-            if (data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict() == null) {
-                if (data.getPincode().equals("") || data.getPincode() == null) {
-                    List<ProfileBb> profileBbList = profileBbRepo.findAll();
-                    for (ProfileBb profileBb : profileBbList) {
-                        InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
-                        double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
-                        // TODO add to a new Array list after comparison
-                        if (price != -1) {
-                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
-                        }
-                    }
-                } else {
-                    List<ProfileBb> profileBbList = profileBbRepo.findByPincode(data.getPincode());
-                    for (ProfileBb profileBb : profileBbList) {
-                        InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
-                        double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
-                        if (price != -1) {
-                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
-                        }
-                    }
-                }
-            } else {
-                List<ProfileBb> profileBbList = profileBbRepo.findByDistrictAndPincode(data.getDistrict(), data.getPincode());
-                for (ProfileBb profileBb : profileBbList) {
-                    InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
-                    double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
-                    if (price != -1) {
-                        responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
-                    }
-                }
-            }
-        } else {
-            List<ProfileBb> profileBbList = profileBbRepo.findByStateAndDistrictAndPincode(data.getState(), data.getDistrict(), data.getPincode());
-            for (ProfileBb profileBb : profileBbList) {
+        if(!(data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null)){
+            list = list.stream().filter( item -> item.getState().equals(data.getState())).collect(Collectors.toList());
+        }
+        if(!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict() == null)){
+            list = list.stream().filter( item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
+        }
+        if(data.getPincode() != "" && data.getPincode() != null){
+            list = list.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
+        }
+        System.out.println(list);
+        for(ProfileBb profileBb: list){
+            if(!profileBb.getUserId().equals(userId)) {
                 InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
                 double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
                 if (price != -1) {
                     responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+                    //result = profileBbList.stream().map(item -> new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode())).collect(Collectors.toList());
+
                 }
             }
         }
+
         return responseList;
+
     }
 
     public SuccessResponseBody submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
@@ -226,3 +206,82 @@ public class BuyBloodDAO {
         return new SuccessResponseBody(status);
     }
 }
+
+
+//        List<BuyBlood_RespBody> responseList = new ArrayList<>();
+//
+//        List<ProfileBb> profileBbList = new ArrayList<>();
+//        List<InventoryBb> inventoryBbList = new ArrayList<>();
+//        List<BuyBlood_RespBody> result = new ArrayList<>();
+//
+////        inventoryBbList = inventoryBbRepo.findByComponent(data.getComponent());
+//
+//        for (ProfileBb profileBb : profileBbList){
+//            if(!(data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null)){
+//                profileBbList = profileBbList.stream().filter( item -> item.getState().equals(data.getState())).collect(Collectors.toList());
+//            }
+//            if(!(data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict() == null)){
+//                profileBbList= profileBbList.stream().filter( item -> item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
+//            }
+//            if(data.getPincode() != "" && data.getPincode() != null){
+//                profileBbList = profileBbList.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
+//            }
+//            InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
+//            double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
+//            if (price != -1) {
+//                responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+//                //result = profileBbList.stream().map(item -> new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode())).collect(Collectors.toList());
+//
+//            }
+//        }
+
+//inventoryBbList = inventoryBbList.stream().filter( item -> item.getDonorStatus() == 1).collect(Collectors.toList());
+
+
+
+
+//return result;
+
+//        if (data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null) {
+//            if (data.getDistrict().equals("All") || data.getDistrict().equals("") || data.getDistrict().equals("Select district") || data.getDistrict() == null) {
+//                if (data.getPincode().equals("") || data.getPincode() == null) {
+//                    List<ProfileBb> profileBbList = profileBbRepo.findAll();
+//                    for (ProfileBb profileBb : profileBbList) {
+//                        InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
+//                        double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
+//                        // TODO add to a new Array list after comparison
+//                        if (price != -1) {
+//                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+//                        }
+//                    }
+//                } else {
+//                    List<ProfileBb> profileBbList = profileBbRepo.findByPincode(data.getPincode());
+//                    for (ProfileBb profileBb : profileBbList) {
+//                        InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
+//                        double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
+//                        if (price != -1) {
+//                            responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+//                        }
+//                    }
+//                }
+//            } else {
+//                List<ProfileBb> profileBbList = profileBbRepo.findByDistrictAndPincode(data.getDistrict(), data.getPincode());
+//                for (ProfileBb profileBb : profileBbList) {
+//                    InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
+//                    double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
+//                    if (price != -1) {
+//                        responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+//                    }
+//                }
+//            }
+//        } else {
+//            List<ProfileBb> profileBbList = profileBbRepo.findByStateAndDistrictAndPincode(data.getState(), data.getDistrict(), data.getPincode());
+//            for (ProfileBb profileBb : profileBbList) {
+//                InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(profileBb.getUserId(), data.getComponent());
+//                double price = compareUnits(inventoryBb, data.getBloodGroup(), data.getReqUnits());
+//                if (price != -1) {
+//                    responseList.add(new BuyBlood_RespBody(profileBb.getUserId(), profileBb.getName(), profileBb.getEmail(), price, profileBb.getPhone1(), profileBb.getAddress(), profileBb.getDistrict(), profileBb.getState(), profileBb.getPincode()));
+//                }
+//            }
+//        }
+//       return responseList;

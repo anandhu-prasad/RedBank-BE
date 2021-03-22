@@ -26,12 +26,15 @@ public class FindDonorsController {
     JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/donorslist")
-    public ResponseEntity<List<FindDonors_RespBody>> getDonorsList(@RequestBody FindDonors_ReqBody data) {
+    public ResponseEntity<List<FindDonors_RespBody>> getDonorsList(@RequestBody FindDonors_ReqBody data , @RequestHeader("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
 
-        return ResponseEntity.ok().headers(responseHeaders).body(findDonorsDAO.getDonorsList(data));
+        return ResponseEntity.ok().headers(responseHeaders).body(findDonorsDAO.getDonorsList(data, userId));
     }
 
     @PostMapping("/sendnotification")
