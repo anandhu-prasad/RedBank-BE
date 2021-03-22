@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/inventory")
+//This controller is for all the operations related to inventory of the Hospitals and Blood Banks
 public class InventoryController {
 
     @Autowired
@@ -28,8 +29,9 @@ public class InventoryController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    //? FETCH CURRENT USER'S INVENTORY
-    //! TESTED
+    // FETCH CURRENT USER'S INVENTORY
+    // TESTED
+    //This GET mapping is to get the inventory of the user and also the details of the inventory
     @GetMapping("/receieveinventory")
     public ResponseEntity<List<?>> extractInventory(@RequestHeader ("Authorization") String userToken){
 
@@ -40,8 +42,9 @@ public class InventoryController {
         return inventoryDAO.extractInventory(userId, userType);
            }
 
-    //? TO UPDATE THE INVENTORY OF CURRENT USER / HOSPITAL.
-    //! TESTED
+    // TO UPDATE THE INVENTORY OF CURRENT USER / HOSPITAL.
+    // TESTED
+    //This PUT mapping is for updating the inventory of the Hospitals
     @PutMapping("/updatehosinventory")
     public ResponseEntity<List<InventoryHos>> updateHosInventory(@RequestBody List<InventoryHos> inventoryHosList, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
@@ -52,8 +55,9 @@ public class InventoryController {
     }
 
 
-    //? TO UPDATE THE INVENTORY OF CURRENT USER / BLOOD BANK.
-    //? TESTED
+    // TO UPDATE THE INVENTORY OF CURRENT USER / BLOOD BANK.
+    // TESTED
+    //This PUT mapping is for updating the inventory of the Blood Banks
     @PutMapping("/updatebbinventory")
     public ResponseEntity<List<InventoryBb>> updateBbInventory(@RequestBody List<InventoryBb> inventoryBbList, @RequestHeader ("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
