@@ -119,7 +119,6 @@ public class SalesAnalyticsDAO {
         Calendar calendar = new GregorianCalendar();
 
 
-
         // Defining Objects of each component
         List<Double> bloodObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
         List<Double> plasmaObject = new ArrayList<Double>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0));
