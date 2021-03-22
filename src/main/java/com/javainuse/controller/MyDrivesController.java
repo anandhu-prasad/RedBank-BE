@@ -44,15 +44,17 @@ public class MyDrivesController {
     }
     //This PUT mapping is for updating the donor status by the user after donor has donated blood
     @PutMapping("/drivedonorverification")
-    public ResponseEntity<SuccessResponseBody> driveDonorVerify(@RequestBody DriveDonorVerification_ReqBody driveDonorVerification_reqBody) {
-        return myDrivesDAO.driveDonorVerify(driveDonorVerification_reqBody);
+    public ResponseEntity<SuccessResponseBody> driveDonorVerify(@RequestBody DriveDonorVerification_ReqBody driveDonorVerification_reqBody, @RequestHeader("Authorization") String userToken) {
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        return myDrivesDAO.driveDonorVerify(driveDonorVerification_reqBody, userId);
     }
     //This GET mapping is to get all the active donors in a list based on the Drive they have accepted
     @GetMapping("/fetchdrivedonorlist/{driveId}")
     public ResponseEntity<List<DriveDonorsList_RespBody>> getDriveDetails(@PathVariable(value = "driveId") String driveId, @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
-        return myDrivesDAO.getDriveDonorList(driveId);
+        return myDrivesDAO.getDriveDonorList(driveId, userId);
     }
 
 

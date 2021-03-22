@@ -50,7 +50,8 @@ public class InventoryController {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
 
         String userId = claims.get("userId").toString();
-        return inventoryDAO.updateHosInventory(userId, inventoryHosList);
+        int userType = Integer.parseInt(claims.get("userType").toString());
+        return inventoryDAO.updateHosInventory(userId, userType, inventoryHosList);
     }
 
 
@@ -63,7 +64,7 @@ public class InventoryController {
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
 
-        return inventoryDAO.updateBbInventory(userId, inventoryBbList);
+        return inventoryDAO.updateBbInventory(userId, userType, inventoryBbList);
 
     }
 //    @GetMapping("/piechart/{type}")

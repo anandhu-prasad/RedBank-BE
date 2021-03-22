@@ -4,6 +4,7 @@ import com.javainuse.models.InventoryBb;
 import com.javainuse.util.InventoryPk;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.sql.Struct;
 import java.util.List;
 
 public interface InventoryBbRepo extends JpaRepository<InventoryBb, InventoryPk> {
@@ -17,5 +18,5 @@ public interface InventoryBbRepo extends JpaRepository<InventoryBb, InventoryPk>
     public InventoryBb findByUserIdAndComponent(String id, String comp);
 
 
-    List<InventoryBb> findByComponent(String component);
+
 }

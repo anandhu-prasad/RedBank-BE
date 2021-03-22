@@ -1,6 +1,7 @@
 package com.javainuse.controller;
 
 import com.javainuse.analyticsModels.charts.*;
+import com.javainuse.analyticsModels.objects.NewBarChart;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.responses.TodaysSale_RespBody;
 import com.javainuse.service.SalesAnalyticsDAO;
@@ -35,7 +36,7 @@ public class SalesAnalyticsController {
     }
     //This GET mapping is to get the Analytics of the required type YEAR wise
     @GetMapping("/yearly/{year}/{type}")
-    public ResponseEntity<BarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "type") int type,@RequestHeader("Authorization") String userToken){
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year, @PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
 
