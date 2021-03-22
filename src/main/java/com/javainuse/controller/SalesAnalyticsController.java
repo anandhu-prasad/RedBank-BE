@@ -47,7 +47,7 @@ public class SalesAnalyticsController {
     }
     //This GET mapping is to get the Analytics of the required type MONTH wise
     @GetMapping("/monthly/{year}/{month}/{type}")
-    public ResponseEntity<BarChartMonth> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
 
