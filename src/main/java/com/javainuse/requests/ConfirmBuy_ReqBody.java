@@ -7,16 +7,20 @@ public class ConfirmBuy_ReqBody {
     private String bloodGroup;
     private String component;
     private int units;
+    private String reason;
+    private String location;
 
     public ConfirmBuy_ReqBody() {
         super();
     }
 
-    public ConfirmBuy_ReqBody(String sellerId, String bloodGroup, String component, int units) {
+    public ConfirmBuy_ReqBody(String sellerId, String bloodGroup, String component, int units, String reason, String location) {
         this.sellerId = sellerId;
         this.bloodGroup = bloodGroup;
         this.component = component;
         this.units = units;
+        this.reason = reason;
+        this.location = location;
     }
 
 
@@ -52,5 +56,31 @@ public class ConfirmBuy_ReqBody {
         this.units = units;
     }
 
+    public String getReason() {
+        return reason;
+    }
 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "ConfirmBuy_ReqBody{" +
+                "sellerId='" + sellerId + '\'' +
+                ", bloodGroup='" + bloodGroup + '\'' +
+                ", component='" + component + '\'' +
+                ", units=" + units +
+                ", reason='" + reason + '\'' +
+                ", location='" + location + '\'' +
+                '}';
+    }
 }

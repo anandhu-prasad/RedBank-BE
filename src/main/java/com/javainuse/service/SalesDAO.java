@@ -57,19 +57,19 @@ public class SalesDAO {
                 results.add(new Sales_RespBody(item.getSales_id(), item.getDate(),
                         profileBbRepo.findByUserId(item.getBuyer()).getName(),  profileBbRepo.findByUserId(item.getBuyer()).getEmail(),
                         profileBbRepo.findByUserId(item.getBuyer()).getPhone1(), item.getComponent(), item.getBlood_group(),
-                        item.getUnits(), item.getPrice() ));
+                        item.getUnits(), item.getPrice(), item.getReason(), item.getLocation() ));
             }
             else if(item.getBuyer().substring(0,3).equals("HOS")) {
                 results.add(new Sales_RespBody(item.getSales_id(), item.getDate(),
                         profileHosRepo.findByUserId(item.getBuyer()).getName(), profileHosRepo.findByUserId(item.getBuyer()).getEmail(),
                         profileHosRepo.findByUserId(item.getBuyer()).getPhone1(), item.getComponent(), item.getBlood_group(),
-                        item.getUnits(), item.getPrice()));
+                        item.getUnits(), item.getPrice(), item.getReason(), item.getLocation()));
             }
             else{
                 results.add(new Sales_RespBody(item.getSales_id(), item.getDate(),
                         profileIndRepo.findByUserId(item.getBuyer()).getName(), profileIndRepo.findByUserId(item.getBuyer()).getEmail(),
                         profileIndRepo.findByUserId(item.getBuyer()).getPhone(), item.getComponent(), item.getBlood_group(),
-                        item.getUnits(), item.getPrice()));
+                        item.getUnits(), item.getPrice(), item.getReason(), item.getLocation()));
             }
         }
 

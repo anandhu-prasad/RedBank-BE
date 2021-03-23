@@ -173,7 +173,7 @@ public class BuyBloodDAO {
         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(data.getSellerId(),data.getComponent());
         Double price = getprice(inventoryBb, data.getBloodGroup()); // getting price
 
-        Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp);
+        Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp, data.getReason(), data.getLocation());
         salesRepo.save(neworder);
         Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits());
         String customer;
