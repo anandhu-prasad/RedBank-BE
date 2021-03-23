@@ -42,6 +42,7 @@ public class MyDrivesDAO {
     @Autowired
     ProfileIndRepo profileIndRepo;
 
+
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
 
@@ -122,6 +123,30 @@ public class MyDrivesDAO {
                 profileInd.setDonorStatus(2);
                 profileInd.setLast_donation_date(new Timestamp(System.currentTimeMillis()));
                 profileIndRepo.save(profileInd);
+
+//                List<DriveInvitedDonors> donorsList =  driveInvitedDonorsRepo.findByDriveId(driveDonorVerification_reqBody.getDriveId());
+//
+//                boolean flag = true;
+//
+//                for( DriveInvitedDonors item : donorsList){
+//                    if(item.getAcceptance() == 2){
+//                        flag = false;
+//                        break;
+//                    }
+//                    else{
+//                        if(item.getAcceptance() == 1 && item.isDonation_status() == false){
+//                            flag = false;
+//                            break;
+//                        }
+//
+//                    }
+//                }
+//
+//                if(flag){
+//                    Drives obj =  drivesRepo.findByDriveId(driveDonorVerification_reqBody.getDriveId());
+//                    obj.setStatus(false);
+//                    drivesRepo.save(obj);
+//                }
 
                 //FIREBASE NOTIFICATION
                 JSONObject body = new JSONObject();

@@ -110,6 +110,30 @@ public class DonationRequestDAO {
             profileInd.setLast_donation_date(new Timestamp(System.currentTimeMillis()));
             profileIndRepo.save(profileInd);
 
+            List<DonationInvitedDonors> donorsList =  donationInvitedDonorsRepo.findByDonationId(donationDonorVerification_ReqBody.getDonationId());
+
+            boolean flag = true;
+
+            for( DonationInvitedDonors item : donorsList){
+                if(item.getAcceptance() == 2){
+                    flag = false;
+                    break;
+                }
+                else{
+                    if(item.getAcceptance() == 1 && item.isDonation_status() == false){
+                      flag = false;
+                        break;
+                    }
+
+                }
+            }
+
+            if(flag){
+               DonationRequest obj =  donationRequestRepo.findByDonationId(donationDonorVerification_ReqBody.getDonationId());
+               obj.setStatus(false);
+               donationRequestRepo.save(obj);
+            }
+
             //? SENDING NOTIFICATION TO THE DONOR.
             Notification notification = new Notification(donationDonorVerification_ReqBody.getUserId(), "Donation complete", "Your blood donation for Donation Id " + donationDonorVerification_ReqBody.getDonationId() + " is approved by the recipient.", new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
