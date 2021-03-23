@@ -42,7 +42,7 @@ public class PurchasesDAO {
             results.add(new Purchases_RespBody( item.getSales_id(), item.getDate(),
                     profileBbRepo.findByUserId(item.getSeller_id()).getName(), profileBbRepo.findByUserId(item.getSeller_id()).getEmail(),
                     profileBbRepo.findByUserId(item.getSeller_id()).getPhone1(), item.getComponent(),
-                    item.getBlood_group(), item.getUnits(), item.getPrice()));
+                    item.getBlood_group(), item.getUnits(), item.getPrice(), item.getReason(), item.getLocation()));
         }
         return results;
     }

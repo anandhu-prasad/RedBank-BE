@@ -38,11 +38,18 @@ public class Sales {
     @Column(name ="date_of_transaction")
     private Timestamp date;
 
+    @Column(name ="reason")
+    private String reason;
+
+    @Column(name ="location")
+    private String location;
+
+
     public Sales() {
         super();
     }
 
-    public Sales(String sellerId, String buyerId, String component, String bloodGroup, int units, Double price, Timestamp date) {
+    public Sales(String sellerId, String buyerId, String component, String bloodGroup, int units, Double price, Timestamp date, String reason, String location) {
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.component = component;
@@ -50,6 +57,8 @@ public class Sales {
         this.units = units;
         this.price = price;
         this.date = date;
+        this.reason = reason;
+        this.location = location;
     }
 
     public String getSales_id() {
@@ -116,10 +125,51 @@ public class Sales {
         this.price = price;
     }
 
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "Sales{" +
-                "sales_id=" + sales_id +
+                "sales_id='" + sales_id + '\'' +
                 ", sellerId='" + sellerId + '\'' +
                 ", buyerId='" + buyerId + '\'' +
                 ", component='" + component + '\'' +
@@ -127,6 +177,8 @@ public class Sales {
                 ", units=" + units +
                 ", price=" + price +
                 ", date=" + date +
+                ", reason='" + reason + '\'' +
+                ", location='" + location + '\'' +
                 '}';
     }
 }

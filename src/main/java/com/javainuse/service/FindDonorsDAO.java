@@ -3,10 +3,9 @@ package com.javainuse.service;
 
 import com.javainuse.models.DonationInvitedDonors;
 import com.javainuse.models.DonationRequest;
+import com.javainuse.models.Notification;
 import com.javainuse.models.ProfileInd;
-import com.javainuse.repositories.DonationInvitedDonorsRepo;
-import com.javainuse.repositories.DonationRequestRepo;
-import com.javainuse.repositories.ProfileIndRepo;
+import com.javainuse.repositories.*;
 import com.javainuse.requests.FindDonors_ReqBody;
 import com.javainuse.requests.FindDonors_ReqBody_withSelectedDonors;
 import com.javainuse.responses.DonationDonorsList_RespBody;
@@ -32,6 +31,12 @@ public class FindDonorsDAO {
     ProfileIndRepo profileIndRepo;
 
     @Autowired
+    ProfileHosRepo profileHosRepo;
+
+    @Autowired
+    ProfileBbRepo profileBbRepo;
+
+    @Autowired
     DonationRequestRepo donationRequestRepo;
 
     @Autowired
@@ -40,14 +45,17 @@ public class FindDonorsDAO {
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
 
+    @Autowired
+    NotificationRepo notificationRepo;
 
-    public List<FindDonors_RespBody> getDonorsList(FindDonors_ReqBody data){
+    public List<FindDonors_RespBody> getDonorsList(FindDonors_ReqBody data, String userId){
 
         List<ProfileInd> list = new ArrayList<>();
         List<FindDonors_RespBody> result = new ArrayList<>();
 
         list = profileIndRepo.findByBloodGroup(data.getBloodGroup());
         list = list.stream().filter( item -> item.getDonorStatus() == 1).collect(Collectors.toList());
+
 
         //change the selection criterion in the form for the front end accordingly ( either check for empty state, district fields or check for 'ALL')
         if(!(data.getState().equals("All") || data.getState().equals("") || data.getState().equals("Select state") || data.getState() == null)){
@@ -59,6 +67,7 @@ public class FindDonorsDAO {
         if(data.getPincode() != "" && data.getPincode() != null){
             list = list.stream().filter( item -> item.getPincode() == data.getPincode()).collect(Collectors.toList());
         }
+        list = list.stream().filter( item -> !item.getUserId().equals(userId)).collect(Collectors.toList());
 
         String avatar;
 
@@ -68,7 +77,19 @@ public class FindDonorsDAO {
     }
 
 
+
     public ResponseEntity<SuccessResponseBody> getResponse(FindDonors_ReqBody_withSelectedDonors data, String userId, Integer userType){
+
+        String organizer;
+        if(userType == 1){
+            organizer = profileIndRepo.findByUserId(userId).getName();
+        } else
+        if(userType == 2){
+            organizer = profileHosRepo.findByUserId(userId).getName();
+        } else {
+            organizer = profileBbRepo.findByUserId(userId).getName();
+
+        }
 
         //getting current timestamp
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -84,6 +105,11 @@ public class FindDonorsDAO {
         for (String s : idList) {
             DonationInvitedDonors obj = new DonationInvitedDonors(donationId, s, 2);  //2-> pending , 0-> rejected
             donationInvitedDonorsRepo.save(obj);
+
+            Notification notify = new Notification(s, "Donation Invitation", "You have been invited to a donation by " + organizer + ". Please check My Invites Section for more details.", new Timestamp(System.currentTimeMillis()));
+            notificationRepo.save(notify);
+
+
             // SENDING push notification
             JSONObject body = new JSONObject();
             body.put("to", "/topics/" + s);
@@ -91,7 +117,7 @@ public class FindDonorsDAO {
 
             JSONObject notification = new JSONObject();
             notification.put("title", "Donation Invite");
-            notification.put("body", "You have been invited to " + donationId + " donation . Please check My Invites Section for more details." );
+            notification.put("body", "You have been invited to a donation by \" + organizer + \". Please check My Invites Section for more details." );
 
             JSONObject data2 = new JSONObject();
 

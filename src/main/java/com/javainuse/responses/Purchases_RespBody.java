@@ -12,14 +12,19 @@ public class Purchases_RespBody {
     private String soldGroup;
     private int soldQuantity;
     private Double pricePerUnit;
+    private String reason;
+    private String location;
 
     public Purchases_RespBody(){
         super();
     }
+
     public Purchases_RespBody(String purchaseId, Timestamp dateOfTransaction,
-                              String sellerName, String sellerEmail, String sellerContact,
-                              String soldComponent, String soldGroup,
-                              int soldQuantity, Double pricePerUnit) {
+                              String sellerName, String sellerEmail,
+                              String sellerContact, String soldComponent,
+                              String soldGroup, int soldQuantity,
+                              Double pricePerUnit, String reason,
+                              String location) {
         this.purchaseId = purchaseId;
         this.dateOfTransaction = dateOfTransaction;
         this.sellerName = sellerName;
@@ -29,6 +34,8 @@ public class Purchases_RespBody {
         this.soldGroup = soldGroup;
         this.soldQuantity = soldQuantity;
         this.pricePerUnit = pricePerUnit;
+        this.reason = reason;
+        this.location = location;
     }
 
     public String getPurchaseId() {
@@ -103,6 +110,22 @@ public class Purchases_RespBody {
         this.pricePerUnit = pricePerUnit;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "Purchases_RespBody{" +
@@ -113,8 +136,10 @@ public class Purchases_RespBody {
                 ", sellerContact='" + sellerContact + '\'' +
                 ", soldComponent='" + soldComponent + '\'' +
                 ", soldGroup='" + soldGroup + '\'' +
-                ", soldQuantity='" + soldQuantity + '\'' +
-                ", pricePerUnit='" + pricePerUnit + '\'' +
+                ", soldQuantity=" + soldQuantity +
+                ", pricePerUnit=" + pricePerUnit +
+                ", reason='" + reason + '\'' +
+                ", location='" + location + '\'' +
                 '}';
     }
 }

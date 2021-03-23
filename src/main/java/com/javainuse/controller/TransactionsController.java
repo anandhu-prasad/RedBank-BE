@@ -27,7 +27,7 @@ public class TransactionsController {
 
         @Autowired
         JwtTokenUtil jwtTokenUtil;
-
+        //This GET mapping is for getting the list of all purchases made by the user
         @GetMapping("/fetchpurchaseslist")
         public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(
                         @RequestHeader("Authorization") String userToken) {
@@ -41,7 +41,7 @@ public class TransactionsController {
                 return ResponseEntity.ok().headers(responseHeaders).body(purchasesDAO.getPurchasesList(userId));
 
         }
-
+        //This GET mapping is specifically for the BloodBanks to get the list of all the sales made by them in the past
         @GetMapping("/fetchsaleslist")
         public ResponseEntity<List<Sales_RespBody>> getSalesList(@RequestHeader("Authorization") String userToken) {
                 Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));

@@ -25,7 +25,7 @@ public class BuyBloodController {
     @Autowired
     public BuyBloodDAO buyBloodDAO;
 
-
+    //This Post Mapping is for finding the Blood banks as per the details filled by the user
     @PostMapping("/findbb")
     public ResponseEntity<List<BuyBlood_RespBody>> getBloodBanksList(@RequestBody BuyBlood_ReqBody data , @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
@@ -36,9 +36,9 @@ public class BuyBloodController {
         responseHeaders.set("success", "true");
 
 
-        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.findBloodBanks(data));
+        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.findBloodBanks(data,userId));
     }
-
+    //This Post Mapping is used to confirm the buying of blood by the user from the BloodBanks
    @PostMapping("/confirmbuy")
     public ResponseEntity<SuccessResponseBody> confirmbuy(@RequestBody ConfirmBuy_ReqBody data, @RequestHeader("Authorization") String userToken){
 

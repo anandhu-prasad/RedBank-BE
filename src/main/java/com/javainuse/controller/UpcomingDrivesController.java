@@ -25,7 +25,7 @@ public class UpcomingDrivesController {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
-
+    //This POST mapping is to get the list of all the upcoming drives conducted by Hospitals and Blood Banks
     @PostMapping("/fetchdriveslist")
     public ResponseEntity<List<UpcomingDrives_RespBody>> getDrivesList(@RequestBody UpcomingDrives_ReqBody data, @RequestHeader ("Authorization") String userToken){
 
@@ -38,7 +38,7 @@ public class UpcomingDrivesController {
 
         return ResponseEntity.ok().headers(responseHeaders).body(upcomingDrivesDAO.getDrives(data, userId));
     }
-
+    //This POST mapping is to register for the Upcoming Drives conducted by the Hospitals and Blood Banks
     @PostMapping("/registerfordrive")
     public ResponseEntity<SuccessResponseBody> registerForDrive(@RequestBody RegisterForDriveReqBody registerForDriveReqBody, @RequestHeader ("Authorization") String userToken){
         try{

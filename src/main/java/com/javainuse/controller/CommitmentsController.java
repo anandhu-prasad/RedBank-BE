@@ -5,6 +5,8 @@ package com.javainuse.controller;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.service.CommitmentsDAO;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+//This controller is for commitments made by the user.
 public class CommitmentsController {
 
     @Autowired
@@ -26,6 +29,8 @@ public class CommitmentsController {
     JwtTokenUtil jwtTokenUtil;
 
     ///unique key for each child.
+    //This Get Mapping is for the getting the details of the commitments of the user.
+
 
     @GetMapping("/commitment")
     public ResponseEntity<List<?>> getcommitmentdetails(@RequestHeader("Authorization") String userToken)

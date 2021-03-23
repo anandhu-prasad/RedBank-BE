@@ -1,6 +1,7 @@
 package com.javainuse.controller;
 
 import com.javainuse.analyticsModels.charts.*;
+import com.javainuse.analyticsModels.objects.NewBarChart;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.responses.TodaysSale_RespBody;
 import com.javainuse.service.SalesAnalyticsDAO;
@@ -23,7 +24,7 @@ public class SalesAnalyticsController {
 
     @Autowired
     SalesAnalyticsDAO salesAnalyticsDAO;
-
+    //This GET mapping is for getting the stats for the required type
     @GetMapping("/fetchnow")
     public  ResponseEntity<TodaysSale_RespBody> getcurrentStatus (@RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
@@ -33,9 +34,9 @@ public class SalesAnalyticsController {
         responseHeaders.set("success", "true");
         return ResponseEntity.ok().headers(responseHeaders).body(salesAnalyticsDAO.getToday(userId));
     }
-
+    //This GET mapping is to get the Analytics of the required type YEAR wise
     @GetMapping("/yearly/{year}/{type}")
-    public ResponseEntity<BarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "type") int type,@RequestHeader("Authorization") String userToken){
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year, @PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
 
@@ -44,9 +45,9 @@ public class SalesAnalyticsController {
 
         return ResponseEntity.ok().headers(responseHeaders).body(salesAnalyticsDAO.getCurrentYearStats(userId,year,type));
     }
-
+    //This GET mapping is to get the Analytics of the required type MONTH wise
     @GetMapping("/monthly/{year}/{month}/{type}")
-    public ResponseEntity<BarChartMonth> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
 
