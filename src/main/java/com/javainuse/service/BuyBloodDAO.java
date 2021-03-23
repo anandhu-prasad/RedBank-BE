@@ -163,12 +163,18 @@ public class BuyBloodDAO {
 
     public SuccessResponseBody submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
 
+        // getting the current timestamp
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("success", "true");
 
-        Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), data.getPrice(), data.getDate());
-        salesRepo.save(neworder);
+
         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(data.getSellerId(),data.getComponent());
+        Double price = getprice(inventoryBb, data.getBloodGroup()); // getting price
+
+        Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp);
+        salesRepo.save(neworder);
         Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits());
         String customer;
         if(userType == 1){
@@ -204,5 +210,27 @@ public class BuyBloodDAO {
 
 
         return new SuccessResponseBody(status);
+    }
+
+    private Double getprice(InventoryBb inventoryBb, String bloodGroup) {
+        double price = 0.0;
+        if(bloodGroup.equals("A+") ){
+            price = inventoryBb.getaPosPrice();
+        } else if(bloodGroup.equals("A-")){
+            price = inventoryBb.getaNegPrice();
+        } else if(bloodGroup.equals("B+")){
+            price = inventoryBb.getbPosPrice();
+        } else if(bloodGroup.equals("B-")){
+            price = inventoryBb.getbNegPrice();
+        } else if(bloodGroup.equals("AB+")){
+            price = inventoryBb.getAbPosPrice();
+        } else if(bloodGroup.equals("AB-")){
+            price = inventoryBb.getAbNegPrice();
+        } else if(bloodGroup.equals("O+")){
+            price = inventoryBb.getoPosPrice();
+        } else if(bloodGroup.equals("O-")){
+            price = inventoryBb.getoNegPrice();
+        }
+        return  price;
     }
 }
