@@ -76,7 +76,7 @@ These are some of the main features in the application/ website of ***REDBANK***
 * User should be able to register and login using their email id and password
 * Three types of user registrations should be available - blood banks, clinics/hospitals, individuals.
 * Blood banks should be able to sell and buy any blood type
-* Bloodd banks and Hospitals should be able to update and track usage and availability of blood
+* Blood banks and Hospitals should be able to update and track usage and availability of blood
 * Any user should be able to buy any blood type from blood banks
 * Any user should be able to get list of donors based on search criteria
 * Recipient should be able to contact donors
