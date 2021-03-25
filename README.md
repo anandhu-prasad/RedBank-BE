@@ -1,12 +1,12 @@
-# RED BANK 
+9# RED BANK 
 RedBank serves as a Typographyplatform to bridge the gap between the blood donors and recipients and to reduce the efforts required to find the right type of blood group and components. With RedBank , hospitals can easily view and manage their inventory, blood banks can sell blood to other users and any user can nake a request to all the active donors who are willing to donate their blood to save a life. With this App, the Hospitals and Blood Banks can organise a drive for collecting the blood for the needy people who might require blood in future.
 
 ## TABLE OF CONTENTS 
 
 1. [General Info](#GeneralInfo) 
 2. [Technologies](#Technologies) 
-3. [Screenshots](#Screenshots)
-4. [Setup/Installation](#Setup/Installation)
+3. [Setup/Installation](#Setup/Installation)
+4. [Backend Structure](#BackendStructure)
 5. [Features](#Features)
 6. [Contact](#Contact)
 
@@ -24,9 +24,6 @@ Similarly we have included 3 persona which are important to this project :
 * React JS (For web application)
 * React Native (For Mobile application)
 * Java (Spring Boot)
-
-## Screenshot
-![Example Screenshot] (https://drive.google.com/file/d/1cxAxgpdorL3O5YQIWBSIdUvrPuFnQ4HD/view?usp=sharing)
 
 ## Setup/Installation
 Blood Management System requires JAVA 15, Maven, React JS 17.0.1, React Native 0.63.4, npm 6.14, MySQL 8.0.23, Redux 4.0.5, Android Studio 11.0 to run.
@@ -69,6 +66,17 @@ spring.mail.properties.
 `jwt.secret=REDBANKo%q2ukuuk5kzn+_w@#z(uw@fc&83w+1%tq$!ooce783&(&l+8&`
 
 By running the backend codes, this will start the Tomcat server in the system at port 8080. So, to access the server use localhost:8080.
+
+## Backend Structure
+The Backend Structure contains 
+* Config files -Here all the configuration files are stored like **JWT Filter, Web Security, Swagger Implementation, CORS Filter, JWT Authentication**. This is the most important package as this will lead to determine which services can be opened by which type of user. All the configuraiton changes can be done in this package. 
+* Analytics Models - Here all the codes related to Analytics are present. To view any type of Analytics and if needed to change the structure of the Analytics, all can be done in this package. This package main objective how ot represent the Analytics in a better and simple way.
+* Controllers - Controller is responsible for processing incoming requests. It invokes business logic, updates the model and returns the view that should be rendered. acts as the coordinator between the View and the Model. This package has all the controllers which receives an input from the users via the View, then processes the user's data with the help of Model and passes the results back to the View.
+* Models- Model represents an object or JAVA POJO carrying data of the application. It can also have logic to update controller if its data changes.In this package all the models required for the project are mentioned and all the models are auto generated.
+* Repositories-This package has the most important usage it provides 2 main benefits: ... The repository improves the reusability of your persistence code, especially your queries, by encouraging you to implement all persistence operations in one place. That makes them easy to find and to reuse.It is used for encapsulating storage, retrieval, and search behavior which emulates a collection of objects.
+* Requests - This package consists of all the requests that can be made by other classes to get the data of the application. This package allows dynamic creation and invocation of the requests.
+* Responses - This package consists of all the responses of the requests made by the user of the application.It is an abstract class that contains three simple methods. The getEntity() method returns the Java object you want converted into an HTTP message body. The getStatus() method returns the HTTP response code. The getMetadata() method is a MultivaluedMap of response headers.
+* Service- This package contains all the services which are defined by a set of interfaces and classes. The service contains an interface or an abstract class that defines the functionality provided by the service.The consumer which is client knows only about the service interface.This package provides a way of a client to interact with some functionality in the application.
 
 ## Features
 These are some of the main features in the application/ website of ***REDBANK***
