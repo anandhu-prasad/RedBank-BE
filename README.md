@@ -10,14 +10,15 @@ RedBank serves as a Typographyplatform to bridge the gap between the blood donor
 5. [Features](#Features)
 6. [Contact](#Contact)
 
-##General Info
+
+## General Info
 We created this ***RED BANK*** to bridge the gap between the blood donors and recipients and to reduce the efforts required to find the right type of blood group. We did this in order to hassle the process of arranging blood and it’s components during emergencies without any difficulty in arranging right type of blood component in a shorter time period.
 We have 4 roles in our project i.e: ***Buyers, Sellers, Donors, Viewers ***
 
 Similarly we have included 3 persona which are important to this project :
-***1. Individuals(Users)
+***   1. Individuals(Users)
       2. Hospitals 
-      3. Blood Banks***
+      3. Blood Banks  ***
       
 ## Technologies Used 
 ***1. React JS (For web application)
