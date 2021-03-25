@@ -13,10 +13,14 @@ import com.javainuse.repositories.*;
 import com.javainuse.requests.ProfileBbDTO;
 import com.javainuse.requests.ProfileHosDTO;
 import com.javainuse.requests.ProfileIndDTO;
+import com.javainuse.requests.RefreshAuthTokenRespBody;
 import com.javainuse.responses.AuthResponse;
 import com.javainuse.responses.SuccessResponseBody;
+import io.jsonwebtoken.Claims;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -112,7 +116,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 			//? GENERATE TOKEN HERE
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileInd.getUserId(), newProfileInd.getEmail(), 1);
-        	AuthResponse authResponse = new AuthResponse(token,  newProfileInd.getUserId(), 1);
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileInd.getUserId(), profileInd.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+
+			AuthResponse authResponse = new AuthResponse(token,  newProfileInd.getUserId(), 1, authTokenExpiry, refreshToken, refreshTokenExpiry);
         	HttpHeaders responseHeaders = new HttpHeaders();
         	responseHeaders.set("success", "true");
         	return ResponseEntity.ok().headers(responseHeaders).body(authResponse);
@@ -166,6 +174,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 			//? GENERATE TOKEN HERE
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileHos.getUserId(), newProfileHos.getEmail(), 2);
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileHos.getUserId(), profileHos.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
 
 			//? INITIALIZE THE INVENTORY.
 
@@ -175,7 +186,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			//? SETTING THE HEADERS AND RESPONSE BODY.
 
-			AuthResponse authResponse = new AuthResponse(token,  newProfileHos.getUserId(), 2);
+			AuthResponse authResponse = new AuthResponse(token,  newProfileHos.getUserId(), 2, authTokenExpiry, refreshToken, refreshTokenExpiry);
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("success", "true");
 
@@ -230,6 +241,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 			//? GENERATE TOKEN HERE
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileBb.getUserId(), newProfileBb.getEmail(), 3);
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileBb.getUserId(), profileBb.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
 
 			//? INITIALIZE THE INVENTORY.
 			for (String component : components) {
@@ -238,12 +252,45 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			//? SETTING THE HEADERS AND RESPONSE BODY.
 
-			AuthResponse authResponse = new AuthResponse(token,  newProfileBb.getUserId(), 3);
+			AuthResponse authResponse = new AuthResponse(token,  newProfileBb.getUserId(), 3, authTokenExpiry, refreshToken, refreshTokenExpiry);
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("success", "true");
 
 			return ResponseEntity.ok().headers(responseHeaders).body(authResponse);
 
+		}
+	}
+
+	public ResponseEntity<?> refreshAuthentication(String expiredAuthToken, String refreshToken){
+		HttpHeaders responseHeaders = new HttpHeaders();
+
+		//? USE THE EXPIRED AUTH TOKEN IF NEEDED.
+
+		try{
+			//VALIDATING REFRESH TOKEN
+
+			if(jwtTokenUtil.validateRefreshToken(refreshToken.substring(7))){
+
+				Claims claims = jwtTokenUtil.getAllClaimsFromToken(refreshToken.substring(7));
+//				String userId = claims.get("userId").toString();
+//				int userType = Integer.parseInt(claims.get("userType").toString());
+//				String userEmail = jwtTokenUtil.getUsernameFromToken(refreshToken.substring(7));
+//
+
+				String newAuthToken = jwtTokenUtil.generateUserToken("IND18", "anandhup28@gmail.com", 1);
+				System.out.println(newAuthToken);
+
+				responseHeaders.set("success", "true");
+				return ResponseEntity.ok().headers(responseHeaders).body(new RefreshAuthTokenRespBody(newAuthToken, jwtTokenUtil.getExpirationDateFromToken(newAuthToken)));
+			}
+			else{
+				responseHeaders.set("error", "Bad request");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(responseHeaders).build();
+			}
+		}
+		catch (Exception e){
+			responseHeaders.set("error", e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(responseHeaders).build();
 		}
 	}
 
