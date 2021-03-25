@@ -2,12 +2,12 @@
 RedBank serves as a Typographyplatform to bridge the gap between the blood donors and recipients and to reduce the efforts required to find the right type of blood group and components. With RedBank , hospitals can easily view and manage their inventory, blood banks can sell blood to other users and any user can nake a request to all the active donors who are willing to donate their blood to save a life. With this App, the Hospitals and Blood Banks can organise a drive for collecting the blood for the needy people who might require blood in future.
 
 ## TABLE OF CONTENTS 
-1.General Info 
-2.Technologies 
-3.Screenshots 
-4.Setup/Installation
-5.Features 
-6.Contact
+1.[General Info](# General Info) 
+2.[Technologies](# Technologies) 
+3.[Screenshots](# Screenshots)
+4.[Setup/Installation](# Setup/Installation)
+5.[Features](# Features)
+6.[Contact](# Contact)
 
 ##General Info
 We created this ***RED BANK*** to bridge the gap between the blood donors and recipients and to reduce the efforts required to find the right type of blood group. We did this in order to hassle the process of arranging blood and it’s components during emergencies without any difficulty in arranging right type of blood component in a shorter time period.
