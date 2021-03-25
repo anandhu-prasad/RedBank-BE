@@ -3,7 +3,7 @@ RedBank serves as a Typographyplatform to bridge the gap between the blood donor
 
 ## TABLE OF CONTENTS 
 
-1. [General Info](#General Info) 
+1. [General Info](#GeneralInfo) 
 2. [Technologies](#Technologies) 
 3. [Screenshots](#Screenshots)
 4. [Setup/Installation](#Setup/Installation)
