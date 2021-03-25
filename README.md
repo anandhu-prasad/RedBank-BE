@@ -26,7 +26,7 @@ Similarly we have included 3 persona which are important to this project :
 * Java (Spring Boot)
 
 ## Screenshot
-![Example Screenshot] (./home/pictures/Screenshot.png)
+![Example Screenshot] (https://drive.google.com/file/d/1cxAxgpdorL3O5YQIWBSIdUvrPuFnQ4HD/view?usp=sharing)
 
 ## Setup/Installation
 Blood Management System requires JAVA 15, Maven, React JS 17.0.1, React Native 0.63.4, npm 6.14, MySQL 8.0.23, Redux 4.0.5, Android Studio 11.0 to run.
