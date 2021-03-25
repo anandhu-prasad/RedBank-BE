@@ -31,18 +31,18 @@ Similarly we have included 3 persona which are important to this project :
 ## Setup/Installation
 Blood Management System requires JAVA 15, Maven, React JS 17.0.1, React Native 0.63.4, npm 6.14, MySQL 8.0.23, Redux 4.0.5, Android Studio 11.0 to run.
 
-#### DATABASE
+###### DATABASE
 
 Setup the database keeping a note of the Database name, Host, Port, Username and Password.
-Import the [db_dump.sql] file to create the databases tables required for the first run.  
+Import the >[db_dump.sql] file to create the databases tables required for the first run.  
 
-#### BACKEND
+###### BACKEND
 
 The Directory javainuse/src/main/resources contains the application.properties config file for the backend. This includes the following configurations 
 The port on which the server needs to be started 
 > server.port=8080
 
-#### Database connection credentials
+###### Database connection credentials
 `spring.datasource.url=jdbc:mysql://localhost/reddb?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
 spring.datasource.username=yourDatabaseUsername
 spring.datasource.password=yourDatabasePassword
@@ -54,7 +54,7 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57InnoDBDialect
 spring.jpa.open-in-view=false
 `
-#### SMTP config for sending the mails from the Server 
+###### SMTP config for sending the mails from the Server 
 `spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=redbank104@gmail.com
@@ -65,8 +65,33 @@ spring.mail.properties.mail.smtp.timeout=5000
 spring.mail.properties.mail.smtp.writetimeout=5000
 spring.mail.properties.
 `
-#### JWT configuration 
+###### JWT configuration 
 `jwt.secret=REDBANKo%q2ukuuk5kzn+_w@#z(uw@fc&83w+1%tq$!ooce783&(&l+8&`
 
 By running the backend codes, this will start the Tomcat server in the system at port 8080. So, to access the server use localhost:8080.
 
+## Features
+These are some of the main features in the application/ website of ***REDBANK***
+
+* User should be able to register and login using their email id and password
+* Three types of user registrations should be available - blood banks, clinics/hospitals, individuals.
+* Blood banks should be able to sell and buy any blood type
+* Bloodd banks and Hospitals should be able to update and track usage and availability of blood
+* Any user should be able to buy any blood type from blood banks
+* Any user should be able to get list of donors based on search criteria
+* Recipient should be able to contact donors
+* Blood banks and Hospitals should be able to organise drive for all/selected blood groups by sending notifications to apt donors
+* Any user should be able to check availability of any blood type in nearby location
+* Indiviidual should be able to register/update himself as a donor or continues as a user
+* User should be able to see his donation related activities
+* A donor shall be informed of when is he eligible to donate blood next
+
+We have added more additional features in the Application/Website. The link to that site is [Red Bank Feature List](https://docs.google.com/document/d/1qd3vI0HPOJz0xnhEBrer7VZ1xoDE2mdB0rdjQP4Jdcw/edit?usp=sharing)
+
+## Contact
+Created By Nineleaps Echo Batch Team 7. The members of the team are :
+* Aayush Raj 
+* Aditya Tomar 
+* Anandhu Prasad 
+* Rajarshi Halder
+* Vipul Kumar 
