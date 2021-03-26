@@ -25,7 +25,7 @@ public class ConductADriveController {
     //This Post Mapping for organizing a drive for blood donation.
     @ApiOperation(value= "User conducts Drives")
     @PostMapping("/savedrivedetails")
-    public ResponseEntity<SuccessResponseBody> saveDriveDetails (@RequestBody ConductADrive_ReqBody data, @RequestHeader("Authorization") String userToken){
+    public ResponseEntity<?> saveDriveDetails (@RequestBody ConductADrive_ReqBody data, @RequestHeader("Authorization") String userToken){
         // get the user_id from the token and then -> data.setUserId( user_id )
 
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));

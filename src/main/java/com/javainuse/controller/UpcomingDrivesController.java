@@ -33,20 +33,17 @@ public class UpcomingDrivesController {
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-
-        return ResponseEntity.ok().headers(responseHeaders).body(upcomingDrivesDAO.getDrives(data, userId));
+        return upcomingDrivesDAO.getDrives(data, userId, userType);
     }
     //This POST mapping is to register for the Upcoming Drives conducted by the Hospitals and Blood Banks
     @PostMapping("/registerfordrive")
-    public ResponseEntity<SuccessResponseBody> registerForDrive(@RequestBody RegisterForDriveReqBody registerForDriveReqBody, @RequestHeader ("Authorization") String userToken){
+    public ResponseEntity<?> registerForDrive(@RequestBody RegisterForDriveReqBody registerForDriveReqBody, @RequestHeader ("Authorization") String userToken){
         try{
             Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
             String userId = claims.get("userId").toString();
             int userType = Integer.parseInt(claims.get("userType").toString());
 
-            return upcomingDrivesDAO.registerForDrive(userId, registerForDriveReqBody.getDriveId());
+            return upcomingDrivesDAO.registerForDrive(userId, registerForDriveReqBody.getDriveId(), userType);
 
         }
         catch(Exception e){
