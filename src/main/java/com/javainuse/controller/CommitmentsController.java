@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +41,15 @@ public class CommitmentsController {
         Integer userType = Integer.parseInt(claims.get("userType").toString());
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(commitmentsDAO.getDetails(userId));
+        if( userType == 1){
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(commitmentsDAO.getDetails(userId));
+        }
+        else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+        }
+
     }
 
 }

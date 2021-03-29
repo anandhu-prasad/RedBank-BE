@@ -106,7 +106,7 @@ public class ProfileDAO {
 //    last donation date - > condition - > set notification -> set donation status
 
 
-    public ResponseEntity<SuccessResponseBody> changePassword(NewPassword newPassword, String userId, int userType){
+    public ResponseEntity<?> changePassword(NewPassword newPassword, String userId, int userType){
 
         if (userType == 1) {
             return verifyChangePasswordDAO.changeIndPassword(newPassword.getNewPassword(), userId);

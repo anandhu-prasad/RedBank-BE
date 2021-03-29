@@ -33,8 +33,12 @@ public class DonationRequestsController {
     //! TESTED
     /*This Put Mapping is for cancelling the donation request made by the user due to certain conditions*/
     @PutMapping("/expirerequest")
-    public ResponseEntity<SuccessResponseBody> expireRequest(@RequestBody ExpireRequestBody expireRequestBody){
-        return donationRequestDAO.expireRequest(expireRequestBody);
+    public ResponseEntity<?> expireRequest(@RequestHeader ("Authorization") String userToken, @RequestBody ExpireRequestBody expireRequestBody){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
+
+        return donationRequestDAO.expireRequest(expireRequestBody, userId);
     }
 
     //? TO FETCH THE LIST OF DONATION REQUESTS OF THE CURRENT USER.
@@ -53,17 +57,18 @@ public class DonationRequestsController {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(donationRequestDAO.getDonationDonorDetails(donationId));
+        return donationRequestDAO.getDonationDonorDetails(donationId, userId);
     }
     /*This Put Mappping is for updating the status of the donor and the updation is done by the user after the
     donor has given blood.
     */
     @PutMapping("/donationdonorverification")
-    public ResponseEntity<SuccessResponseBody> donationDonorVerify(@RequestBody DonationDonorVerification_ReqBody donationDonorVerification_ReqBody){
-        return donationRequestDAO.donationDonorVerify(donationDonorVerification_ReqBody);
-    }
+    public ResponseEntity<?> donationDonorVerify(@RequestHeader ("Authorization") String userToken, @RequestBody DonationDonorVerification_ReqBody donationDonorVerification_ReqBody){
+        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
+        String userId = claims.get("userId").toString();
+        Integer userType = Integer.parseInt(claims.get("userType").toString());
 
+        return donationRequestDAO.donationDonorVerify(donationDonorVerification_ReqBody, userId);
+    }
 
 }

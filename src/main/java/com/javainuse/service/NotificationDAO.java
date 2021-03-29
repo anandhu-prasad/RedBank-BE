@@ -32,9 +32,11 @@ public class NotificationDAO {
 
     public ResponseEntity<SuccessResponseBody> setNotificationStatus(String userId, int notificationId){
         try{
+
+
+
             HttpHeaders responseHeaders = new HttpHeaders();
             Notification notification = notificationRepo.findByNotificationId(notificationId);
-
             if(notification.getUserId().equals(userId)){
                 notification.setStatus(true);
                 notificationRepo.save(notification);

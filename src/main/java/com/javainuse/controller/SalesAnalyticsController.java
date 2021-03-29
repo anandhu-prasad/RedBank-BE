@@ -29,32 +29,27 @@ public class SalesAnalyticsController {
     public  ResponseEntity<TodaysSale_RespBody> getcurrentStatus (@RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-        return ResponseEntity.ok().headers(responseHeaders).body(salesAnalyticsDAO.getToday(userId));
+        return salesAnalyticsDAO.getToday(userId, userType);
     }
     //This GET mapping is to get the Analytics of the required type YEAR wise
     @GetMapping("/yearly/{year}/{type}")
     public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year, @PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-
-        return ResponseEntity.ok().headers(responseHeaders).body(salesAnalyticsDAO.getCurrentYearStats(userId,year,type));
+        return salesAnalyticsDAO.getCurrentYearStats(userId,year,type, userType);
     }
     //This GET mapping is to get the Analytics of the required type MONTH wise
     @GetMapping("/monthly/{year}/{month}/{type}")
     public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
+        int userType = Integer.parseInt(claims.get("userType").toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
-
-        return ResponseEntity.ok().headers(responseHeaders).body(salesAnalyticsDAO.getSelectedMonthStats(userId,year,month,type));
+        return salesAnalyticsDAO.getSelectedMonthStats(userId,year,month,type, userType);
     }
 
 
