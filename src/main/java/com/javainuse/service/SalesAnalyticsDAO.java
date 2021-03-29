@@ -107,7 +107,7 @@ public class SalesAnalyticsDAO {
 
 
 
-    public ResponseEntity<NewBarChart> getCurrentYearStats(String userId, String year, int type, int userType) {
+    public ResponseEntity<NewBarChart> getCurrentYearStats(String userId, String year, int type, int userType, String  reason) {
 
         // getting all users by sellerid and buyerid
         List<Sales> sellerSalesList = salesRepo.findBySellerId(userId);
@@ -132,8 +132,10 @@ public class SalesAnalyticsDAO {
         ///type = 1 => sold
         ///type = 2 => bought
         ///type = 3 => spent
+        ///type = 4 => reason
 
         if(userType != 1){
+            //Revenue
             if(type == 0 && userType == 3){
                 for(Sales sales : sellerSalesList){
                     String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
@@ -171,6 +173,7 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Sold
             if(type == 1 && userType == 3){
                 for(Sales sales : sellerSalesList){
                     String saleDate = yearFormat.format(sales.getDate());
@@ -198,6 +201,7 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Bought
             if(type == 2 ){
                 for(Sales sales : buyerSalesList){
                     String saleDate = yearFormat.format(sales.getDate());
@@ -223,6 +227,7 @@ public class SalesAnalyticsDAO {
                     }
                 }
             }
+            //Spent
             if(type == 3){
                 for(Sales sales : buyerSalesList){
                     String saleDate = yearFormat.format(sales.getDate());
@@ -249,8 +254,48 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Reason
+            if(type == 4 && userType == 3){
+                for(Sales sales : sellerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate());
+
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());
+
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
+                                String component = sales.getComponent();
+                                String buyreason = sales.getReason();
+                                if(buyreason.equals(reason)) {
+                                    if (component.equals("Blood")) {
+                                        int sold = (sales.getUnits());
+                                        bloodObject.set(i, (bloodObject.get(i) + sold));
+                                    } else if (component.equals("Plasma")) {
+                                        int sold = (sales.getUnits());
+                                        plasmaObject.set(i, (plasmaObject.get(i) + sold));
+                                    } else if (component.equals("Platelets")) {
+                                        int sold = (sales.getUnits());
+                                        plateletObject.set(i, (plateletObject.get(i) + sold));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Double totalBlood= 0.0;
+            Double totalPlasma= 0.0;
+            Double totalPlatelet = 0.0;
+
+            for (int j = 0; j<12; j++){
+                totalBlood = totalBlood + bloodObject.get(j);
+                totalPlasma = totalPlasma + plasmaObject.get(j);
+                totalPlatelet = totalPlatelet + plateletObject.get(j);
+            }
+
             responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject));
+            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject,totalBlood,totalPlasma,totalPlatelet));
 
         }else{
             responseHeaders.set("error", "unauthorized");
@@ -262,12 +307,13 @@ public class SalesAnalyticsDAO {
 
     }
 
-    public ResponseEntity<NewBarChart> getSelectedMonthStats(String userId, String year, String month, int type, int userType) {
+    public ResponseEntity<NewBarChart> getSelectedMonthStats(String userId, String year, String month, int type, int userType, String reason) {
 
         ///type = 0 => revenue
         ///type = 1 => sold
         ///type = 2 => bought
         ///type = 3 => spent
+        ///type = 4 => reason
 
         /// month in format Eg "01" for January
         /// year in format Eg "1998"
@@ -288,6 +334,7 @@ public class SalesAnalyticsDAO {
         final List<String> bloodGroups = new ArrayList<>(Arrays.asList("A+","A-","B+","B-","AB+", "AB-", "O+","O-"));
 
         if( userType !=1 ){
+            //Revenue
             if(type == 0 && userType == 3){
                 for(Sales sales : sellerSalesList) {
                     String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
@@ -320,6 +367,7 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Sold
             if(type == 1 && userType == 3){
                 for(Sales sales : sellerSalesList) {
                     String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
@@ -344,6 +392,7 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Bought
             if(type == 2){
                 for(Sales sales : buyerSalesList) {
                     String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
@@ -368,6 +417,7 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            //Spent
             if(type == 3){
                 for(Sales sales : buyerSalesList) {
                     String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
@@ -392,8 +442,48 @@ public class SalesAnalyticsDAO {
                 }
             }
 
+            // Reason
+            if(type == 4 && userType == 3){
+                for(Sales sales : sellerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
+                            String buyreason = sales.getReason();
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if(buyreason.equals(reason)) {
+                                if (component.equals("Blood")) {
+                                    int sold = sales.getUnits();
+                                    bloodObject.set(index, (bloodObject.get(index) + sold));
+                                } else if (component.equals("Plasma")) {
+                                    int sold = sales.getUnits();
+                                    plasmaObject.set(index, (plasmaObject.get(index) + sold));
+                                } else if (component.equals("Platelets")) {
+                                    int sold = sales.getUnits();
+                                    plateletObject.set(index, (plateletObject.get(index) + sold));
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            Double totalBlood= 0.0;
+            Double totalPlasma= 0.0;
+            Double totalPlatelet = 0.0;
+
+            for (int j = 0; j<8; j++){
+                totalBlood = totalBlood + bloodObject.get(j);
+                totalPlasma = totalPlasma + plasmaObject.get(j);
+                totalPlatelet = totalPlatelet + plateletObject.get(j);
+            }
+
             responseHeaders.set("success", "true");
-            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject));
+            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject,totalBlood,totalPlasma,totalPlatelet));
 
         }else{
             responseHeaders.set("error", "unauthorized");

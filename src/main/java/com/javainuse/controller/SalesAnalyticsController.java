@@ -34,22 +34,22 @@ public class SalesAnalyticsController {
         return salesAnalyticsDAO.getToday(userId, userType);
     }
     //This GET mapping is to get the Analytics of the required type YEAR wise
-    @GetMapping("/yearly/{year}/{type}")
-    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year, @PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
+    @GetMapping("/yearly/{year}/{type}/{reason}")
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year, @PathVariable(value = "type") int type, @PathVariable(value = "reason") String reason, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
 
-        return salesAnalyticsDAO.getCurrentYearStats(userId,year,type, userType);
+        return salesAnalyticsDAO.getCurrentYearStats(userId,year,type, userType,reason);
     }
     //This GET mapping is to get the Analytics of the required type MONTH wise
-    @GetMapping("/monthly/{year}/{month}/{type}")
-    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type, @RequestHeader("Authorization") String userToken){
+    @GetMapping("/monthly/{year}/{month}/{type}/{reason}")
+    public ResponseEntity<NewBarChart> getCurrentYearStats  (@PathVariable(value = "year") String year,@PathVariable(value = "month") String month ,@PathVariable(value = "type") int type,@PathVariable(value = "reason") String reason, @RequestHeader("Authorization") String userToken){
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
 
-        return salesAnalyticsDAO.getSelectedMonthStats(userId,year,month,type, userType);
+        return salesAnalyticsDAO.getSelectedMonthStats(userId,year,month,type, userType,reason);
     }
 
 
