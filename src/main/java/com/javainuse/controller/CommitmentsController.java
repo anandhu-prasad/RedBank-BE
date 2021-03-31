@@ -48,7 +48,7 @@ public class CommitmentsController {
         else{
             responseHeaders.set("error", "unauthorized");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
-        }
+//        }
 
     }
 

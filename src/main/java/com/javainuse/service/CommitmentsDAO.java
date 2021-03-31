@@ -53,7 +53,6 @@ public class CommitmentsDAO {
             if (donationInvitedDonors.getAcceptance() == 1) {
                 DonationRequest obj4 = donationRequestRepo.findByDonationId(donationInvitedDonors.getDonationId());  //accessing the 'donation_request' table
 
-                if (obj4.getStatus()) {
                     if(obj4.getUserId().substring(0, 3).equals("BOB")){
 
                             MyCommitment_RespBody_donation donationDetails = new MyCommitment_RespBody_donation(donationInvitedDonors.getResponseTimeStamp(),
@@ -80,7 +79,7 @@ public class CommitmentsDAO {
                                 donationInvitedDonors.isDonation_status(), obj4.getDonationId());
                         obj3.add(donationDetails);
                     }
-                }
+
             }
         }
 
@@ -88,7 +87,7 @@ public class CommitmentsDAO {
         for (DriveInvitedDonors driveInvitedDonors : obj2) {
             if (driveInvitedDonors.getAcceptance() == 1) {
                 Drives obj4 = drivesRepo.findByDriveId(driveInvitedDonors.getDriveId());  //accessing the 'drives' table
-                if (obj4.getStatus()) {
+
                     if(obj4.getUserId().substring(0, 3).equals("BOB")){
 
                             MyCommitment_RespBody_drive driveDetails = new MyCommitment_RespBody_drive(driveInvitedDonors.getResponseTimeStamp(),
@@ -106,7 +105,7 @@ public class CommitmentsDAO {
                                     driveInvitedDonors.isDonation_status(), obj4.getStartTimestamp(),obj4.getEndTimestamp(), obj4.getDriveId());
                             obj3.add(driveDetails);
                     }
-                }
+
             }
         }
 
