@@ -40,16 +40,13 @@ public class BuyBloodController {
     }
     //This Post Mapping is used to confirm the buying of blood by the user from the BloodBanks
    @PostMapping("/confirmbuy")
-    public ResponseEntity<SuccessResponseBody> confirmbuy(@RequestBody ConfirmBuy_ReqBody data, @RequestHeader("Authorization") String userToken){
+    public ResponseEntity<?> confirmbuy(@RequestBody ConfirmBuy_ReqBody data, @RequestHeader("Authorization") String userToken){
 
        Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
        String userId = claims.get("userId").toString();
        Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-       HttpHeaders responseHeaders = new HttpHeaders();
-       responseHeaders.set("success", "true");
 
-       return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.submitSale(userId,data,userType));
-
+       return  buyBloodDAO.submitSale(userId,data,userType);
    }
 }
