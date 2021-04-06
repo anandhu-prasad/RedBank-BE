@@ -34,22 +34,21 @@ public class CommitmentsController {
 
 
     @GetMapping("/commitment")
-    public ResponseEntity<List<?>> getcommitmentdetails(@RequestHeader("Authorization") String userToken)
-    {
+    public ResponseEntity<List<?>> getcommitmentdetails(@RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         Integer userType = Integer.parseInt(claims.get("userType").toString());
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        if( userType == 1){
+        if (userType == 1) {
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(commitmentsDAO.getDetails(userId));
-        }
-        else{
+        } else {
             responseHeaders.set("error", "unauthorized");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
 //        }
 
-    }
+        }
 
+    }
 }
