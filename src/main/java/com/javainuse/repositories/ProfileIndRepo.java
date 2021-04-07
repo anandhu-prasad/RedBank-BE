@@ -11,4 +11,6 @@ public interface ProfileIndRepo extends JpaRepository<ProfileInd, String> {
     public ProfileInd findByUserId(String id);
     public List<ProfileInd> findByBloodGroupIn(List<String> bloodGroups);
     public List<ProfileInd> findByBloodGroup(String bloodGroup);
+
+    List<ProfileInd> findByBloodGroupAndStateAndDistrictIn(List<String> bloodGroups, String state, String district);
 }

@@ -29,8 +29,7 @@ public class TransactionsController {
         JwtTokenUtil jwtTokenUtil;
         //This GET mapping is for getting the list of all purchases made by the user
         @GetMapping("/fetchpurchaseslist")
-        public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(
-                        @RequestHeader("Authorization") String userToken) {
+        public ResponseEntity<List<Purchases_RespBody>> getPurchasesList(@RequestHeader("Authorization") String userToken) {
                 Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
                 String userId = claims.get("userId").toString();
                 Integer userType = Integer.parseInt(claims.get("userType").toString());
@@ -48,8 +47,6 @@ public class TransactionsController {
                 String userId = claims.get("userId").toString();
                 Integer userType = Integer.parseInt(claims.get("userType").toString());
 
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.set("success", "true");
-                return ResponseEntity.ok().headers(responseHeaders).body(salesDAO.getSalesList(userId));
+                return salesDAO.getSalesList(userId, userType);
         }
 }

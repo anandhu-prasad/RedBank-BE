@@ -9,6 +9,7 @@ import com.javainuse.repositories.ProfileIndRepo;
 import com.javainuse.responses.SuccessResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,37 +27,60 @@ public class ChangePasswordDAO {
     @Autowired
     private PasswordEncoder bycrptEncoder;
 
-    public ResponseEntity<SuccessResponseBody> changeIndPassword(String message, String userId) {
+    public ResponseEntity<?> changeIndPassword(String message, String userId) {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
         ProfileInd obj = profileIndRepository.findByUserId(userId);
-        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+
+        if (userId.equals(obj.getUserId())) {
+            BCryptPasswordEncoder b = new BCryptPasswordEncoder();
             obj.setPassword(bycrptEncoder.encode(message));
             profileIndRepository.save(obj);
-            HttpHeaders responseHeaders = new HttpHeaders();
+
             responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+
+        } else {
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+        }
     }
 
-    public ResponseEntity<SuccessResponseBody> changeBbPassword(String message, String userId) {
+    public ResponseEntity<?> changeBbPassword(String message, String userId) {
+        HttpHeaders responseHeaders = new HttpHeaders();
         ProfileBb obj = profileBbRepository.findByUserId(userId);
-        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+
+        if(userId.equals(obj.getUserId())){
+            BCryptPasswordEncoder b = new BCryptPasswordEncoder();
             obj.setPassword(bycrptEncoder.encode(message));
             profileBbRepository.save(obj);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("success", "true");
 
+            responseHeaders.set("success", "true");
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+        }else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+        }
+
     }
 
-    public ResponseEntity<SuccessResponseBody> changeHosPassword(String message, String userId) {
+    public ResponseEntity<?> changeHosPassword(String message, String userId) {
+        HttpHeaders responseHeaders = new HttpHeaders();
         ProfileHos obj = profileHosRepository.findByUserId(userId);
-        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+
+        if(userId.equals(obj.getUserId())){
+            BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
             obj.setPassword(bycrptEncoder.encode(message));
             profileHosRepository.save(obj);
-            HttpHeaders responseHeaders = new HttpHeaders();
+
             responseHeaders.set("success", "true");
 
             return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+        }else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
+        }
 
     }
 }

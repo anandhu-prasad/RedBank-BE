@@ -25,7 +25,7 @@ public class ContactUsController {
     //This Post Mapping is for sending the message to the ADMINS of the RedBank app
     @ApiOperation(value= "User sends message to Developers")
     @PostMapping("/addmessage")
-    public ResponseEntity<SuccessResponseBody> addMessage(@RequestBody ContactUs_ReqBody message,
+    public ResponseEntity<?> addMessage(@RequestBody ContactUs_ReqBody message,
             @RequestHeader("Authorization") String userToken) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();

@@ -10,6 +10,9 @@ import com.javainuse.repositories.SalesRepo;
 import com.javainuse.responses.TodaysSale_RespBody;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -22,10 +25,10 @@ public class SalesAnalyticsDAO {
     @Autowired
     SalesRepo salesRepo;
 
-    public TodaysSale_RespBody getToday(String userId) {
+    public ResponseEntity<TodaysSale_RespBody> getToday(String userId, int userType) {
 
+        HttpHeaders responseHeaders = new HttpHeaders();
         List<Sales> sellerSalesList = salesRepo.findBySellerId(userId);
-
         List<Sales> buyerSalesList = salesRepo.findByBuyerId(userId);
 
         Calendar calendar = new GregorianCalendar();
@@ -44,75 +47,72 @@ public class SalesAnalyticsDAO {
         //Date ts = sales.getDate() ;
        // Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-        for(Sales sales: sellerSalesList) {
-            //System.out.println(sales.getDate());
 
+        if( userType != 1) {
+            for (Sales sales : sellerSalesList) {
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-           // System.out.println(saleDate);
-            String saleDate = simpleDateFormat.format(sales.getDate());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-            System.out.println(saleDate);
-            System.out.println(LocalDate.now());
+                String saleDate = simpleDateFormat.format(sales.getDate());
 
-            if(saleDate.compareTo(String.valueOf(LocalDate.now())) == 0){
-                System.out.println("ok");
-                System.out.println(saleDate);
-                System.out.println(LocalDate.now());
-                        if(sales.getSeller_id().equals(userId)){
-                            unitsSold= unitsSold + sales.getUnits();
-                            amountCollected= amountCollected + (sales.getPrice() * sales.getUnits());
-                            System.out.println("Seller");
+                if (saleDate.compareTo(String.valueOf(LocalDate.now())) == 0) {
+
+                    if (userType == 3) {
+                        if (sales.getSeller_id().equals(userId)) {
+                            unitsSold = unitsSold + sales.getUnits();
+                            amountCollected = amountCollected + (sales.getPrice() * sales.getUnits());
+
                         }
-                        System.out.println("buyer"+sales.getBuyer());
-                System.out.println("seller"+sales.getSeller_id());
-                        if(sales.getBuyer().equals(userId)){
-                            unitsBought= unitsBought+ sales.getUnits();
-                            amountSpent= amountSpent+ (sales.getPrice() * sales.getUnits());
-                            System.out.println("Buyer");
-                        }
-
-            }
-
-        }
-        for(Sales sales: buyerSalesList) {
-            //System.out.println(sales.getDate());
+                    }
 
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // System.out.println(saleDate);
-            String saleDate = simpleDateFormat.format(sales.getDate());
+                    if (sales.getBuyer().equals(userId)) {
+                        unitsBought = unitsBought + sales.getUnits();
+                        amountSpent = amountSpent + (sales.getPrice() * sales.getUnits());
 
-            System.out.println(saleDate);
-            System.out.println(LocalDate.now());
-
-            if(saleDate.compareTo(String.valueOf(LocalDate.now())) == 0){
-                System.out.println("ok");
-                System.out.println(saleDate);
-                System.out.println(LocalDate.now());
-                System.out.println("buyer"+sales.getBuyer());
-
-                if(sales.getBuyer().equals(userId)){
-                    unitsBought= unitsBought+ sales.getUnits();
-                    amountSpent= amountSpent+ (sales.getPrice() * sales.getUnits());
-                    System.out.println("Buyer");
+                    }
                 }
 
             }
 
+
+            for (Sales sales : buyerSalesList) {
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String saleDate = simpleDateFormat.format(sales.getDate());
+
+                if (saleDate.compareTo(String.valueOf(LocalDate.now())) == 0) {
+
+                    if (sales.getBuyer().equals(userId)) {
+                        unitsBought = unitsBought + sales.getUnits();
+                        amountSpent = amountSpent + (sales.getPrice() * sales.getUnits());
+
+                    }
+
+                }
+
+            }
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new TodaysSale_RespBody(unitsSold, amountCollected, unitsBought, amountSpent));
+        }
+        else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
         }
 
 
-
-        return new TodaysSale_RespBody(unitsSold,amountCollected,unitsBought,amountSpent);
-
     }
 
-    public NewBarChart getCurrentYearStats(String userId, String year, int type) {
+
+
+
+    public ResponseEntity<NewBarChart> getCurrentYearStats(String userId, String year, int type, int userType, String  reason) {
 
         // getting all users by sellerid and buyerid
         List<Sales> sellerSalesList = salesRepo.findBySellerId(userId);
         List<Sales> buyerSalesList = salesRepo.findByBuyerId(userId);
+        HttpHeaders responseHeaders = new HttpHeaders();
 
         // date formatter
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -132,18 +132,21 @@ public class SalesAnalyticsDAO {
         ///type = 1 => sold
         ///type = 2 => bought
         ///type = 3 => spent
+        ///type = 4 => reason
 
-        if(type == 0){
-            for(Sales sales : sellerSalesList){
-                String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+        if(userType != 1){
+            //Revenue
+            if(type == 0 && userType == 3){
+                for(Sales sales : sellerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
 
-                if(saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
 
-                    for (int i = 0; i<months.size(); i++ ){
-                        if(saleMonth.equals(months.get(i))) {
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
 
-                            String component = sales.getComponent();
+                                String component = sales.getComponent();
 
 //                            TESING PURPOSE
 //                            System.out.println("Objects:");
@@ -154,115 +157,170 @@ public class SalesAnalyticsDAO {
 
 //                            Filtering by type of component
 
-                            if(component.equals("Blood")){
-                                Double revenue = (sales.getUnits()* sales.getPrice());
-                                bloodObject.set(i,(bloodObject.get(i)+revenue));
-                            } else if (component.equals("Plasma")){
-                                Double revenue = (sales.getUnits()* sales.getPrice());
-                                plasmaObject.set(i,(plasmaObject.get(i)+revenue));
-                            } else if (component.equals("Platelets")){
-                                Double revenue = (sales.getUnits()* sales.getPrice());
-                                plateletObject.set(i, (plateletObject.get(i)+revenue));
+                                if(component.equals("Blood")){
+                                    Double revenue = (sales.getUnits()* sales.getPrice());
+                                    bloodObject.set(i,(bloodObject.get(i)+revenue));
+                                } else if (component.equals("Plasma")){
+                                    Double revenue = (sales.getUnits()* sales.getPrice());
+                                    plasmaObject.set(i,(plasmaObject.get(i)+revenue));
+                                } else if (component.equals("Platelets")){
+                                    Double revenue = (sales.getUnits()* sales.getPrice());
+                                    plateletObject.set(i, (plateletObject.get(i)+revenue));
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        if(type == 1){
-            for(Sales sales : sellerSalesList){
-                String saleDate = yearFormat.format(sales.getDate());
+            //Sold
+            if(type == 1 && userType == 3){
+                for(Sales sales : sellerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate());
 
-                if(saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());
 
-                    for (int i = 0; i<months.size(); i++ ){
-                        if(saleMonth.equals(months.get(i))) {
-                            String component = sales.getComponent();
-                            if(component.equals("Blood")){
-                                int sold = (sales.getUnits());
-                                bloodObject.set(i,(bloodObject.get(i)+sold));
-                            } else if (component.equals("Plasma")){
-                                int sold = (sales.getUnits());
-                                plasmaObject.set(i,(plasmaObject.get(i)+sold));
-                            } else if (component.equals(
-                                    "Platelets")){
-                                int sold = (sales.getUnits());
-                                plateletObject.set(i, (plateletObject.get(i)+sold));
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
+                                String component = sales.getComponent();
+                                if(component.equals("Blood")){
+                                    int sold = (sales.getUnits());
+                                    bloodObject.set(i,(bloodObject.get(i)+sold));
+                                } else if (component.equals("Plasma")){
+                                    int sold = (sales.getUnits());
+                                    plasmaObject.set(i,(plasmaObject.get(i)+sold));
+                                } else if (component.equals(
+                                        "Platelets")){
+                                    int sold = (sales.getUnits());
+                                    plateletObject.set(i, (plateletObject.get(i)+sold));
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        if(type == 2){
-            for(Sales sales : buyerSalesList){
-                String saleDate = yearFormat.format(sales.getDate());
+            //Bought
+            if(type == 2 ){
+                for(Sales sales : buyerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate());
 
-                if(saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());
 
-                    for (int i = 0; i<months.size(); i++ ){
-                        if(saleMonth.equals(months.get(i))) {
-                            String component = sales.getComponent();
-                            if(component.equals("Blood")){
-                                int bought = (sales.getUnits());
-                                bloodObject.set(i,(bloodObject.get(i)+bought));
-                            } else if (component.equals("Plasma")){
-                                int bought = (sales.getUnits());
-                                plasmaObject.set(i,(plasmaObject.get(i)+bought));
-                            } else if (component.equals("Platelets")){
-                                int bought = (sales.getUnits());
-                                plateletObject.set(i,(plateletObject.get(i)+bought));
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
+                                String component = sales.getComponent();
+                                if(component.equals("Blood")){
+                                    int bought = (sales.getUnits());
+                                    bloodObject.set(i,(bloodObject.get(i)+bought));
+                                } else if (component.equals("Plasma")){
+                                    int bought = (sales.getUnits());
+                                    plasmaObject.set(i,(plasmaObject.get(i)+bought));
+                                } else if (component.equals("Platelets")){
+                                    int bought = (sales.getUnits());
+                                    plateletObject.set(i,(plateletObject.get(i)+bought));
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        if(type == 3){
-            for(Sales sales : buyerSalesList){
-                String saleDate = yearFormat.format(sales.getDate());
+            //Spent
+            if(type == 3){
+                for(Sales sales : buyerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate());
 
-                if(saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());
 
-                    for (int i = 0; i<months.size(); i++ ){
-                        if(saleMonth.equals(months.get(i))) {
-                            String component = sales.getComponent();
-                            if(component.equals("Blood")){
-                                Double spent = (sales.getUnits()* sales.getPrice());
-                                bloodObject.set(i,(bloodObject.get(i)+spent));
-                            } else if (component.equals("Plasma")){
-                                Double spent = (sales.getUnits()* sales.getPrice());
-                                plasmaObject.set(i,(plasmaObject.get(i)+spent));
-                            } else if (component.equals("Platelets")){
-                                Double spent = (sales.getUnits()* sales.getPrice());
-                                plateletObject.set(i, (plateletObject.get(i)+spent));
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
+                                String component = sales.getComponent();
+                                if(component.equals("Blood")){
+                                    Double spent = (sales.getUnits()* sales.getPrice());
+                                    bloodObject.set(i,(bloodObject.get(i)+spent));
+                                } else if (component.equals("Plasma")){
+                                    Double spent = (sales.getUnits()* sales.getPrice());
+                                    plasmaObject.set(i,(plasmaObject.get(i)+spent));
+                                } else if (component.equals("Platelets")){
+                                    Double spent = (sales.getUnits()* sales.getPrice());
+                                    plateletObject.set(i, (plateletObject.get(i)+spent));
+                                }
                             }
                         }
                     }
                 }
             }
+
+            //Reason
+            if(type == 4 && userType == 3){
+                for(Sales sales : sellerSalesList){
+                    String saleDate = yearFormat.format(sales.getDate());
+
+                    if(saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());
+
+                        for (int i = 0; i<months.size(); i++ ){
+                            if(saleMonth.equals(months.get(i))) {
+                                String component = sales.getComponent();
+                                String buyreason = sales.getReason();
+                                if(buyreason.equals(reason)) {
+                                    if (component.equals("Blood")) {
+                                        int sold = (sales.getUnits());
+                                        bloodObject.set(i, (bloodObject.get(i) + sold));
+                                    } else if (component.equals("Plasma")) {
+                                        int sold = (sales.getUnits());
+                                        plasmaObject.set(i, (plasmaObject.get(i) + sold));
+                                    } else if (component.equals("Platelets")) {
+                                        int sold = (sales.getUnits());
+                                        plateletObject.set(i, (plateletObject.get(i) + sold));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Double totalBlood= 0.0;
+            Double totalPlasma= 0.0;
+            Double totalPlatelet = 0.0;
+
+            for (int j = 0; j<12; j++){
+                totalBlood = totalBlood + bloodObject.get(j);
+                totalPlasma = totalPlasma + plasmaObject.get(j);
+                totalPlatelet = totalPlatelet + plateletObject.get(j);
+            }
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject,totalBlood,totalPlasma,totalPlatelet));
+
+        }else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
         }
 
-        return new NewBarChart(bloodObject,plasmaObject,plateletObject);
+
+
+
     }
 
-    public NewBarChart getSelectedMonthStats(String userId, String year, String month, int type) {
+    public ResponseEntity<NewBarChart> getSelectedMonthStats(String userId, String year, String month, int type, int userType, String reason) {
 
         ///type = 0 => revenue
         ///type = 1 => sold
         ///type = 2 => bought
         ///type = 3 => spent
+        ///type = 4 => reason
 
         /// month in format Eg "01" for January
         /// year in format Eg "1998"
 
         //Month Array
 
+        HttpHeaders responseHeaders = new HttpHeaders();
         List<Sales> sellerSalesList = salesRepo.findBySellerId(userId);
         List<Sales> buyerSalesList = salesRepo.findByBuyerId(userId);
 
@@ -275,13 +333,15 @@ public class SalesAnalyticsDAO {
 
         final List<String> bloodGroups = new ArrayList<>(Arrays.asList("A+","A-","B+","B-","AB+", "AB-", "O+","O-"));
 
-        if(type == 0){
-            for(Sales sales : sellerSalesList) {
-                String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
-                if (saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
-                    if (saleMonth.equals(month)) {
-                        String component = sales.getComponent();
+        if( userType !=1 ){
+            //Revenue
+            if(type == 0 && userType == 3){
+                for(Sales sales : sellerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
 //                            TESING PURPOSE
 //                            System.out.println("Objects:");
 //                            System.out.println(bloodObject);
@@ -290,95 +350,145 @@ public class SalesAnalyticsDAO {
 //                            System.out.println(component);
 
 //                            Filtering by type of component
-                        int index = bloodGroups.indexOf(sales.getBlood_group());
-                        if (component.equals("Blood")) {
-                            Double revenue = (sales.getUnits() * sales.getPrice());
-                            bloodObject.set(index, (bloodObject.get(index) + revenue));
-                        } else if (component.equals("Plasma")) {
-                            Double revenue = (sales.getUnits() * sales.getPrice());
-                            plasmaObject.set(index, (plasmaObject.get(index) + revenue));
-                        } else if (component.equals("Platelets")) {
-                            Double revenue = (sales.getUnits() * sales.getPrice());
-                            plateletObject.set(index, (plateletObject.get(index) + revenue));
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if (component.equals("Blood")) {
+                                Double revenue = (sales.getUnits() * sales.getPrice());
+                                bloodObject.set(index, (bloodObject.get(index) + revenue));
+                            } else if (component.equals("Plasma")) {
+                                Double revenue = (sales.getUnits() * sales.getPrice());
+                                plasmaObject.set(index, (plasmaObject.get(index) + revenue));
+                            } else if (component.equals("Platelets")) {
+                                Double revenue = (sales.getUnits() * sales.getPrice());
+                                plateletObject.set(index, (plateletObject.get(index) + revenue));
 
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if(type == 1){
-            for(Sales sales : sellerSalesList) {
-                String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
-                if (saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
-                    if (saleMonth.equals(month)) {
-                        String component = sales.getComponent();
-                        int index = bloodGroups.indexOf(sales.getBlood_group());
-                        if (component.equals("Blood")) {
-                            int sold = sales.getUnits();
-                            bloodObject.set(index, (bloodObject.get(index) + sold));
-                        } else if (component.equals("Plasma")) {
-                            int sold = sales.getUnits();
-                            plasmaObject.set(index, (plasmaObject.get(index) + sold));
-                        } else if (component.equals("Platelets")) {
-                            int sold = sales.getUnits();
-                            plateletObject.set(index, (plateletObject.get(index) + sold));
+            //Sold
+            if(type == 1 && userType == 3){
+                for(Sales sales : sellerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if (component.equals("Blood")) {
+                                int sold = sales.getUnits();
+                                bloodObject.set(index, (bloodObject.get(index) + sold));
+                            } else if (component.equals("Plasma")) {
+                                int sold = sales.getUnits();
+                                plasmaObject.set(index, (plasmaObject.get(index) + sold));
+                            } else if (component.equals("Platelets")) {
+                                int sold = sales.getUnits();
+                                plateletObject.set(index, (plateletObject.get(index) + sold));
 
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if(type == 2){
-            for(Sales sales : buyerSalesList) {
-                String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
-                if (saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
-                    if (saleMonth.equals(month)) {
-                        String component = sales.getComponent();
-                        int index = bloodGroups.indexOf(sales.getBlood_group());
-                        if (component.equals("Blood")) {
-                            int bought = sales.getUnits();
-                            bloodObject.set(index, (bloodObject.get(index) + bought));
-                        } else if (component.equals("Plasma")) {
-                            int bought = sales.getUnits();
-                            plasmaObject.set(index, (plasmaObject.get(index) + bought));
-                        } else if (component.equals("Platelets")) {
-                            int bought = sales.getUnits();
-                            plateletObject.set(index, (plateletObject.get(index) + bought));
+            //Bought
+            if(type == 2){
+                for(Sales sales : buyerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if (component.equals("Blood")) {
+                                int bought = sales.getUnits();
+                                bloodObject.set(index, (bloodObject.get(index) + bought));
+                            } else if (component.equals("Plasma")) {
+                                int bought = sales.getUnits();
+                                plasmaObject.set(index, (plasmaObject.get(index) + bought));
+                            } else if (component.equals("Platelets")) {
+                                int bought = sales.getUnits();
+                                plateletObject.set(index, (plateletObject.get(index) + bought));
 
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if(type == 3){
-            for(Sales sales : buyerSalesList) {
-                String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
-                if (saleDate.equals(year)) {
-                    String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
-                    if (saleMonth.equals(month)) {
-                        String component = sales.getComponent();
-                        int index = bloodGroups.indexOf(sales.getBlood_group());
-                        if (component.equals("Blood")) {
-                            Double spent = (sales.getUnits() * sales.getPrice());
-                            bloodObject.set(index, (bloodObject.get(index) + spent));
-                        } else if (component.equals("Plasma")) {
-                            Double spent = (sales.getUnits() * sales.getPrice());
-                            plasmaObject.set(index, (plasmaObject.get(index) + spent));
-                        } else if (component.equals("Platelets")) {
-                            Double spent = (sales.getUnits() * sales.getPrice());
-                            plateletObject.set(index, (plateletObject.get(index) + spent));
+            //Spent
+            if(type == 3){
+                for(Sales sales : buyerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if (component.equals("Blood")) {
+                                Double spent = (sales.getUnits() * sales.getPrice());
+                                bloodObject.set(index, (bloodObject.get(index) + spent));
+                            } else if (component.equals("Plasma")) {
+                                Double spent = (sales.getUnits() * sales.getPrice());
+                                plasmaObject.set(index, (plasmaObject.get(index) + spent));
+                            } else if (component.equals("Platelets")) {
+                                Double spent = (sales.getUnits() * sales.getPrice());
+                                plateletObject.set(index, (plateletObject.get(index) + spent));
 
+                            }
                         }
                     }
                 }
             }
+
+            // Reason
+            if(type == 4 && userType == 3){
+                for(Sales sales : sellerSalesList) {
+                    String saleDate = yearFormat.format(sales.getDate()); // getting  all sales with year filter
+                    if (saleDate.equals(year)) {
+                        String saleMonth = monthFormat.format(sales.getDate());  // getting  all sales with month filter
+                        if (saleMonth.equals(month)) {
+                            String component = sales.getComponent();
+                            String buyreason = sales.getReason();
+                            int index = bloodGroups.indexOf(sales.getBlood_group());
+                            if(buyreason.equals(reason)) {
+                                if (component.equals("Blood")) {
+                                    int sold = sales.getUnits();
+                                    bloodObject.set(index, (bloodObject.get(index) + sold));
+                                } else if (component.equals("Plasma")) {
+                                    int sold = sales.getUnits();
+                                    plasmaObject.set(index, (plasmaObject.get(index) + sold));
+                                } else if (component.equals("Platelets")) {
+                                    int sold = sales.getUnits();
+                                    plateletObject.set(index, (plateletObject.get(index) + sold));
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            Double totalBlood= 0.0;
+            Double totalPlasma= 0.0;
+            Double totalPlatelet = 0.0;
+
+            for (int j = 0; j<8; j++){
+                totalBlood = totalBlood + bloodObject.get(j);
+                totalPlasma = totalPlasma + plasmaObject.get(j);
+                totalPlatelet = totalPlatelet + plateletObject.get(j);
+            }
+
+            responseHeaders.set("success", "true");
+            return ResponseEntity.ok().headers(responseHeaders).body(new NewBarChart(bloodObject,plasmaObject,plateletObject,totalBlood,totalPlasma,totalPlatelet));
+
+        }else{
+            responseHeaders.set("error", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(responseHeaders).build();
         }
 
-        return new NewBarChart(bloodObject,plasmaObject,plateletObject);
     }
 }

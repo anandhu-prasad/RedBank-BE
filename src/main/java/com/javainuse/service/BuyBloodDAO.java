@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -161,21 +163,32 @@ public class BuyBloodDAO {
 
     }
 
-    public SuccessResponseBody submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
+    public ResponseEntity<?> submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        if(!(userType == 1 ) && data.getLocation() != null){
+            responseHeaders.set("error", "Invalid Request Body");
+            return ResponseEntity.badRequest().headers(responseHeaders).build();
+
+        }
 
         // getting the current timestamp
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("success", "true");
+
+//        responseHeaders.set("success", "true");
+//
+//        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.submitSale(userId,data,userType));
 
 
         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(data.getSellerId(),data.getComponent());
         Double price = getprice(inventoryBb, data.getBloodGroup()); // getting price
+        Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits());
 
         Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp, data.getReason(), data.getLocation());
         salesRepo.save(neworder);
-        Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits());
+
+
         String customer;
         if(userType == 1){
             customer = profileIndRepo.findByUserId(userId).getName();
@@ -187,6 +200,8 @@ public class BuyBloodDAO {
 
         // SENDING push notification
         if ( status == true){
+
+            responseHeaders.set("success", "true");
             Notification notification = new Notification(data.getSellerId(),"New booking",customer + " has booked "+ data.getUnits() + " units of "+ data.getComponent(),new Timestamp(System.currentTimeMillis()));
             notificationRepo.save(notification);
 
@@ -206,10 +221,16 @@ public class BuyBloodDAO {
 
             CompletableFuture pushNotification = androidPushNotificationsService.send(request);
             CompletableFuture.allOf(pushNotification).join();
+
+            return ResponseEntity.ok().headers(responseHeaders).body(new SuccessResponseBody(true));
+        } else {
+            responseHeaders.set("error", "Requested item is sold out! Please try again later.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(responseHeaders).body(new SuccessResponseBody(false));
+
         }
 
 
-        return new SuccessResponseBody(status);
+
     }
 
     private Double getprice(InventoryBb inventoryBb, String bloodGroup) {

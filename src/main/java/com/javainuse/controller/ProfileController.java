@@ -65,7 +65,7 @@ public class ProfileController {
         }
     //This PUT mapping is for changing of the password of the account
     @PutMapping("/changepassword")
-    public ResponseEntity<SuccessResponseBody> changePass(@RequestHeader ("Authorization") String userToken ,@RequestBody NewPassword newPassword ) {
+    public ResponseEntity<?> changePass(@RequestHeader ("Authorization") String userToken ,@RequestBody NewPassword newPassword ) {
         Claims claims = jwtTokenUtil.getAllClaimsFromToken(userToken.substring(7));
         String userId = claims.get("userId").toString();
         int userType = Integer.parseInt(claims.get("userType").toString());
