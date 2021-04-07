@@ -65,7 +65,7 @@ public class ConductADriveDAO {
             notificationRepo.save(obj);
 
             // getting the details of the individuals matching the blood group criterion of 'conduct a drive' form
-            individuals = profileIndRepo.findByBloodGroupIn(data.getBloodGroups());
+            individuals = profileIndRepo.findByBloodGroupAndStateAndDistrictIn(data.getBloodGroups(),data.getState(),data.getDistrict()) ;
 
 
             //getting the drive Id
