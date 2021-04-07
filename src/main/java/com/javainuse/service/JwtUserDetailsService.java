@@ -117,7 +117,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileInd.getUserId(), newProfileInd.getEmail(), 1);
 			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
-			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileInd.getUserId(), profileInd.getEmail(), 1);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(newProfileInd.getUserId(), newProfileInd.getEmail(), 1);
 			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
 
 			AuthResponse authResponse = new AuthResponse(token,  newProfileInd.getUserId(), 1, authTokenExpiry, refreshToken, refreshTokenExpiry);
@@ -175,7 +175,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileHos.getUserId(), newProfileHos.getEmail(), 2);
 			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
-			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileHos.getUserId(), profileHos.getEmail(), 1);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(newProfileHos.getUserId(), newProfileHos.getEmail(), 1);
 			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
 
 			//? INITIALIZE THE INVENTORY.
@@ -242,7 +242,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 			final String token = jwtTokenUtil.generateUserToken(newProfileBb.getUserId(), newProfileBb.getEmail(), 3);
 			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
-			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileBb.getUserId(), profileBb.getEmail(), 1);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(newProfileBb.getUserId(), newProfileBb.getEmail(), 1);
 			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
 
 			//? INITIALIZE THE INVENTORY.
