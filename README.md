@@ -102,4 +102,5 @@ Created By Nineleaps Echo Batch Team 7. The members of the team are :
 * Aditya Tomar 
 * Anandhu Prasad 
 * Rajarshi Halder
-* Vipul Kumar 
+* Vipul Kumar
+* Hari Kiran Revanur 
