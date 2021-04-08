@@ -4,10 +4,7 @@ import com.javainuse.models.*;
 import com.javainuse.repositories.ProfileBbRepo;
 import com.javainuse.repositories.ProfileHosRepo;
 import com.javainuse.repositories.ProfileIndRepo;
-import com.javainuse.requests.JwtRequest;
-import com.javainuse.requests.ProfileBbDTO;
-import com.javainuse.requests.ProfileHosDTO;
-import com.javainuse.requests.ProfileIndDTO;
+import com.javainuse.requests.*;
 import com.javainuse.responses.AuthResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,8 @@ import com.javainuse.service.JwtUserDetailsService;
 
 
 import com.javainuse.config.JwtTokenUtil;
+
+import java.util.Date;
 
 @RestController
 @CrossOrigin
@@ -92,27 +91,36 @@ public class JwtAuthenticationController {
 
 		if(profileInd != null){
 			final String token = jwtTokenUtil.generateUserToken(profileInd.getUserId(), profileInd.getEmail(), 1);
-			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileInd.getUserId(), 1));
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileInd.getUserId(), profileInd.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+
+			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileInd.getUserId(), 1, authTokenExpiry, refreshToken, refreshTokenExpiry));
 		}
 		else if(profileHos != null){
 			final String token = jwtTokenUtil.generateUserToken(profileHos.getUserId(), profileHos.getEmail(), 2);
-			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileHos.getUserId(), 2));
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileHos.getUserId(), profileHos.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+
+			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileHos.getUserId(), 2, authTokenExpiry, refreshToken, refreshTokenExpiry));
 		}
 		else {
 			final String token = jwtTokenUtil.generateUserToken(profileBb.getUserId(), profileBb.getEmail(), 3);
-			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileBb.getUserId(), 3));
+			final Date authTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(profileBb.getUserId(), profileBb.getEmail(), 1);
+			final Date refreshTokenExpiry = jwtTokenUtil.getExpirationDateFromToken(token);
+
+			return ResponseEntity.ok().headers(responseHeaders).body(new AuthResponse(token, profileBb.getUserId(), 3, authTokenExpiry, refreshToken, refreshTokenExpiry));
 		}
 
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
 
-
-//		final String token = jwtTokenUtil.generateToken(userDetails);
-
-
-//		final String token = jwtTokenUtil.generateUserToken();
-
-//		return ResponseEntity.ok(new JwtResponse(token));
+	@PostMapping("/refreshauth")
+	private ResponseEntity<?> refreshAuthentication(@RequestBody RefreshAuthTokenReqBody refreshAuthTokenReqBody){
+		return userDetailsService.refreshAuthentication(refreshAuthTokenReqBody.getExpiredAuthToken(), refreshAuthTokenReqBody.getRefreshToken());
 	}
 
 	private void authenticate(String email, String password) throws Exception {
@@ -126,4 +134,5 @@ public class JwtAuthenticationController {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
+
 }
