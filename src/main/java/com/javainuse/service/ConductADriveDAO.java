@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class ConductADriveDAO {
@@ -65,7 +66,12 @@ public class ConductADriveDAO {
             notificationRepo.save(obj);
 
             // getting the details of the individuals matching the blood group criterion of 'conduct a drive' form
-            individuals = profileIndRepo.findByBloodGroupAndStateAndDistrictIn(data.getBloodGroups(),data.getState(),data.getDistrict()) ;
+
+            individuals = profileIndRepo.findByBloodGroupIn(data.getBloodGroups()) ;
+
+
+            individuals = individuals.stream().filter( item -> item.getState().equals(data.getState()) && item.getDistrict().equals(data.getDistrict())).collect(Collectors.toList());
+
 
 
             //getting the drive Id

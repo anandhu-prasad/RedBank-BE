@@ -29,6 +29,9 @@ public class BuyBloodDAO {
     InventoryBbRepo inventoryBbRepo;
 
     @Autowired
+    InventoryHosRepo inventoryHosRepo;
+
+    @Autowired
     ProfileBbRepo profileBbRepo;
 
     @Autowired
@@ -64,7 +67,7 @@ public class BuyBloodDAO {
 
     }
 
-    private Boolean updateinventory(InventoryBb inventoryBb, String bloodGroup, int units) {
+    private Boolean updateinventory(InventoryBb inventoryBb, String bloodGroup, int units, int userType) {
 
         boolean status = false;
 
@@ -130,6 +133,17 @@ public class BuyBloodDAO {
         }
         inventoryBbRepo.save(inventoryBb);
 
+//        if(userType == 2){
+//            inventoryBb.getComponent();
+//            inventoryHosRepo.fi
+//        }
+//        else if( userType == 3){
+//
+//        }
+//        else{
+//            System.out.println("Individual");
+//        }
+
         return status;
     }
 
@@ -166,7 +180,7 @@ public class BuyBloodDAO {
     public ResponseEntity<?> submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
         HttpHeaders responseHeaders = new HttpHeaders();
 
-        if(!(userType == 1 ) && data.getLocation() != null){
+       if(!(userType == 1 ) && data.getLocation()  != null && !data.getLocation().equals("")  && !data.getLocation().equals("N/A")){
             responseHeaders.set("error", "Invalid Request Body");
             return ResponseEntity.badRequest().headers(responseHeaders).build();
 
@@ -177,13 +191,12 @@ public class BuyBloodDAO {
 
 
 //        responseHeaders.set("success", "true");
-//
 //        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.submitSale(userId,data,userType));
 
 
         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(data.getSellerId(),data.getComponent());
         Double price = getprice(inventoryBb, data.getBloodGroup()); // getting price
-        Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits());
+        Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits(), userType);
 
         Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp, data.getReason(), data.getLocation());
         salesRepo.save(neworder);
