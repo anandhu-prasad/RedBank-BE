@@ -146,6 +146,153 @@ public class BuyBloodDAO {
 
         return status;
     }
+    private Boolean updatecustbbinventory(InventoryBb inventoryBb, String bloodGroup, int units, int userType) {
+
+        boolean status = false;
+
+        if(bloodGroup.equals("A+") ){
+            if(inventoryBb.getaPosUnits()>=units){
+                inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("A-")){
+            if(inventoryBb.getaNegUnits()>=units){
+                inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("B+")){
+            if(inventoryBb.getbPosUnits()>=units){
+                inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+
+
+        } else if(bloodGroup.equals("B-")){
+            if(inventoryBb.getbNegUnits()>=units){
+                inventoryBb.setbNegUnits(inventoryBb.getbNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+
+        } else if(bloodGroup.equals("AB+")){
+            if(inventoryBb.getAbPosUnits()>=units){
+                inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("AB-")){
+            if(inventoryBb.getAbNegUnits()>=units){
+                inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("O+")){
+            if(inventoryBb.getoPosUnits()>=units){
+                inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("O-")){
+            if(inventoryBb.getoNegUnits()>=units){
+                inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        }
+        inventoryBbRepo.save(inventoryBb);
+
+        return status;
+    }
+    private Boolean updatecusthosinventory(InventoryHos inventoryBb, String bloodGroup, int units, int userType) {
+
+        boolean status = false;
+
+        if(bloodGroup.equals("A+") ){
+            if(inventoryBb.getaPosUnits()>=units){
+                inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("A-")){
+            if(inventoryBb.getaNegUnits()>=units){
+                inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("B+")){
+            if(inventoryBb.getbPosUnits()>=units){
+                inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+
+
+        } else if(bloodGroup.equals("B-")){
+            if(inventoryBb.getbNegUnits()>=units){
+                inventoryBb.setbNegUnits(inventoryBb.getbNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+
+        } else if(bloodGroup.equals("AB+")){
+            if(inventoryBb.getAbPosUnits()>=units){
+                inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("AB-")){
+            if(inventoryBb.getAbNegUnits()>=units){
+                inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("O+")){
+            if(inventoryBb.getoPosUnits()>=units){
+                inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
+                status= true;
+            } else {
+                status = false;
+            }
+        } else if(bloodGroup.equals("O-")){
+            if(inventoryBb.getoNegUnits()>=units){
+                inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() +units);
+                status= true;
+            } else {
+                status = false;
+            }
+        }
+        inventoryHosRepo.save(inventoryBb);
+
+//        if(userType == 2){
+//            inventoryBb.getComponent();
+//            inventoryHosRepo.fi
+//        }
+//        else if( userType == 3){
+//
+//        }
+//        else{
+//            System.out.println("Individual");
+//        }
+
+        return status;
+    }
 
     public List<BuyBlood_RespBody> findBloodBanks(BuyBlood_ReqBody data, String userId) {
         List<BuyBlood_RespBody> responseList = new ArrayList<>();
@@ -180,7 +327,7 @@ public class BuyBloodDAO {
     public ResponseEntity<?> submitSale(String userId, ConfirmBuy_ReqBody data, Integer userType) {
         HttpHeaders responseHeaders = new HttpHeaders();
 
-       if(!(userType == 1 ) && data.getLocation()  != null && !data.getLocation().equals("")  && !data.getLocation().equals("N/A")){
+        if(!(userType == 1 ) && data.getLocation()  != null && !data.getLocation().equals("")  && !data.getLocation().equals("N/A")){
             responseHeaders.set("error", "Invalid Request Body");
             return ResponseEntity.badRequest().headers(responseHeaders).build();
 
@@ -189,17 +336,31 @@ public class BuyBloodDAO {
         // getting the current timestamp
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-
-//        responseHeaders.set("success", "true");
-//        return ResponseEntity.ok().headers(responseHeaders).body(buyBloodDAO.submitSale(userId,data,userType));
-
+        Boolean updatecustomer = false;
 
         InventoryBb inventoryBb = inventoryBbRepo.findByUserIdAndComponent(data.getSellerId(),data.getComponent());
         Double price = getprice(inventoryBb, data.getBloodGroup()); // getting price
         Boolean status = updateinventory(inventoryBb,data.getBloodGroup(),data.getUnits(), userType);
 
-        Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp, data.getReason(), data.getLocation());
-        salesRepo.save(neworder);
+        if (status == true){
+
+            if(userType == 3){
+                InventoryBb inventoryBbCustomer = inventoryBbRepo.findByUserIdAndComponent(userId,data.getComponent());
+                updatecustomer = updatecustbbinventory(inventoryBbCustomer,data.getBloodGroup(),data.getUnits(), 0);
+
+                System.out.println("updating bloodbank inv");
+            } else
+            if(userType == 2){
+                InventoryHos inventoryHosCustomer = inventoryHosRepo.findByUserIdAndComponent(userId,data.getComponent());
+                updatecustomer = updatecusthosinventory(inventoryHosCustomer,data.getBloodGroup(),data.getUnits(), 2);
+
+            }
+            Sales neworder = new Sales(data.getSellerId(), userId, data.getComponent(), data.getBloodGroup(), data.getUnits(), price , timestamp, data.getReason(), data.getLocation());
+            salesRepo.save(neworder);
+        } else {
+            responseHeaders.set("error", "Requested item is sold out! Please try again later.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(responseHeaders).body(new SuccessResponseBody(false));
+        }
 
 
         String customer;
@@ -210,6 +371,7 @@ public class BuyBloodDAO {
         } else {
             customer = profileBbRepo.findByUserId(userId).getName();
         }
+
 
         // SENDING push notification
         if ( status == true){
@@ -241,8 +403,6 @@ public class BuyBloodDAO {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(responseHeaders).body(new SuccessResponseBody(false));
 
         }
-
-
 
     }
 
