@@ -151,26 +151,18 @@ public class BuyBloodDAO {
         boolean status = false;
 
         if(bloodGroup.equals("A+") ){
-            if(inventoryBb.getaPosUnits()>=units){
-                inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
+            status= true;
         } else if(bloodGroup.equals("A-")){
-            if(inventoryBb.getaNegUnits()>=units){
-                inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+
+            inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("B+")){
-            if(inventoryBb.getbPosUnits()>=units){
-                inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+
+            inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
+            status= true;
+
 
 
         } else if(bloodGroup.equals("B-")){
@@ -182,33 +174,21 @@ public class BuyBloodDAO {
             }
 
         } else if(bloodGroup.equals("AB+")){
-            if(inventoryBb.getAbPosUnits()>=units){
-                inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("AB-")){
-            if(inventoryBb.getAbNegUnits()>=units){
-                inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("O+")){
-            if(inventoryBb.getoPosUnits()>=units){
-                inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("O-")){
-            if(inventoryBb.getoNegUnits()>=units){
-                inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() + units);
+            status= true;
+
         }
         inventoryBbRepo.save(inventoryBb);
 
@@ -219,77 +199,37 @@ public class BuyBloodDAO {
         boolean status = false;
 
         if(bloodGroup.equals("A+") ){
-            if(inventoryBb.getaPosUnits()>=units){
-                inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setaPosUnits(inventoryBb.getaPosUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("A-")){
-            if(inventoryBb.getaNegUnits()>=units){
-                inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setaNegUnits(inventoryBb.getaNegUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("B+")){
-            if(inventoryBb.getbPosUnits()>=units){
-                inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
-
-
+            inventoryBb.setbPosUnits(inventoryBb.getbPosUnits() + units);
+            status= true;
         } else if(bloodGroup.equals("B-")){
-            if(inventoryBb.getbNegUnits()>=units){
-                inventoryBb.setbNegUnits(inventoryBb.getbNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
-
+            inventoryBb.setbNegUnits(inventoryBb.getbNegUnits() + units);
+            status= true;
         } else if(bloodGroup.equals("AB+")){
-            if(inventoryBb.getAbPosUnits()>=units){
-                inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setAbPosUnits(inventoryBb.getAbPosUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("AB-")){
-            if(inventoryBb.getAbNegUnits()>=units){
-                inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setAbNegUnits(inventoryBb.getAbNegUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("O+")){
-            if(inventoryBb.getoPosUnits()>=units){
-                inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setoPosUnits(inventoryBb.getoPosUnits() + units);
+            status= true;
+
         } else if(bloodGroup.equals("O-")){
-            if(inventoryBb.getoNegUnits()>=units){
-                inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() +units);
-                status= true;
-            } else {
-                status = false;
-            }
+            inventoryBb.setoNegUnits(inventoryBb.getoNegUnits() +units);
+            status= true;
+
         }
         inventoryHosRepo.save(inventoryBb);
-
-//        if(userType == 2){
-//            inventoryBb.getComponent();
-//            inventoryHosRepo.fi
-//        }
-//        else if( userType == 3){
-//
-//        }
-//        else{
-//            System.out.println("Individual");
-//        }
 
         return status;
     }
