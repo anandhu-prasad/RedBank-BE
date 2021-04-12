@@ -54,8 +54,8 @@ spring.jpa.open-in-view=false
 ###### SMTP config for sending the mails from the Server 
 `spring.mail.host=smtp.gmail.com
 spring.mail.port=587
-spring.mail.username=redbank104@gmail.com
-spring.mail.password=#Redbank123
+spring.mail.username=ApplicationEmailID
+spring.mail.password=ApplicationEmailPassword
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.connectiontimeout=5000
 spring.mail.properties.mail.smtp.timeout=5000
@@ -63,7 +63,7 @@ spring.mail.properties.mail.smtp.writetimeout=5000
 spring.mail.properties.
 `
 ###### JWT configuration 
-`jwt.secret=REDBANKo%q2ukuuk5kzn+_w@#z(uw@fc&83w+1%tq$!ooce783&(&l+8&`
+`jwt.secret=secret_key`
 
 By running the backend codes, this will start the Tomcat server in the system at port 8080. So, to access the server use localhost:8080.
 
